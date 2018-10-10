@@ -5,14 +5,14 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
 import { actions as home } from '../../index';
-const { getQuotes } = home;
+const { getInvites } = home;
 
 import { actions as auth, theme } from '../../../auth/index';
 const { signOut } = auth;
 const { color } = theme;
 
 import styles from './styles';
-import Quote from '../../components/Quote';
+import Invite from '../../components/Invite';
 
 class Home extends React.Component {
   constructor() {
@@ -24,7 +24,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getQuotes((error) => alert(error.message));
+    this.props.getInvites((error) => alert(error.message));
   }
 
   onSignOut() {
@@ -40,7 +40,7 @@ class Home extends React.Component {
   }
 
   renderItem({ item, index }) {
-    return <Quote index={index} />;
+    return <Invite index={index} />;
   }
 
   render() {
@@ -55,7 +55,7 @@ class Home extends React.Component {
         <View style={styles.container}>
           <FlatList
             ref="listRef"
-            data={this.props.quotes}
+            data={this.props.invites}
             renderItem={this.renderItem}
             initialNumToRender={5}
             keyExtractor={(item, index) => index.toString()}
@@ -78,11 +78,11 @@ class Home extends React.Component {
 function mapStateToProps(state, props) {
   return {
     isLoading: state.homeReducer.isLoading,
-    quotes: state.homeReducer.quotes,
+    invites: state.homeReducer.invites,
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getQuotes, signOut }
+  { getInvites, signOut }
 )(Home);

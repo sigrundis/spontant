@@ -9,14 +9,13 @@ import styles from './styles';
 import { connect } from 'react-redux';
 
 import { actions as home, theme } from '../../index';
-const { addQuote, updateQuote } = home;
+const { addInvite, updateInvite } = home;
 const { normalize } = theme;
 
 class SaveButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-
     this.onPress = this.onPress.bind(this);
   }
 
@@ -24,36 +23,35 @@ class SaveButton extends React.Component {
     const { data } = this.props;
     const { edit } = data;
 
-    if (edit) this.editQuote();
-    else this.saveQuote();
+    if (edit) this.editInvite();
+    else this.saveInvite();
   }
 
-  editQuote() {
+  editInvite() {
     let { data } = this.props;
-    const { text, color, quote } = data;
+    const { title, color, invite } = data;
 
-    quote['text'] = text;
-    quote['color'] = color;
+    invite['title'] = title;
 
-    this.props.updateQuote(quote, this.onSuccess, this.onError);
+    this.props.updateInvite(invite, this.onSuccess, this.onError);
   }
 
-  saveQuote() {
+  saveInvite() {
     const { data, user } = this.props;
-    const { text, color } = data;
+    const { title } = data;
 
-    const newQuote = {
-      text: text,
-      color,
+    const newInvite = {
+      title: title,
       time: Date.now(),
       userId: user.uid,
-      loveCount: 0,
+      joinCount: 0,
       author: {
-        name: user.username,
+        username: user.username,
+        name: user.displayname,
       },
     };
 
-    this.props.addQuote(newQuote, this.onSuccess, this.onError);
+    this.props.addInvite(newInvite, this.onSuccess, this.onError);
   }
 
   onSuccess() {
@@ -89,5 +87,5 @@ function mapStateToProps(state, props) {
 
 export default connect(
   mapStateToProps,
-  { addQuote, updateQuote }
+  { addInvite, updateInvite }
 )(SaveButton);

@@ -15,7 +15,7 @@ const fields = [
     placeholder: 'Email Address',
     autoFocus: false,
     secureTextEntry: false,
-    value: 'test1@eandmdigital.com',
+    value: 'sigrun@spontant.com',
     type: 'email',
   },
   {
@@ -24,7 +24,16 @@ const fields = [
     placeholder: 'Username',
     autoFocus: false,
     secureTextEntry: false,
-    value: 'mosesesan',
+    value: 'sigrundis',
+    type: 'text',
+  },
+  {
+    key: 'displayname',
+    label: 'Display name',
+    placeholder: 'Display name',
+    autoFocus: false,
+    secureTextEntry: false,
+    value: 'Sigrún Dís',
     type: 'text',
   },
   {
@@ -68,7 +77,6 @@ class Register extends React.Component {
 
   onSubmit(data) {
     this.setState({ error: error }); //clear out error messages
-
     this.props.register(data, this.onSuccess, this.onError);
   }
 

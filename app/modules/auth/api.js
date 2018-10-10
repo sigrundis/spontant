@@ -2,10 +2,12 @@ import { auth, database, provider } from '../../config/firebase';
 
 //Register the user using email and password
 export function register(data, callback) {
-  const { email, password, username } = data;
+  const { email, password, username, displayname } = data;
   auth
     .createUserWithEmailAndPassword(email, password)
-    .then((resp) => createUser({ username, uid: resp.user.uid }, callback))
+    .then((resp) =>
+      createUser({ username, displayname, uid: resp.user.uid }, callback)
+    )
     .catch((error) => callback(false, null, error));
 }
 

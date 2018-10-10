@@ -1,83 +1,84 @@
 // In this file, we will be creating several functions that interacts with the Firebase API to carry out our CRUD operations.
 import { database } from '../../config/firebase';
 
-export function addQuote(quote, callback) {
-  const { userId } = quote;
-  const newQuoteRef = database
+export function addInvite(invite, callback) {
+  const { userId } = invite;
+  const newInviteRef = database
     .ref()
-    .child('quotes')
+    .child('invites')
     .push();
-  const newQuoteKey = newQuoteRef.key;
+  const newInviteKey = newInviteRef.key;
 
-  quote.id = newQuoteKey;
+  invite.id = newInviteKey;
 
-  // Write the new quote data simultaneously in the quotes list and the user's quotes list.
+  // Write the new invite data simultaneously in the invites list and the user's invites list.
   let updates = {};
-  updates['/quotes/' + newQuoteKey] = quote;
-  updates['/user-quotes/' + userId + '/' + newQuoteKey] = quote;
+  updates['/invites/' + newInviteKey] = invite;
+  updates['/user-invites/' + userId + '/' + newInviteKey] = invite;
 
   database
     .ref()
     .update(updates)
-    .then(() => callback(true, quote, null))
+    .then(() => callback(true, invite, null))
     .catch((error) => callback(false, null, error));
 }
 
-export function getQuotes(callback) {
-  const quotesRef = database.ref('quotes');
+export function getInvites(callback) {
+  const invitesRef = database.ref('invites');
 
   //start listening for new data
-  quotesRef.on('value', function(snapshot) {
+  invitesRef.on('value', function(snapshot) {
     callback(true, snapshot, null);
   });
 }
 
-export function updateQuote(quote, callback) {
-  const { id, userId } = quote;
+export function updateInvite(invite, callback) {
+  const { id, userId } = invite;
 
   let updates = {};
-  updates['quotes/' + id] = quote;
-  updates['/user-quotes/' + userId + '/' + id] = quote;
+  updates['invites/' + id] = invite;
+  updates['/user-invites/' + userId + '/' + id] = invite;
 
   database
     .ref()
     .update(updates)
-    .then(() => callback(true, quote, null))
+    .then(() => callback(true, invite, null))
     .catch((error) => callback(false, null, error));
 }
 
-export function deleteQuote(quote, callback) {
-  const { id, userId } = quote;
+export function deleteInvite(invite, callback) {
+  const { id, userId } = invite;
 
   let updates = {};
-  updates['quotes/' + id] = null;
-  updates['/user-quotes/' + userId + '/' + id] = null;
+  updates['invites/' + id] = null;
+  updates['/user-invites/' + userId + '/' + id] = null;
 
   database
     .ref()
     .update(updates)
-    .then(() => callback(true, quote, null))
+    .then(() => callback(true, invite, null))
     .catch((error) => callback(false, null, error));
 }
 
 export function toggleLove(data, callback) {
-  const { quote, uid } = data;
-  const quoteRef = database.ref('quotes/' + quote.id);
+  const { invite, uid } = data;
+  console.log('invite', invite);
+  const inviteRef = database.ref('invites/' + invite.id);
 
-  quoteRef.transaction(
-    function(quote) {
-      if (quote) {
-        if (quote.loves && quote.loves[uid]) {
-          quote.loveCount--;
-          quote.loves[uid] = null;
+  inviteRef.transaction(
+    function(invite) {
+      if (invite) {
+        if (invite.attendees && invite.attendees[uid]) {
+          invite.joinCount--;
+          invite.attendees[uid] = null;
         } else {
-          quote.loveCount++;
-          if (!quote.loves) quote.loves = {};
-          quote.loves[uid] = true;
+          invite.joinCount++;
+          if (!invite.attendees) invite.attendees = {};
+          invite.attendees[uid] = true;
         }
       }
 
-      return quote;
+      return invite;
     },
     function(error, committed, snapshot) {
       if (error || !committed) callback(false, null, error);
