@@ -8,8 +8,6 @@ import { actions as home } from '../../index';
 const { getInvites } = home;
 
 import { actions as auth, theme } from '../../../auth/index';
-const { signOut } = auth;
-const { color } = theme;
 
 import styles from './styles';
 import Invite from '../../components/Invite';
@@ -18,25 +16,11 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {};
-
     this.renderItem = this.renderItem.bind(this);
-    this.onSignOut = this.onSignOut.bind(this);
   }
 
   componentDidMount() {
     this.props.getInvites((error) => alert(error.message));
-  }
-
-  onSignOut() {
-    this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this));
-  }
-
-  onSuccess() {
-    Actions.Auth();
-  }
-
-  onError(error) {
-    Alert.alert('Oops!', error.message);
   }
 
   renderItem({ item, index }) {
@@ -60,15 +44,6 @@ class Home extends React.Component {
             initialNumToRender={5}
             keyExtractor={(item, index) => index.toString()}
           />
-          <Button
-            raised
-            borderRadius={4}
-            title={'LOG OUT'}
-            containerViewStyle={[styles.containerView]}
-            buttonStyle={[styles.button]}
-            textStyle={styles.buttonText}
-            onPress={this.onSignOut}
-          />
         </View>
       );
     }
@@ -84,5 +59,5 @@ function mapStateToProps(state, props) {
 
 export default connect(
   mapStateToProps,
-  { getInvites, signOut }
+  { getInvites }
 )(Home);

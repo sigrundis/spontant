@@ -21,6 +21,7 @@ import ForgotPassword from '../modules/auth/scenes/ForgotPassword';
 import Home from '../modules/home/scenes/Home';
 import NewInvite from '../modules/home/scenes/NewInvite';
 
+//Components
 import NavButton from '../components/NavButton';
 import SaveButton from '../modules/home/components/SaveButton';
 import DrawerMenu from '../components/DrawerMenu';
@@ -76,7 +77,7 @@ export default class extends React.Component {
     return (
       <NavButton
         onPress={Actions.DrawerMenu}
-        name={'menu'}
+        name={'md-menu'}
         type={'ionicon'}
         color={color.black}
       />
@@ -136,9 +137,11 @@ export default class extends React.Component {
                 initial={true}
                 type={ActionConst.REPLACE}
                 renderRightButton={this.renderAddButton}
+                renderLeftButton={this.renderHamburgerButton}
               />
             </Stack>
           </Scene>
+
           <Scene
             key="NewInvite"
             navigationBarStyle={{ backgroundColor: '#fff' }}
@@ -147,6 +150,14 @@ export default class extends React.Component {
             title="New Invite"
             renderLeftButton={this.renderCloseButton}
             renderRightButton={this.renderSaveButton}
+          />
+          <Scene
+            key="DrawerMenu"
+            navigationBarStyle={{ backgroundColor: '#fff' }}
+            titleStyle={navTitleStyle}
+            component={DrawerMenu}
+            title="New Invite"
+            renderLeftButton={this.renderCloseButton}
           />
         </Modal>
       </Router>
