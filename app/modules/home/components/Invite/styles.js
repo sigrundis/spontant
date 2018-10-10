@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: normalize(8 * 2.5),
+    backgroundColor: '#fff',
+    borderColor: '#fff',
 
     ...Platform.select({
       ios: {
@@ -28,18 +30,19 @@ const styles = StyleSheet.create({
     }),
   },
 
-  quote: {
-    marginBottom: padding * 2,
+  invite: {
+    marginTop: padding,
+    marginBottom: padding,
     flexDirection: 'row',
   },
 
-  text: {
+  title: {
     fontSize: normalize(17),
     lineHeight: normalize(21),
-    color: color.white,
     letterSpacing: 0.5,
     fontFamily: fontFamily.medium,
     flex: 1,
+    color: color.themeNight,
   },
 
   bottom: {
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
   author: {
     fontSize: normalize(14),
     lineHeight: normalize(19),
-    color: color.white,
+    color: color.themeNight,
     fontWeight: '500',
     fontFamily: fontFamily.medium,
   },
@@ -64,7 +67,14 @@ const styles = StyleSheet.create({
   publishedAt: {
     fontSize: normalize(12),
     lineHeight: normalize(17),
-    color: color.white,
+    color: color.themeNight,
+    fontFamily: fontFamily.regular,
+  },
+
+  description: {
+    fontSize: normalize(12),
+    lineHeight: normalize(17),
+    color: color.themeNight,
     fontFamily: fontFamily.regular,
   },
 
@@ -80,6 +90,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 54,
     height: 34,
+  },
+
+  joinButton: {
+    width: '100%',
+    backgroundColor: color.themeRed,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
   },
 });
 

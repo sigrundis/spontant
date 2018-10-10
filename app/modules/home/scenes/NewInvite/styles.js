@@ -8,8 +8,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
 
-  topContainer: {
+  formInput: {
+    paddingTop: normalize(8 * 3),
+    paddingBottom: normalize(8 * 3),
+    paddingHorizontal: normalize(8 * 2),
     flex: 1,
+    fontSize: normalize(17 + 3),
+    lineHeight: normalize(21 + 3),
+    color: color.themeRed,
+    letterSpacing: 0.5,
+    fontFamily: fontFamily.medium,
   },
 
   textInput: {
@@ -19,7 +27,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: normalize(17 + 3),
     lineHeight: normalize(21 + 3),
-    color: color.white,
+    color: color.themeRed,
     letterSpacing: 0.5,
     fontFamily: fontFamily.medium,
   },

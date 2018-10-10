@@ -19,10 +19,11 @@ import CompleteProfile from '../modules/auth/scenes/CompleteProfile';
 import Login from '../modules/auth/scenes/Login';
 import ForgotPassword from '../modules/auth/scenes/ForgotPassword';
 import Home from '../modules/home/scenes/Home';
-import NewQuote from '../modules/home/scenes/NewQuote';
+import NewInvite from '../modules/home/scenes/NewInvite';
 
 import NavButton from '../components/NavButton';
 import SaveButton from '../modules/home/components/SaveButton';
+import DrawerMenu from '../components/DrawerMenu';
 
 //Import Store, actions
 import store from '../redux/store';
@@ -52,7 +53,7 @@ export default class extends React.Component {
   renderAddButton(props) {
     return (
       <NavButton
-        onPress={Actions.NewQuote}
+        onPress={Actions.NewInvite}
         name={'plus'}
         type={'entypo'}
         color={color.black}
@@ -65,6 +66,17 @@ export default class extends React.Component {
       <NavButton
         onPress={Actions.pop}
         name={'md-close'}
+        type={'ionicon'}
+        color={color.black}
+      />
+    );
+  }
+
+  renderHamburgerButton(props) {
+    return (
+      <NavButton
+        onPress={Actions.DrawerMenu}
+        name={'menu'}
         type={'ionicon'}
         color={color.black}
       />
@@ -128,11 +140,11 @@ export default class extends React.Component {
             </Stack>
           </Scene>
           <Scene
-            key="NewQuote"
+            key="NewInvite"
             navigationBarStyle={{ backgroundColor: '#fff' }}
             titleStyle={navTitleStyle}
-            component={NewQuote}
-            title="New Quote"
+            component={NewInvite}
+            title="New Invite"
             renderLeftButton={this.renderCloseButton}
             renderRightButton={this.renderSaveButton}
           />

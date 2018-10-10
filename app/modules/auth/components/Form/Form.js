@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import {
+  Button,
+  FormLabel,
+  FormInput,
+  FormValidationMessage,
+} from 'react-native-elements';
 
 import { isEmpty, validate } from '../../utils/validate';
 
@@ -64,7 +69,6 @@ class Form extends React.Component {
 
   render() {
     const { fields, showLabel, buttonTitle, onForgotPassword } = this.props;
-    console.log('this.state.error[general]', this.state.error['general']);
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>

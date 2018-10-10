@@ -10,6 +10,11 @@ const color = {
   grey: '#ccc',
   red: 'red',
   underlayColor: '#ddd',
+  themeRed: '#f9595c',
+  themeBlue: '#00aadd',
+  themeOcean: '#3ac9c2',
+  themeYellow: '#fca45d',
+  themeNight: '#354355',
 };
 
 const fontSize = {

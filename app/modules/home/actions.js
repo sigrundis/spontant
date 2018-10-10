@@ -1,41 +1,41 @@
 import * as t from './actionTypes';
 import * as api from './api';
 
-// Add Quote - CREATE (C)
-export function addQuote(quote, successCB, errorCB) {
+// Add Invite - CREATE (C)
+export function addInvite(invite, successCB, errorCB) {
   return (dispatch) => {
-    api.addQuote(quote, function(success, data, error) {
+    api.addInvite(invite, function(success, data, error) {
       if (success) successCB();
       else if (error) errorCB(error);
     });
   };
 }
 
-// Get Quotes - READ (R)
-export function getQuotes(errorCB) {
+// Get Invites - READ (R)
+export function getInvites(errorCB) {
   return (dispatch) => {
-    dispatch({ type: t.LOADING_QUOTES });
-    api.getQuotes(function(success, data, error) {
-      if (success) dispatch({ type: t.QUOTES_AVAILABLE, data });
+    dispatch({ type: t.LOADING_INVITES });
+    api.getInvites(function(success, data, error) {
+      if (success) dispatch({ type: t.INVITES_AVAILABLE, data });
       else if (error) errorCB(error);
     });
   };
 }
 
-// Update Quote - UPDATE (U)
-export function updateQuote(quote, successCB, errorCB) {
+// Update Invite - UPDATE (U)
+export function updateInvite(invite, successCB, errorCB) {
   return (dispatch) => {
-    api.updateQuote(quote, function(success, data, error) {
+    api.updateInvite(invite, function(success, data, error) {
       if (success) successCB();
       else if (error) errorCB(error);
     });
   };
 }
 
-// Delete Quote - DELETE (D)
-export function deleteQuote(quote, errorCB) {
+// Delete Invite - DELETE (D)
+export function deleteInvite(invite, errorCB) {
   return (dispatch) => {
-    api.deleteQuote(quote, function(success, data, error) {
+    api.deleteInvite(invite, function(success, data, error) {
       if (error) errorCB(error);
     });
   };
@@ -44,7 +44,7 @@ export function deleteQuote(quote, errorCB) {
 // Like/Unlike
 export function toggleLove(data, errorCB) {
   return (dispatch) => {
-    dispatch({ type: t.LOADING_QUOTES });
+    dispatch({ type: t.LOADING_INVITES });
     api.toggleLove(data, function(success, data, error) {
       if (error) errorCB(error);
     });
