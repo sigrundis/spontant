@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     fontFamily: fontFamily.medium,
     flex: 1,
-    color: color.themeNight,
+    color: color.themeRed,
   },
 
   bottom: {
@@ -92,12 +92,27 @@ const styles = StyleSheet.create({
     height: 34,
   },
 
+  userImage: {
+    marginLeft: -normalize(8 * 2.5),
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: padding * 2,
+    paddingRight: padding,
+  },
+
   joinButton: {
     width: '100%',
-    backgroundColor: color.themeRed,
+    backgroundColor: color.themeBlue,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#fff',
+  },
+  joinButtonSelected: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: color.themeBlue,
   },
 });
 

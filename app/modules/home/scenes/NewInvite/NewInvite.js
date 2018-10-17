@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, ScrollView, TouchableHighlight } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import {
   Button,
   FormLabel,
@@ -9,10 +9,13 @@ import {
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { Icon } from 'react-native-elements';
+import NavButton from '../../../../components/NavButton';
 import styles from './styles';
 import { isEmpty } from '../../../auth/utils/validate';
 import { actions as home, theme } from '../../index';
 const { addInvite, updateInvite } = home;
+const { color } = theme;
 
 const fields = [
   {
@@ -31,7 +34,7 @@ const fields = [
     autoFocus: false,
     secureTextEntry: false,
     value: '',
-    type: 'text',
+    type: 'textfield',
   },
   {
     key: 'minAttendees',
@@ -40,7 +43,7 @@ const fields = [
     autoFocus: false,
     secureTextEntry: false,
     value: '',
-    type: 'number',
+    type: 'numeric',
   },
   {
     key: 'maxAttendees',
@@ -49,7 +52,7 @@ const fields = [
     autoFocus: false,
     secureTextEntry: true,
     value: '',
-    type: 'number',
+    type: 'numeric',
   },
 ];
 
@@ -67,6 +70,16 @@ class NewInvite extends React.Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeMinAttendees = this.onChangeMinAttendees.bind(this);
     this.onChangeMaxAttendees = this.onChangeMaxAttendees.bind(this);
+  }
+
+  renderCloseButton(props) {
+    return (
+      <TouchableOpacity onPress={Actions.pop}>
+        <View style={styles.closeButton}>
+          <Icon name={'md-close'} type={'ionicon'} color={color.black} />
+        </View>
+      </TouchableOpacity>
+    );
   }
 
   onSubmit() {
@@ -179,6 +192,7 @@ class NewInvite extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        {this.renderCloseButton()}
         {this.renderInputs()}
         <Button
           raised

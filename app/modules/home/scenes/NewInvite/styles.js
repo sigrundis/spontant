@@ -47,6 +47,14 @@ const styles = StyleSheet.create({
     height: normalize(49),
   },
 
+  closeButton: {
+    // position: 'absolute',
+    // top: 5,
+    // right: 5,
+    marginLeft: 'auto',
+    padding: 10,
+  },
+
   color: {
     height: normalize(25),
     width: normalize(25),

@@ -11,6 +11,7 @@ import {
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
 
+import JoinBar from '../JoinBar';
 import styles from './styles';
 import { connect } from 'react-redux';
 
@@ -24,11 +25,9 @@ class Invite extends React.Component {
   constructor() {
     super();
     this.state = {};
-
     this.onOption = this.onOption.bind(this);
     this.onDelete = this.onDelete.bind(this);
-    this.onToggleLove = this.onToggleLove.bind(this);
-    this.renderLoveButton = this.renderLoveButton.bind(this);
+    this.onClickJoin = this.onClickJoin.bind(this);
   }
 
   onOption() {
@@ -55,13 +54,22 @@ class Invite extends React.Component {
     this.props.deleteInvite(invite, (error) => alert(error.message));
   }
 
-  onToggleLove() {
+  onClickJoin() {
     const { user, invites, index } = this.props;
     const invite = invites[index];
 
     const data = { invite, uid: user.uid };
 
     this.props.toggleLove(data, (error) => alert(error.message));
+  }
+
+  /**
+   * TODO: Change this when user can upload image.
+   */
+  renderUserImage() {
+    return (
+      <Icon name={'ios-contact'} type="ionicon" color={color.grey} size={50} />
+    );
   }
 
   renderOptionButton() {
@@ -72,34 +80,12 @@ class Invite extends React.Component {
             <Icon
               name={'md-more'}
               type="ionicon"
-              color={color.themeRed}
+              color={color.themeBlue}
               size={normalize(20)}
             />
           </View>
         </TouchableOpacity>
       </View>
-    );
-  }
-
-  renderLoveButton() {
-    const { user, invites, index } = this.props;
-    const invite = invites[index];
-    const { attendees } = invite;
-
-    return (
-      <TouchableOpacity onPress={this.onToggleLove}>
-        <View style={styles.buttonContainer}>
-          <Icon
-            name={
-              attendees && attendees[user.uid] ? 'md-heart' : 'md-heart-outline'
-            }
-            type="ionicon"
-            color="#fff"
-            iconStyle={{ height: normalize(20) }}
-            size={normalize(20)}
-          />
-        </View>
-      </TouchableOpacity>
     );
   }
 
@@ -109,11 +95,19 @@ class Invite extends React.Component {
     const { attendees } = invite;
 
     return (
-      <View style={styles.joinButton}>
+      <View
+        style={
+          attendees && attendees[user.uid]
+            ? styles.joinButtonSelected
+            : styles.joinButton
+        }
+      >
         <Button
-          onPress={this.onToggleLove}
+          onPress={this.onClickJoin}
           title={attendees && attendees[user.uid] ? 'Cansel join' : 'Join'}
-          color="#fff"
+          color={
+            attendees && attendees[user.uid] ? color.themeBlue : color.white
+          }
         />
       </View>
     );
@@ -137,24 +131,24 @@ class Invite extends React.Component {
       <View style={[styles.container]}>
         <View style={styles.wrapper}>
           <View style={[styles.invite]}>
+            <View style={styles.userImage}>{this.renderUserImage()}</View>
             <View style={styles.left}>
               <Text style={[styles.author]}>{author.name}</Text>
               <Text style={[styles.publishedAt]}>{`Created an invite ${moment(
                 time
               ).fromNow()}`}</Text>
-              <Text
-                style={[styles.publishedAt]}
-              >{`for minimum ${minAttendees} and maximum ${maxAttendees} persons.`}</Text>
             </View>
             {user.uid === userId && this.renderOptionButton()}
           </View>
-          <View style={styles.left}>
+          <View style={[styles.left, { marginBottom: 10 }]}>
             <Text style={[styles.title]}>{title}</Text>
             <Text style={[styles.description]}>{description}</Text>
-            <Text
-              style={[styles.description]}
-            >{`${joinCount}/${maxAttendees} have joined.`}</Text>
           </View>
+          <JoinBar
+            joinCount={joinCount}
+            minAttendees={minAttendees}
+            maxAttendees={maxAttendees}
+          />
           <View style={styles.bottom}>{this.renderJoinButton()}</View>
         </View>
       </View>
