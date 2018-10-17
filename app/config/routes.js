@@ -8,6 +8,7 @@ import {
   Tabs,
   Actions,
 } from 'react-native-router-flux';
+import { Icon } from 'react-native-elements';
 
 //Splash Component
 import Splash from '../components/Splash/Splash';
@@ -24,7 +25,7 @@ import NewInvite from '../modules/home/scenes/NewInvite';
 //Components
 import NavButton from '../components/NavButton';
 import SaveButton from '../modules/home/components/SaveButton';
-import DrawerMenu from '../components/DrawerMenu';
+import DrawerMenu from '../modules/home/scenes/DrawerMenu';
 
 //Import Store, actions
 import store from '../redux/store';
@@ -84,6 +85,17 @@ export default class extends React.Component {
     );
   }
 
+  renderHomeButton(props) {
+    return (
+      <NavButton
+        onPress={Actions.Main()}
+        name={'md-home'}
+        type={'ionicon'}
+        color={color.black}
+      />
+    );
+  }
+
   renderSaveButton(props) {
     if (props.showButton) return <SaveButton data={props.data} />;
     else return null;
@@ -129,28 +141,46 @@ export default class extends React.Component {
                 title="Forgot Password"
               />
             </Stack>
-            <Stack key="Main" initial={this.state.isLoggedIn}>
+            <Stack tabs={true} key="Main" initial={this.state.isLoggedIn}>
               <Scene
                 key="Home"
+                tabBarIcon={({ focused }) => (
+                  <Icon
+                    name={focused ? 'ios-home' : 'ios-home-outline'}
+                    type={'ionicon'}
+                    size={26}
+                    color={color.themeRed}
+                  />
+                )}
+                tabBarOptions={{
+                  showLabel: false,
+                }}
                 component={Home}
                 title="Home"
-                initial={true}
                 type={ActionConst.REPLACE}
-                renderRightButton={this.renderAddButton}
+                renderLeftButton={this.renderHamburgerButton}
+              />
+              <Scene
+                key="NewInvite"
+                tabBarIcon={({ focused }) => (
+                  <Icon
+                    name={focused ? 'ios-add-circle' : 'ios-add-circle-outline'}
+                    type={'ionicon'}
+                    size={26}
+                    color={color.themeRed}
+                  />
+                )}
+                tabBarOptions={{
+                  showLabel: false,
+                }}
+                titleStyle={navTitleStyle}
+                component={NewInvite}
+                title="New Invite"
                 renderLeftButton={this.renderHamburgerButton}
               />
             </Stack>
           </Scene>
 
-          <Scene
-            key="NewInvite"
-            navigationBarStyle={{ backgroundColor: '#fff' }}
-            titleStyle={navTitleStyle}
-            component={NewInvite}
-            title="New Invite"
-            renderLeftButton={this.renderCloseButton}
-            renderRightButton={this.renderSaveButton}
-          />
           <Scene
             key="DrawerMenu"
             navigationBarStyle={{ backgroundColor: '#fff' }}
@@ -158,6 +188,7 @@ export default class extends React.Component {
             component={DrawerMenu}
             title="New Invite"
             renderLeftButton={this.renderCloseButton}
+            style={{ width: '80%' }}
           />
         </Modal>
       </Router>
