@@ -8,7 +8,7 @@ import {
 } from 'react-navigation';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { actions as auth } from '../../modules/auth/index';
+import { actions as auth } from '../../../auth/index';
 const { signOut } = auth;
 
 import styles from './styles';
@@ -18,7 +18,7 @@ const MENU_ITEMS = [
     name: 'Heim',
     icon: 'md-home',
     type: 'ionicon',
-    screen: 'Home',
+    screen: 'Main',
     iconColor: '#fff',
   },
   {
@@ -36,13 +36,13 @@ class DrawerMenu extends Component {
 
     navigation.dispatch(DrawerActions.closeDrawer());
 
-    // if (screen === 'Home') {
-    //   const resetAction = StackActions.reset({
-    //     index: 0,
-    //     actions: [NavigationActions.navigate({ routeName: screen })],
-    //   });
-    //   navigation.dispatch(resetAction);
-    // }
+    if (screen === 'Home') {
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: screen })],
+      });
+      navigation.dispatch(resetAction);
+    }
     if (screen == 'Welcome') {
       this.props.signOut(
         this.onSuccessSignOut.bind(this),
