@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import {
   Button,
@@ -58,7 +58,7 @@ const fields = [
 
 const error = {};
 
-class NewInvite extends React.Component {
+class NewInvite extends Component {
   constructor(props) {
     super(props);
 
@@ -118,7 +118,8 @@ class NewInvite extends React.Component {
   }
 
   onSuccess() {
-    Actions.pop();
+    console.log('navigation', this.propsnavigation);
+    this.props.navigation.navigate('Home');
   }
 
   onError(error) {

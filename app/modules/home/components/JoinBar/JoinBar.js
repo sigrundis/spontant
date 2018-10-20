@@ -13,59 +13,40 @@ class JoinBar extends React.Component {
 
   render() {
     const { minAttendees, maxAttendees, joinCount } = this.props;
-    const joinPercentage = `${(joinCount / maxAttendees) * 100}%`;
-    const availableSpotsPercentage = `${90 -
-      (joinCount / maxAttendees) * 100}%`;
+    const joinPercentage = (joinCount / maxAttendees) * 100;
+    const availableSpotsPercentage = 100 - joinPercentage;
     return (
-      <View
-        style={{
-          borderTopColor: color.grey,
-          borderTopWidth: 1,
-          paddingTop: 10,
-        }}
-      >
+      <View style={styles.container}>
         <Text
-          style={{
-            fontSize: normalize(12),
-            lineHeight: normalize(17),
-            color: color.themeNight,
-            fontFamily: fontFamily.regular,
-          }}
+          style={styles.text}
         >{`Min: ${minAttendees} Max:${maxAttendees}`}</Text>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.bottom}>
           <View
             style={{
               flex: 1,
               justifyContent: 'center',
             }}
           >
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '90%',
-                height: 15,
-                borderRadius: 5,
-              }}
-            >
+            <View style={styles.bar}>
               <View
-                style={{
-                  backgroundColor: color.themeBlue,
-                  width: joinPercentage,
-                  borderTopStartRadius: 5,
-                  borderBottomStartRadius: 5,
-                  borderTopEndRadius: joinCount == maxAttendees ? 5 : 0,
-                  borderBottomEndRadius: joinCount == maxAttendees ? 5 : 0,
-                }}
+                style={[
+                  styles.joined,
+                  {
+                    width: `${joinPercentage}%`,
+                    backgroundColor:
+                      joinCount < minAttendees
+                        ? color.themeRed
+                        : color.themeBlue,
+                  },
+                ]}
               />
               <View
-                style={{
-                  backgroundColor: color.grey,
-                  width: availableSpotsPercentage,
-                  borderTopStartRadius: joinCount == 0 ? 5 : 0,
-                  borderBottomStartRadius: joinCount == 0 ? 5 : 0,
-                  borderTopEndRadius: 5,
-                  borderBottomEndRadius: 5,
-                }}
+                style={[
+                  styles.avaibaleSpots,
+                  {
+                    width: `${availableSpotsPercentage}%`,
+                  },
+                ]}
               />
             </View>
           </View>
@@ -73,19 +54,17 @@ class JoinBar extends React.Component {
             <Icon
               name={'ios-people'}
               type="ionicon"
-              color={color.themeNight}
+              color={color.themeRed}
               size={20}
             />
             <Text
-              style={[
-                {
-                  fontSize: normalize(12),
-                  lineHeight: normalize(17),
-                  color: color.themeNight,
-                  fontFamily: fontFamily.regular,
-                },
-                { padding: 4 },
-              ]}
+              style={{
+                fontSize: normalize(12),
+                lineHeight: normalize(17),
+                color: color.themeRed,
+                fontFamily: fontFamily.regular,
+                padding: 4,
+              }}
             >{`${joinCount}/${maxAttendees}`}</Text>
           </View>
         </View>
