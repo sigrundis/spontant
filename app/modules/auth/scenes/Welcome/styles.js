@@ -16,15 +16,15 @@ const styles = StyleSheet.create({
     paddingBottom: padding * 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FF553F',
+    backgroundColor: color.themeRed,
   },
 
   image: {
     height: 100,
     width: 100,
-    backgroundColor: color.grey,
-    marginBottom: padding,
-    resizeMode,
+    // backgroundColor: color.grey,
+    // marginBottom: padding,
+    // resizeMode,
   },
 
   title: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#FF553F',
+    backgroundColor: color.themeBlue,
     height: normalize(55),
   },
 
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 
   signInText: {
     fontSize: fontSize.regular,
-    color: '#FF553F',
+    color: color.themeOcean,
     fontFamily: fontFamily.medium,
   },
 

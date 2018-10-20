@@ -81,7 +81,7 @@ class Register extends React.Component {
   }
 
   onSuccess(user) {
-    Actions.Main();
+    this.props.navigation.navigate('LoggedIn');
   }
 
   onError(error) {
@@ -99,7 +99,6 @@ class Register extends React.Component {
   }
 
   render() {
-    console.log('this.state.error', this.state.error);
     return (
       <Form
         fields={fields}
