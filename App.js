@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Font, AppLoading } from 'expo';
-
-import PrimaryNav from './app/config/navigation';
-import Router from './app/config/routes';
+import { createRootNavigator } from './app/config/navigation';
+import NavigationService from './NavigationService';
 import store from './app/redux/store';
+import { checkLoginStatus } from './app/modules/auth/actions';
+import Splash from './app/components/Splash/Splash';
 
 function cacheFonts(fonts) {
   return fonts.map((font) => Font.loadAsync(font));
@@ -15,6 +16,9 @@ export default class App extends Component {
     super();
     this.state = {
       isReady: false,
+      checkedLogin: false,
+      isLoggedIn: false,
+      exist: false,
     };
   }
 
@@ -30,8 +34,18 @@ export default class App extends Component {
     await Promise.all([...fontAssets]);
   }
 
+  componentDidMount() {
+    let _this = this;
+    store.dispatch(
+      checkLoginStatus((exist, isLoggedIn) => {
+        _this.setState({ checkedLogin: true, exist, isLoggedIn });
+      })
+    );
+  }
+
   render() {
-    if (!this.state.isReady) {
+    const { isReady, checkedLogin, isLoggedIn } = this.state;
+    if (!isReady) {
       return (
         <AppLoading
           startAsync={this._loadAssetsAsync}
@@ -40,11 +54,16 @@ export default class App extends Component {
         />
       );
     }
+    if (!checkedLogin) return <Splash />;
 
+    const Layout = createRootNavigator(isLoggedIn);
     return (
       <Provider store={store}>
-        {/* <PrimaryNav /> */}
-        <Router />
+        <Layout
+          ref={(navigatorRef) => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
       </Provider>
     );
   }
