@@ -49,18 +49,19 @@ class Login extends React.Component {
   }
 
   onForgotPassword() {
-    Actions.ForgotPassword();
+    const { navigation } = this.props;
+    console.log('navigation', navigation);
+    navigation.navigate('ForgotPassword');
   }
 
   onSubmit(data) {
     this.setState({ error: error }); //clear out error messages
-
     this.props.login(data, this.onSuccess, this.onError);
   }
 
   onSuccess({ exists, user }) {
-    if (exists) Actions.Main();
-    else Actions.CompleteProfile({ user });
+    if (exists) this.props.navigation.navigate('LoggedIn');
+    else this.props.navigation.navigate('CompleteProfile', { user });
   }
 
   onError(error) {
@@ -78,6 +79,7 @@ class Login extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
     return (
       <Form
         fields={fields}
@@ -85,7 +87,7 @@ class Login extends React.Component {
         onSubmit={this.onSubmit}
         buttonTitle={'LOG IN'}
         error={this.state.error}
-        onForgotPassword={this.onForgotPassword}
+        onForgotPassword={() => navigation.navigate('ForgotPassword')}
       />
     );
   }

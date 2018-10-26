@@ -1,13 +1,9 @@
 import React from 'react';
 import { View, FlatList, ActivityIndicator } from 'react-native';
-import { Button } from 'react-native-elements';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
 import { actions as home } from '../../index';
 const { getInvites } = home;
-
-import { actions as auth, theme } from '../../../auth/index';
 
 import styles from './styles';
 import Invite from '../../components/Invite';
@@ -24,7 +20,8 @@ class Home extends React.Component {
   }
 
   renderItem({ item, index }) {
-    return <Invite index={index} />;
+    const { navigation } = this.props;
+    return <Invite navigation={navigation} index={index} />;
   }
 
   render() {

@@ -40,14 +40,13 @@ class CompleteProfile extends React.Component {
     this.setState({ error: error }); //clear out error messages
 
     //attach user id
-    const { user } = this.props;
+    const user = this.props.navigation.getParam(user);
     data['uid'] = user.uid;
-
     this.props.createUser(data, this.onSuccess, this.onError);
   }
 
   onSuccess() {
-    Actions.Main();
+    this.props.navigation.navigate('Home');
   }
 
   onError(error) {

@@ -10,6 +10,8 @@ const { signInWithFacebook } = auth;
 
 import styles from './styles';
 
+const image = require('../../../../static/img/icon.png');
+
 class Welcome extends React.Component {
   constructor() {
     super();
@@ -42,11 +44,17 @@ class Welcome extends React.Component {
     alert(error.message);
   }
 
+  onPressSignIn() {
+    const { navigation } = this.props;
+    navigation.navigate('Login');
+  }
+
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.topContainer}>
-          <Image style={styles.image} source={{ uri: '' }} />
+          <Image style={styles.image} source={image} />
           <Text style={styles.title}>Spontant</Text>
         </View>
 
@@ -75,13 +83,13 @@ class Welcome extends React.Component {
               containerViewStyle={[styles.containerView]}
               buttonStyle={[styles.button]}
               textStyle={styles.buttonText}
-              onPress={Actions.Register}
+              onPress={() => navigation.navigate('Register')}
             />
           </View>
           <View style={styles.bottom}>
             <Text style={styles.bottomText}>Already have an account?</Text>
 
-            <TouchableOpacity onPress={Actions.Login}>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text style={styles.signInText}>Sign in</Text>
             </TouchableOpacity>
           </View>
