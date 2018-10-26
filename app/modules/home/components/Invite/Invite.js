@@ -31,9 +31,8 @@ class Invite extends React.Component {
   }
 
   onOption() {
-    const { invites, index } = this.props;
+    const { invites, index, navigation } = this.props;
     const invite = invites[index];
-
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: ['Edit', 'Delete', 'Cancel'],
@@ -41,7 +40,8 @@ class Invite extends React.Component {
         cancelButtonIndex: 2,
       },
       (buttonIndex) => {
-        if (buttonIndex === 0) Actions.NewInvite({ edit: true, invite });
+        if (buttonIndex === 0)
+          navigation.navigate('NewInvite', { edit: true, invite });
         else if (buttonIndex === 1) this.onDelete();
       }
     );
