@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { Font, AppLoading } from 'expo';
-
-import HomeStack from './app/config/newRoutes';
-import PrimaryNav from './app/config/navigation';
 import { createRootNavigator } from './app/config/navigation';
-import Router from './app/config/routes';
+import NavigationService from './NavigationService';
 import store from './app/redux/store';
 import { checkLoginStatus } from './app/modules/auth/actions';
 import Splash from './app/components/Splash/Splash';
@@ -60,12 +57,13 @@ export default class App extends Component {
     if (!checkedLogin) return <Splash />;
 
     const Layout = createRootNavigator(isLoggedIn);
-    console.log('is logged in in app?', isLoggedIn);
     return (
       <Provider store={store}>
-        <Layout />
-        {/* <PrimaryNav /> */}
-        {/* <Router /> */}
+        <Layout
+          ref={(navigatorRef) => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
       </Provider>
     );
   }

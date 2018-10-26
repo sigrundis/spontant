@@ -85,6 +85,14 @@ const MainStack = createBottomTabNavigator(
             color={color.themeRed}
           />
         ),
+        tabBarOnPress: ({ navigation }) => {
+          console.log('tab bar on press', navigation);
+          navigation.setParams({ edit: false, invite: {} });
+          navigation.navigate('NewInvite', {
+            edit: false,
+            invite: {},
+          });
+        },
       },
     },
     Profile: {
