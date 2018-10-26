@@ -33,13 +33,12 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#FF553F',
+    backgroundColor: color.themeBlue,
     height: normalize(55),
   },
 
   buttonText: {
     color: color.white,
-    fontWeight: '700',
     fontSize: fontSize.regular + 2,
   },
 
