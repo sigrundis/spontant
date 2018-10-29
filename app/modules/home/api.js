@@ -86,3 +86,16 @@ export function toggleLove(data, callback) {
     }
   );
 }
+
+export function updateUser(user, callback) {
+  const { uid } = user;
+
+  let updates = {};
+  updates['users/' + uid] = user;
+
+  database
+    .ref()
+    .update(updates)
+    .then(() => callback(true, user, null))
+    .catch((error) => callback(false, null, error));
+}

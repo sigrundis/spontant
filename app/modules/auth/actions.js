@@ -26,6 +26,17 @@ export function createUser(user, successCB, errorCB) {
   };
 }
 
+export function updateUser(user, successCB, errorCB) {
+  return (dispatch) => {
+    api.updateUser(user, function(success, data, error) {
+      if (success) {
+        dispatch({ type: t.UPDATE_USER, data: user });
+        successCB();
+      } else if (error) errorCB(error);
+    });
+  };
+}
+
 export function login(data, successCB, errorCB) {
   return (dispatch) => {
     api.login(data, function(success, data, error) {

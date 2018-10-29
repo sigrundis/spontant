@@ -20,6 +20,10 @@ const authReducer = (state = initialState, action) => {
 
       return { ...state, isLoggedIn: false, user: null };
 
+    case t.UPDATE_USER:
+      const updatedUser = action.data;
+      return { ...state, user: updatedUser };
+
     default:
       return state;
   }
