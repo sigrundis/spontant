@@ -50,3 +50,14 @@ export function toggleLove(data, errorCB) {
     });
   };
 }
+
+export function updateUser(user, successCB, errorCB) {
+  return (dispatch) => {
+    api.updateUser(user, function(success, data, error) {
+      if (success) {
+        dispatch();
+        successCB();
+      } else if (error) errorCB(error);
+    });
+  };
+}
