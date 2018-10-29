@@ -22,6 +22,19 @@ export function createUser(user, callback) {
     .catch((error) => callback(false, null, { message: error }));
 }
 
+export function updateUser(user, callback) {
+  const { uid } = user;
+
+  let updates = {};
+  updates['users/' + uid] = user;
+
+  database
+    .ref()
+    .update(updates)
+    .then(() => callback(true, user, null))
+    .catch((error) => callback(false, null, error));
+}
+
 //Sign the user in with their email and password
 export function login(data, callback) {
   const { email, password } = data;
