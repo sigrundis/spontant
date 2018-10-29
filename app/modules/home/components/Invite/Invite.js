@@ -41,7 +41,11 @@ class Invite extends React.Component {
       },
       (buttonIndex) => {
         if (buttonIndex === 0)
-          navigation.navigate('NewInvite', { edit: true, invite });
+          navigation.navigate('NewInvite', {
+            title: 'Edit Invite',
+            edit: true,
+            invite,
+          });
         else if (buttonIndex === 1) this.onDelete();
       }
     );
@@ -104,7 +108,7 @@ class Invite extends React.Component {
       >
         <Button
           onPress={this.onClickJoin}
-          title={attendees && attendees[user.uid] ? 'Cansel join' : 'Join'}
+          title={attendees && attendees[user.uid] ? 'Cancel join' : 'Join'}
           color={
             attendees && attendees[user.uid] ? color.themeBlue : color.white
           }

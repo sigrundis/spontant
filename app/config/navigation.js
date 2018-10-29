@@ -1,11 +1,9 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,
   createSwitchNavigator,
-  createDrawerNavigator,
-  DrawerActions,
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import DrawerMenu from '../modules/home/scenes/DrawerMenu';
@@ -18,21 +16,12 @@ import ForgotPassword from '../modules/auth/scenes/ForgotPassword';
 import Home from '../modules/home/scenes/Home';
 import NewInvite from '../modules/home/scenes/NewInvite';
 import Profile from '../modules/home/scenes/Profile';
+import EditProfile from '../modules/home/scenes/EditProfile';
 import { color } from '../styles/theme';
 import store from '../redux/store';
 import { checkLoginStatus } from '../modules/auth/actions';
 
-let userExists = false;
-let isReady = false;
-let isUserLoggedIn = false;
-
-store.dispatch(
-  checkLoginStatus((exist, isLoggedIn) => {
-    isReady = true;
-    userExists = exist;
-    isUserLoggedIn = isLoggedIn;
-  })
-);
+let showEditProfileButton = false;
 
 const headerStyle = {
   marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
@@ -52,14 +41,12 @@ const AuthStack = createStackNavigator(
     Login: { screen: Login },
     ForgotPassword: { screen: ForgotPassword },
   },
-  // Default config for all screens
   {
     initialRouteName: 'Welcome',
   }
 );
 
-// Manifest of possible screens
-const MainStack = createBottomTabNavigator(
+const MainTab = createBottomTabNavigator(
   {
     Home: {
       screen: Home,
@@ -72,6 +59,10 @@ const MainStack = createBottomTabNavigator(
             color={color.themeRed}
           />
         ),
+        tabBarOnPress: ({ navigation }) => {
+          showEditProfileButton = false;
+          navigation.navigate('Home', { title: 'Home' });
+        },
       },
     },
     NewInvite: {
@@ -86,11 +77,11 @@ const MainStack = createBottomTabNavigator(
           />
         ),
         tabBarOnPress: ({ navigation }) => {
-          console.log('tab bar on press', navigation);
-          navigation.setParams({ edit: false, invite: {} });
+          showEditProfileButton = false;
           navigation.navigate('NewInvite', {
             edit: false,
             invite: {},
+            title: 'New Invite',
           });
         },
       },
@@ -106,16 +97,49 @@ const MainStack = createBottomTabNavigator(
             color={color.themeRed}
           />
         ),
+        tabBarOnPress: ({ navigation }) => {
+          showEditProfileButton = true;
+          navigation.navigate('Profile', { title: 'Profile' });
+        },
       },
     },
   },
-  // Default config for all screens
   {
     tabBarOptions: {
       showLabel: false,
     },
   }
 );
+
+function getHeaderRight(navigation) {
+  if (showEditProfileButton) {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+        <View style={{ marginRight: 10 }}>
+          <Icon name={'ios-settings'} type={'ionicon'} color={color.black} />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
+
+const MainStack = createStackNavigator({
+  Tab: {
+    screen: MainTab,
+    navigationOptions: ({ navigation }) => {
+      const { state } = navigation;
+      const { params } = state.routes[state.index];
+      return {
+        title: params ? params.title : 'Home',
+        headerRight: getHeaderRight(navigation),
+      };
+    },
+  },
+  EditProfile: {
+    screen: EditProfile,
+    navigationOptions: { title: 'Edit Profile' },
+  },
+});
 
 export const createRootNavigator = (loggedIn = false) => {
   return createSwitchNavigator(
@@ -128,15 +152,3 @@ export const createRootNavigator = (loggedIn = false) => {
     }
   );
 };
-
-const Drawer = createDrawerNavigator(
-  {
-    Main: { screen: isUserLoggedIn ? MainStack : AuthStack },
-  },
-  {
-    contentComponent: DrawerMenu,
-    drawerWidth: 300,
-  }
-);
-
-export default Drawer;

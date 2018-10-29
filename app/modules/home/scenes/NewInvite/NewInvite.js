@@ -63,20 +63,9 @@ class NewInvite extends Component {
     };
   }
 
-  renderCloseButton(props) {
-    return (
-      <TouchableOpacity onPress={Actions.pop}>
-        <View style={styles.closeButton}>
-          <Icon name={'md-close'} type={'ionicon'} color={color.black} />
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
   onSubmit() {
     let { navigation } = this.props;
     const edit = navigation.getParam('edit', false);
-    console.log('is it edit?', edit);
     if (edit) this.editInvite();
     else this.saveInvite();
   }
@@ -241,7 +230,6 @@ class NewInvite extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderCloseButton()}
         {this.renderInputs()}
         <Button
           raised

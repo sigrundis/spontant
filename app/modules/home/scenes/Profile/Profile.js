@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, Button, Text } from 'react-native-elements';
 import { actions as auth } from '../../../auth/index';
 const { signOut } = auth;
 import styles from './styles';
+import { theme } from '../../index';
+const { color } = theme;
 
 class Profile extends Component {
   onPressSignOut = (screen) => {
@@ -21,13 +23,11 @@ class Profile extends Component {
   }
 
   onErrorSignOut(error) {
-    console.log('on sign out error', error);
     alert('Oops!', error.message);
   }
 
   render() {
     const { user } = this.props;
-    console.log('styles', styles.button);
     return (
       <View style={{ paddingVertical: 20 }}>
         <Card title={user && user.displayname}>
