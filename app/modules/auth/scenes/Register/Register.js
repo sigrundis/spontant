@@ -15,7 +15,7 @@ const fields = [
     placeholder: 'Email Address',
     autoFocus: false,
     secureTextEntry: false,
-    value: 'sigrun@spontant.com',
+    value: '',
     type: 'email',
   },
   {
@@ -24,7 +24,7 @@ const fields = [
     placeholder: 'Username',
     autoFocus: false,
     secureTextEntry: false,
-    value: 'sigrundis',
+    value: '',
     type: 'text',
   },
   {
@@ -33,7 +33,7 @@ const fields = [
     placeholder: 'Display name',
     autoFocus: false,
     secureTextEntry: false,
-    value: 'Sigrún Dís',
+    value: '',
     type: 'text',
   },
   {
@@ -42,7 +42,7 @@ const fields = [
     placeholder: 'Password',
     autoFocus: false,
     secureTextEntry: true,
-    value: 'testpass',
+    value: '',
     type: 'password',
   },
   {
@@ -51,7 +51,7 @@ const fields = [
     placeholder: 'Confirm Password',
     autoFocus: false,
     secureTextEntry: true,
-    value: 'testpass',
+    value: '',
     type: 'confirm_password',
   },
 ];
