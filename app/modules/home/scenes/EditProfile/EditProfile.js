@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import {
   Button,
   FormLabel,
@@ -7,6 +7,7 @@ import {
   FormValidationMessage,
   Icon,
 } from 'react-native-elements';
+import { Permissions, ImagePicker } from 'expo';
 import { withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -19,10 +20,16 @@ const { color } = theme;
 
 const error = {};
 
+const CLOUDINARY_NAME = 'dgbmwdqbl';
+
+const CLOUDINARY_PRESET = 'face-crop';
+
 class EditProfile extends React.Component {
   constructor() {
     super();
     this.state = {
+      userImage: null,
+      uploadingImage: false,
       error: error,
     };
     this.onChangeDisplayName = this.onChangeDisplayName.bind(this);
@@ -34,19 +41,56 @@ class EditProfile extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { isFocused, user } = props;
     if (!isFocused) return null;
-    // If the user was creating a new invite last time they were using the input fields
-    // but didn't save, we want to keep their input, i.e. don't change the state.
-    const { displayname } = user;
+    const { displayname, userimage } = user;
     return {
       displayName: displayname,
+      userImage: userimage,
     };
   }
 
+  pickImage = async () => {
+    const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    }
+    this.setState({ uploadingImage: true });
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [60, 60],
+      base64: true,
+    });
+    if (result.canseled) {
+      this.setState({ uploadingImage: false });
+    } else {
+      let base64Img = `data:image/jpg;base64,${result.base64}`;
+      let apiUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`;
+      let data = {
+        file: base64Img,
+        upload_preset: CLOUDINARY_PRESET,
+      };
+      fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      })
+        .then(async (response) => {
+          let data = await response.json();
+          this.setState({ uploadingImage: false, userImage: data.secure_url });
+        })
+        .catch((err) => {
+          console.error('Cloudinary error', err);
+          this.setState({ uploadingImage: false });
+        });
+    }
+  };
+
   onSubmit() {
-    const { displayName } = this.state;
-    const { navigation, user } = this.props;
-    console.log('user', user);
+    const { displayName, userImage } = this.state;
+    const { user } = this.props;
     user['displayname'] = displayName;
+    user['userimage'] = userImage || '';
     this.setState({ error: error }); //clear out error messages
     this.props.updateUser(user, this.onSuccess, this.onError);
   }
@@ -71,7 +115,6 @@ class EditProfile extends React.Component {
   }
 
   onChangeDisplayName(displayName) {
-    console.log('change name');
     this.setState({ displayName });
   }
 
@@ -80,7 +123,7 @@ class EditProfile extends React.Component {
     return [
       {
         key: 'displayName',
-        label: 'Display name',
+        label: 'Name',
         placeholder: 'Display name',
         autoFocus: false,
         secureTextEntry: false,
@@ -101,10 +144,45 @@ class EditProfile extends React.Component {
     );
   }
 
+  renderImage(uri) {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Image
+          source={{ uri }}
+          style={{ width: 100, height: 100, borderRadius: 50 }}
+        />
+      </View>
+    );
+  }
+
+  renderUserImage() {
+    const { user } = this.props;
+    const { userimage } = user;
+    const { uploadingImage, userImage } = this.state;
+    if (uploadingImage) {
+      return <ActivityIndicator size="large" color={color.themeRed} />;
+    }
+    // Newly uploaded user image
+    if (userImage) {
+      return this.renderImage(userImage);
+    }
+    // User image from database
+    if (userimage) {
+      return this.renderImage(userimage);
+    }
+    return (
+      <Icon name={'ios-contact'} type="ionicon" color={color.grey} size={100} />
+    );
+  }
+
   renderInputs() {
     const { error } = this.state;
     const { placeholderTextColor } = this.props;
-    const showLabel = false;
     const onChangeText = {
       displayName: this.onChangeDisplayName,
     };
@@ -124,7 +202,7 @@ class EditProfile extends React.Component {
           } = field;
           return (
             <View style={styles.FormInput} key={key}>
-              {showLabel && <FormLabel>{label}</FormLabel>}
+              <FormLabel>{label}</FormLabel>
               <FormInput
                 autoCapitalize="none"
                 clearButtonMode="while-editing"
@@ -154,16 +232,24 @@ class EditProfile extends React.Component {
     return (
       <View style={styles.container}>
         {this.renderCloseButton()}
+        {this.renderUserImage()}
+        <Button
+          title="Select new profile picture"
+          onPress={this.pickImage}
+          buttonStyle={styles.imageButton}
+          textStyle={styles.imageButtonText}
+        />
         {this.renderInputs()}
         <Button
           raised
-          title="SAVE CHANGES"
+          title="Save changes"
           borderRadius={10}
           containerViewStyle={styles.containerView}
           buttonStyle={styles.button}
           textStyle={styles.buttonText}
           onPress={this.onSubmit}
         />
+
         <View style={styles.bottomContainer} />
         <KeyboardSpacer />
       </View>
@@ -180,6 +266,26 @@ function mapStateToProps(state, props) {
     user: state.authReducer.user,
   };
 }
+
+// function uploadFile(file) {
+//   return RNFetchBlob.fetch(
+//     'POST',
+//     'https://api.cloudinary.com/v1_1/' +
+//       CLOUDINARY_NAME +
+//       '/image/upload?upload_preset=' +
+//       CLOUDINARY_PRESET,
+//     {
+//       'Content-Type': 'multipart/form-data',
+//     },
+//     [
+//       {
+//         name: 'file',
+//         filename: file.fileName,
+//         data: RNFetchBlob.wrap(file.origURL),
+//       },
+//     ]
+//   );
+// }
 
 export default withNavigationFocus(
   connect(

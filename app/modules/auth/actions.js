@@ -92,6 +92,16 @@ export function checkLoginStatus(callback) {
   };
 }
 
+export function getUserById(userId, successCB, errorCB) {
+  return (dispatch) => {
+    api.getUserById(userId, function(success, data, error) {
+      if (success) {
+        successCB(data);
+      } else if (error) errorCB(error);
+    });
+  };
+}
+
 export function signInWithFacebook(facebookToken, successCB, errorCB) {
   return (dispatch) => {
     api.signInWithFacebook(facebookToken, function(success, data, error) {
