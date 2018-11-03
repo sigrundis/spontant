@@ -37,8 +37,18 @@ const styles = StyleSheet.create({
     height: normalize(55),
   },
 
+  imageButton: {
+    backgroundColor: 'transparent',
+    height: normalize(55),
+  },
+
   buttonText: {
     color: color.white,
+    fontSize: fontSize.regular + 2,
+  },
+
+  imageButtonText: {
+    color: color.themeBlue,
     fontSize: fontSize.regular + 2,
   },
 

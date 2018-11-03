@@ -62,6 +62,23 @@ export function getUser(user, callback) {
     .catch((error) => callback(false, null, error));
 }
 
+export function getUserById(userId, callback) {
+  database
+    .ref('users')
+    .child(userId)
+    .once('value')
+    .then(function(snapshot) {
+      const exists = snapshot.val() !== null;
+
+      //if the user exist in the DB, replace the user variable with the returned snapshot
+      if (exists) user = snapshot.val();
+
+      const data = { exists, user };
+      callback(true, data, null);
+    })
+    .catch((error) => callback(false, null, error));
+}
+
 //Send Password Reset Email
 export function resetPassword(data, callback) {
   const { email } = data;

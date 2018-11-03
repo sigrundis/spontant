@@ -1,7 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 
 import { theme } from '../../index';
-const { padding, color, fontFamily, normalize } = theme;
+const { padding, color, fontFamily, normalize, fontSize } = theme;
 
 const styles = StyleSheet.create({
   container: {
@@ -113,6 +113,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: color.themeBlue,
+  },
+  link: {
+    fontSize: fontSize.regular,
+    color: color.themeOcean,
+    fontFamily: fontFamily.light,
   },
 });
 

@@ -16,7 +16,6 @@ class Welcome extends React.Component {
   constructor() {
     super();
     this.state = {};
-
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
     this.onSignInWithFacebook = this.onSignInWithFacebook.bind(this);
