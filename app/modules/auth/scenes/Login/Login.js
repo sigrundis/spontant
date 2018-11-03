@@ -50,7 +50,6 @@ class Login extends React.Component {
 
   onForgotPassword() {
     const { navigation } = this.props;
-    console.log('navigation', navigation);
     navigation.navigate('ForgotPassword');
   }
 

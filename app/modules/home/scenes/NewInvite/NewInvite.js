@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import {
   Button,
   FormLabel,
@@ -7,16 +7,12 @@ import {
   FormValidationMessage,
 } from 'react-native-elements';
 import { withNavigationFocus } from 'react-navigation';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { Icon } from 'react-native-elements';
-import NavigationService from '../../../../../NavigationService';
 import styles from './styles';
 import { isEmpty } from '../../../auth/utils/validate';
 import { actions as home, theme } from '../../index';
 const { addInvite, updateInvite } = home;
-const { color } = theme;
 
 const error = {};
 
@@ -84,6 +80,7 @@ class NewInvite extends Component {
   saveInvite() {
     const { title, description, minAttendees, maxAttendees } = this.state;
     const { user } = this.props;
+
     const newInvite = {
       title: title,
       description: description,
@@ -91,11 +88,12 @@ class NewInvite extends Component {
       maxAttendees: maxAttendees,
       time: Date.now(),
       userId: user.uid,
-      joinCount: 0,
+      joinCount: 1,
       author: {
         username: user.username,
         name: user.displayname,
       },
+      attendees: { [user.uid]: true },
     };
     this.props.addInvite(newInvite, this.onSuccess, this.onError);
   }
@@ -228,6 +226,7 @@ class NewInvite extends Component {
   }
 
   render() {
+    const { user } = this.props;
     return (
       <View style={styles.container}>
         {this.renderInputs()}
