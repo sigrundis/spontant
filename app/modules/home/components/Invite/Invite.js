@@ -1,34 +1,51 @@
 import React from 'react';
-
 import {
   Text,
   View,
   TouchableOpacity,
   ActionSheetIOS,
   Button,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
-
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
-
+import AnimatedEllipsis from 'react-native-animated-ellipsis';
 import JoinBar from '../JoinBar';
 import styles from './styles';
 import { connect } from 'react-redux';
-
 import { actions, theme } from '../../index';
-import { Actions } from 'react-native-router-flux';
-
-const { deleteInvite, toggleLove } = actions;
+import { actions as authActions } from '../../../auth/index';
+const { getUserById } = authActions;
+const { deleteInvite, addJoin } = actions;
 const { normalize, color } = theme;
 
 class Invite extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { fetchingInviter: true };
     this.onOption = this.onOption.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onClickJoin = this.onClickJoin.bind(this);
+    this.onFindUserSuccess = this.onFindUserSuccess.bind(this);
+    this.onFindUserError = this.onFindUserError.bind(this);
   }
+
+  componentDidMount() {
+    const { invites, index, getUserById } = this.props;
+    const invite = invites[index];
+    const { userId } = invite;
+    getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
+  }
+
+  onFindUserSuccess = (data) => {
+    this.setState({ fetchingInviter: false, inviter: data.user });
+  };
+
+  onFindUserError = (error) => {
+    this.setState({ fetchingInviter: false });
+    console.error('Error finding user', error);
+  };
 
   onOption() {
     const { invites, index, navigation } = this.props;
@@ -61,17 +78,24 @@ class Invite extends React.Component {
   onClickJoin() {
     const { user, invites, index } = this.props;
     const invite = invites[index];
-
     const data = { invite, uid: user.uid };
-
-    this.props.toggleLove(data, (error) => alert(error.message));
+    this.props.addJoin(data, (error) => alert(error.message));
   }
 
   /**
    * TODO: Change this when user can upload image.
    */
   renderUserImage() {
-    return (
+    const { inviter, fetchingInviter } = this.state;
+    if (fetchingInviter)
+      return <ActivityIndicator size="small" color={color.grey} />;
+    const { userimage } = inviter;
+    return userimage ? (
+      <Image
+        source={{ uri: userimage }}
+        style={{ width: 50, height: 50, borderRadius: 25 }}
+      />
+    ) : (
       <Icon name={'ios-contact'} type="ionicon" color={color.grey} size={50} />
     );
   }
@@ -82,7 +106,7 @@ class Invite extends React.Component {
         <TouchableOpacity onPress={this.onOption}>
           <View style={styles.buttonContainer}>
             <Icon
-              name={'md-more'}
+              name={'ios-more'}
               type="ionicon"
               color={color.themeBlue}
               size={normalize(20)}
@@ -119,6 +143,7 @@ class Invite extends React.Component {
 
   render() {
     const { user, invites, index } = this.props;
+    const { inviter, fetchingInviter } = this.state;
     const invite = invites[index];
     const {
       title,
@@ -130,14 +155,17 @@ class Invite extends React.Component {
       userId,
       joinCount,
     } = invite;
-
     return (
       <View style={[styles.container]}>
         <View style={styles.wrapper}>
           <View style={[styles.invite]}>
             <View style={styles.userImage}>{this.renderUserImage()}</View>
             <View style={styles.left}>
-              <Text style={[styles.author]}>{author.name}</Text>
+              {fetchingInviter ? (
+                <AnimatedEllipsis />
+              ) : (
+                <Text style={[styles.author]}>{inviter.displayname}</Text>
+              )}
               <Text style={[styles.publishedAt]}>{`Created an invite ${moment(
                 time
               ).fromNow()}`}</Text>
@@ -169,5 +197,5 @@ function mapStateToProps(state, props) {
 
 export default connect(
   mapStateToProps,
-  { deleteInvite, toggleLove }
+  { getUserById, deleteInvite, addJoin }
 )(Invite);

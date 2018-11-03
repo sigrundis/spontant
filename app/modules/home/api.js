@@ -60,9 +60,8 @@ export function deleteInvite(invite, callback) {
     .catch((error) => callback(false, null, error));
 }
 
-export function toggleLove(data, callback) {
+export function addJoin(data, callback) {
   const { invite, uid } = data;
-  console.log('invite', invite);
   const inviteRef = database.ref('invites/' + invite.id);
 
   inviteRef.transaction(
