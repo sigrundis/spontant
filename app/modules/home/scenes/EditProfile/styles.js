@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: color.themeBlue,
+    backgroundColor: color.themeRed,
     height: normalize(55),
   },
 
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
 
   imageButtonText: {
-    color: color.themeBlue,
+    color: color.themeGreen,
     fontSize: fontSize.regular + 2,
   },
 
@@ -57,9 +57,6 @@ const styles = StyleSheet.create({
   },
 
   closeButton: {
-    // position: 'absolute',
-    // top: 5,
-    // right: 5,
     marginLeft: 'auto',
     padding: 10,
   },

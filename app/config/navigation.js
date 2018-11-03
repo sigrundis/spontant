@@ -6,8 +6,6 @@ import {
   createSwitchNavigator,
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import DrawerMenu from '../modules/home/scenes/DrawerMenu';
-import transitionConfig from '../modules/home/utils/navigationAnimation';
 import Welcome from '../modules/auth/scenes/Welcome';
 import Register from '../modules/auth/scenes/Register';
 import Login from '../modules/auth/scenes/Login';
@@ -18,8 +16,6 @@ import NewInvite from '../modules/home/scenes/NewInvite';
 import Profile from '../modules/home/scenes/Profile';
 import EditProfile from '../modules/home/scenes/EditProfile';
 import { color } from '../styles/theme';
-import store from '../redux/store';
-import { checkLoginStatus } from '../modules/auth/actions';
 
 let showEditProfileButton = false;
 
@@ -35,6 +31,7 @@ const AuthStack = createStackNavigator(
       navigationOptions: {
         title: 'Sign Up',
         headerStyle,
+        headerTintColor: color.themeNight,
       },
     },
     CompleteProfile: { screen: CompleteProfile },
@@ -116,7 +113,7 @@ function getHeaderRight(navigation) {
     return (
       <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
         <View style={{ marginRight: 10 }}>
-          <Icon name={'ios-settings'} type={'ionicon'} color={color.black} />
+          <Icon name={'ios-settings'} type={'ionicon'} color={color.themeRed} />
         </View>
       </TouchableOpacity>
     );
@@ -132,12 +129,18 @@ const MainStack = createStackNavigator({
       return {
         title: params ? params.title : 'Home',
         headerRight: getHeaderRight(navigation),
+        headerStyle,
+        headerTintColor: color.themeNight,
       };
     },
   },
   EditProfile: {
     screen: EditProfile,
-    navigationOptions: { title: 'Edit Profile' },
+    navigationOptions: {
+      title: 'Edit Profile',
+      headerStyle,
+      headerTintColor: color.themeNight,
+    },
   },
 });
 
