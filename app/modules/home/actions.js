@@ -42,10 +42,10 @@ export function deleteInvite(invite, errorCB) {
 }
 
 // Like/Unlike
-export function toggleLove(data, errorCB) {
+export function addJoin(data, errorCB) {
   return (dispatch) => {
     dispatch({ type: t.LOADING_INVITES });
-    api.toggleLove(data, function(success, data, error) {
+    api.addJoin(data, function(success, data, error) {
       if (error) errorCB(error);
     });
   };

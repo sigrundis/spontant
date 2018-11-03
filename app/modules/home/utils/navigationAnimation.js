@@ -33,7 +33,6 @@ const transitionConfig = () => {
         outputRange: [height, 0],
       });
 
-      console.log('translateX', translateX);
       const slideFromRight = { transform: [{ translateX: translateX }] };
       const slideFromLeft = { transform: [{ translateMinusX }] };
       const slideFromBottom = { transform: [{ translateY }] };

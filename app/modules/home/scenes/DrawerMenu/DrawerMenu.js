@@ -58,7 +58,7 @@ class DrawerMenu extends Component {
   }
 
   onErrorSignOut(error) {
-    console.log('on sign out error', error);
+    console.error('on sign out error', error);
     alert('Oops!', error.message);
   }
 
