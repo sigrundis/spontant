@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: color.themeBlue,
+    backgroundColor: color.themeRed,
     borderRadius: 5,
     height: normalize(55),
   },
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 
   forgotText: {
     textAlign: 'center',
-    color: color.themeOcean,
+    color: color.themeGreen,
     marginBottom: padding,
     fontSize: fontSize.regular,
     fontFamily: fontFamily.medium,

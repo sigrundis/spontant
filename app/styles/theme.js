@@ -15,6 +15,7 @@ const color = {
   themeOcean: '#3ac9c2',
   themeYellow: '#fca45d',
   themeNight: '#354355',
+  themeGreen: '#008489',
 };
 
 const fontSize = {

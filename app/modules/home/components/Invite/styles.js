@@ -102,17 +102,13 @@ const styles = StyleSheet.create({
 
   joinButton: {
     width: '100%',
-    backgroundColor: color.themeBlue,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#fff',
   },
   joinButtonSelected: {
     width: '100%',
-    backgroundColor: '#fff',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: color.themeBlue,
   },
   link: {
     fontSize: fontSize.regular,

@@ -36,7 +36,7 @@ class JoinBar extends React.Component {
                     backgroundColor:
                       joinCount < minAttendees
                         ? color.themeRed
-                        : color.themeBlue,
+                        : color.themeGreen,
                   },
                 ]}
               />
@@ -54,14 +54,17 @@ class JoinBar extends React.Component {
             <Icon
               name={'ios-people'}
               type="ionicon"
-              color={color.themeRed}
+              color={
+                joinCount < minAttendees ? color.themeRed : color.themeGreen
+              }
               size={20}
             />
             <Text
               style={{
                 fontSize: normalize(12),
                 lineHeight: normalize(17),
-                color: color.themeRed,
+                color:
+                  joinCount < minAttendees ? color.themeRed : color.themeGreen,
                 fontFamily: fontFamily.regular,
                 padding: 4,
               }}
