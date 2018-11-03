@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: color.themeBlue,
+    backgroundColor: color.themeRed,
     height: normalize(55),
   },
 
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 
   signInText: {
     fontSize: fontSize.regular,
-    color: color.themeOcean,
+    color: color.themeGreen,
     fontFamily: fontFamily.medium,
   },
 

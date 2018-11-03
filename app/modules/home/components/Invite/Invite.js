@@ -71,7 +71,6 @@ class Invite extends React.Component {
   onDelete() {
     const { invites, index } = this.props;
     const invite = invites[index];
-
     this.props.deleteInvite(invite, (error) => alert(error.message));
   }
 
@@ -108,7 +107,7 @@ class Invite extends React.Component {
             <Icon
               name={'ios-more'}
               type="ionicon"
-              color={color.themeBlue}
+              color={color.themeRed}
               size={normalize(20)}
             />
           </View>
@@ -117,25 +116,25 @@ class Invite extends React.Component {
     );
   }
 
-  renderJoinButton() {
+  renderJoinButton(buttonColor) {
     const { user, invites, index } = this.props;
     const invite = invites[index];
     const { attendees } = invite;
-
+    const isSelected = attendees && attendees[user.uid];
     return (
       <View
-        style={
-          attendees && attendees[user.uid]
-            ? styles.joinButtonSelected
-            : styles.joinButton
-        }
+        style={[
+          styles.joinButton,
+          {
+            backgroundColor: isSelected ? color.white : buttonColor,
+            borderColor: isSelected ? buttonColor : color.white,
+          },
+        ]}
       >
         <Button
           onPress={this.onClickJoin}
           title={attendees && attendees[user.uid] ? 'Cancel join' : 'Join'}
-          color={
-            attendees && attendees[user.uid] ? color.themeBlue : color.white
-          }
+          color={attendees && attendees[user.uid] ? buttonColor : color.white}
         />
       </View>
     );
@@ -150,11 +149,12 @@ class Invite extends React.Component {
       description,
       minAttendees,
       maxAttendees,
-      author,
       time,
       userId,
       joinCount,
     } = invite;
+    const buttonColor =
+      joinCount < minAttendees ? color.themeRed : color.themeGreen;
     return (
       <View style={[styles.container]}>
         <View style={styles.wrapper}>
@@ -164,7 +164,19 @@ class Invite extends React.Component {
               {fetchingInviter ? (
                 <AnimatedEllipsis />
               ) : (
-                <Text style={[styles.author]}>{inviter.displayname}</Text>
+                <Text
+                  style={[
+                    styles.author,
+                    {
+                      color:
+                        joinCount < minAttendees
+                          ? color.themeRed
+                          : color.themeGreen,
+                    },
+                  ]}
+                >
+                  {inviter.displayname}
+                </Text>
               )}
               <Text style={[styles.publishedAt]}>{`Created an invite ${moment(
                 time
@@ -173,7 +185,19 @@ class Invite extends React.Component {
             {user.uid === userId && this.renderOptionButton()}
           </View>
           <View style={[styles.left, { marginBottom: 10 }]}>
-            <Text style={[styles.title]}>{title}</Text>
+            <Text
+              style={[
+                styles.title,
+                {
+                  color:
+                    joinCount < minAttendees
+                      ? color.themeRed
+                      : color.themeGreen,
+                },
+              ]}
+            >
+              {title}
+            </Text>
             <Text style={[styles.description]}>{description}</Text>
           </View>
           <JoinBar
@@ -181,7 +205,9 @@ class Invite extends React.Component {
             minAttendees={minAttendees}
             maxAttendees={maxAttendees}
           />
-          <View style={styles.bottom}>{this.renderJoinButton()}</View>
+          <View style={styles.bottom}>
+            {this.renderJoinButton(buttonColor)}
+          </View>
         </View>
       </View>
     );

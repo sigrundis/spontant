@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { theme } from '../../index';
-const { padding, normalize, color, fontSize, fontFamily } = theme;
+const { color, fontSize } = theme;
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.regular + 2,
   },
   button: {
-    backgroundColor: color.themeBlue,
+    backgroundColor: color.themeRed,
     borderRadius: 5,
   },
 });
