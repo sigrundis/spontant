@@ -140,6 +140,14 @@ class Invite extends React.Component {
     );
   }
 
+  renderImage(uri) {
+    return (
+      <View style={styles.imageContainer}>
+        <Image source={{ uri }} style={styles.image} />
+      </View>
+    );
+  }
+
   render() {
     const { user, invites, index } = this.props;
     const { inviter, fetchingInviter } = this.state;
@@ -147,12 +155,16 @@ class Invite extends React.Component {
     const {
       title,
       description,
+      date,
       minAttendees,
       maxAttendees,
       time,
+      image,
       userId,
       joinCount,
     } = invite;
+    console.log('date', date);
+    console.log('image', image);
     const buttonColor =
       joinCount < minAttendees ? color.themeRed : color.themeGreen;
     return (
@@ -185,6 +197,7 @@ class Invite extends React.Component {
             {user.uid === userId && this.renderOptionButton()}
           </View>
           <View style={[styles.left, { marginBottom: 10 }]}>
+            {image && this.renderImage(image)}
             <Text
               style={[
                 styles.title,
@@ -197,6 +210,9 @@ class Invite extends React.Component {
               ]}
             >
               {title}
+            </Text>
+            <Text style={styles.date}>
+              {date && moment(date).format('LLLL')}
             </Text>
             <Text style={[styles.description]}>{description}</Text>
           </View>

@@ -15,6 +15,7 @@ const color = {
   themeOcean: '#3ac9c2',
   themeYellow: '#fca45d',
   themeNight: '#354355',
+  themeLightNight: '#5b7391',
   themeGreen: '#008489',
 };
 
