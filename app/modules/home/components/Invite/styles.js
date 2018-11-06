@@ -43,7 +43,25 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.medium,
     flex: 1,
     color: color.themeRed,
+    marginTop: 10,
   },
+
+  date: {
+    fontSize: normalize(12),
+    lineHeight: normalize(19),
+    letterSpacing: 0.5,
+    flex: 1,
+    color: color.themeLightNight,
+    fontFamily: fontFamily.regular,
+  },
+
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: -23,
+  },
+
+  image: { width: '100%', height: 180 },
 
   bottom: {
     flexDirection: 'row',

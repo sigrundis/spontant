@@ -17,58 +17,62 @@ class JoinBar extends React.Component {
     const availableSpotsPercentage = 100 - joinPercentage;
     return (
       <View style={styles.container}>
-        <Text
-          style={styles.text}
-        >{`Min: ${minAttendees} Max:${maxAttendees}`}</Text>
-        <View style={styles.bottom}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-            }}
-          >
-            <View style={styles.bar}>
-              <View
-                style={[
-                  styles.joined,
-                  {
-                    width: `${joinPercentage}%`,
-                    backgroundColor:
-                      joinCount < minAttendees
-                        ? color.themeRed
-                        : color.themeGreen,
-                  },
-                ]}
-              />
-              <View
-                style={[
-                  styles.avaibaleSpots,
-                  {
-                    width: `${availableSpotsPercentage}%`,
-                  },
-                ]}
-              />
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Icon
-              name={'ios-people'}
-              type="ionicon"
-              color={
-                joinCount < minAttendees ? color.themeRed : color.themeGreen
-              }
-              size={20}
-            />
-            <Text
+        <View style={styles.wrapper}>
+          <Text
+            style={styles.text}
+          >{`Min: ${minAttendees} Max:${maxAttendees}`}</Text>
+          <View style={styles.bottom}>
+            <View
               style={{
-                fontSize: normalize(12),
-                lineHeight: normalize(17),
-                color:
-                  joinCount < minAttendees ? color.themeRed : color.themeGreen,
-                fontFamily: fontFamily.regular,
-                padding: 4,
+                flex: 1,
+                justifyContent: 'center',
               }}
-            >{`${joinCount}/${maxAttendees}`}</Text>
+            >
+              <View style={styles.bar}>
+                <View
+                  style={[
+                    styles.joined,
+                    {
+                      width: `${joinPercentage}%`,
+                      backgroundColor:
+                        joinCount < minAttendees
+                          ? color.themeRed
+                          : color.themeGreen,
+                    },
+                  ]}
+                />
+                <View
+                  style={[
+                    styles.avaibaleSpots,
+                    {
+                      width: `${availableSpotsPercentage}%`,
+                    },
+                  ]}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Icon
+                name={'ios-people'}
+                type="ionicon"
+                color={
+                  joinCount < minAttendees ? color.themeRed : color.themeGreen
+                }
+                size={20}
+              />
+              <Text
+                style={{
+                  fontSize: normalize(12),
+                  lineHeight: normalize(17),
+                  color:
+                    joinCount < minAttendees
+                      ? color.themeRed
+                      : color.themeGreen,
+                  fontFamily: fontFamily.regular,
+                  padding: 4,
+                }}
+              >{`${joinCount}/${maxAttendees}`}</Text>
+            </View>
           </View>
         </View>
       </View>
