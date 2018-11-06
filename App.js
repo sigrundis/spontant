@@ -35,10 +35,9 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    let _this = this;
     store.dispatch(
       checkLoginStatus((exist, isLoggedIn) => {
-        _this.setState({ checkedLogin: true, exist, isLoggedIn });
+        this.setState({ checkedLogin: true, exist, isLoggedIn });
       })
     );
   }

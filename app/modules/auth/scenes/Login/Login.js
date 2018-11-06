@@ -58,10 +58,10 @@ class Login extends React.Component {
     this.props.login(data, this.onSuccess, this.onError);
   }
 
-  onSuccess({ exists, user }) {
+  onSuccess = ({ exists, user }) => {
     if (exists) this.props.navigation.navigate('LoggedIn');
     else this.props.navigation.navigate('CompleteProfile', { user });
-  }
+  };
 
   onError(error) {
     let errObj = this.state.error;
