@@ -4,8 +4,13 @@ const { padding, color, fontSize, fontFamily, windowWidth, normalize } = theme;
 
 const styles = StyleSheet.create({
   container: {
+    marginHorizontal: -22,
     borderTopColor: color.grey,
     borderTopWidth: 1,
+  },
+
+  wrapper: {
+    paddingHorizontal: 22,
     paddingTop: 10,
   },
 
