@@ -6,6 +6,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+    paddingBottom: padding,
+  },
+
+  cover: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    height: 180,
+    width: '100%',
+    padding: padding,
+    borderBottomColor: color.light_grey,
+    borderBottomWidth: 1,
   },
 
   formInput: {
@@ -37,8 +49,18 @@ const styles = StyleSheet.create({
     height: normalize(55),
   },
 
+  imageButton: {
+    backgroundColor: 'transparent',
+    height: normalize(55),
+  },
+
   buttonText: {
     color: color.white,
+    fontSize: fontSize.regular + 2,
+  },
+
+  imageButtonText: {
+    color: color.themeGreen,
     fontSize: fontSize.regular + 2,
   },
 
