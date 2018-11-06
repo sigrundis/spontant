@@ -21,7 +21,6 @@ const { color } = theme;
 const error = {};
 
 const CLOUDINARY_NAME = 'dgbmwdqbl';
-
 const CLOUDINARY_PRESET = 'face-crop';
 
 class EditProfile extends React.Component {
