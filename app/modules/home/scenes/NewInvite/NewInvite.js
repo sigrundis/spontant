@@ -362,7 +362,6 @@ class NewInvite extends Component {
   }
 
   render() {
-    console.log('this.state', this.state);
     return (
       <View style={styles.container}>
         <ScrollView>
