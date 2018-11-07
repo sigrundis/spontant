@@ -375,15 +375,17 @@ class NewInvite extends Component {
           {this.renderInputs()}
           {this.renderDatePicker()}
         </ScrollView>
-        <Button
-          raised
-          title="SAVE INVITE"
-          borderRadius={10}
-          containerViewStyle={styles.containerView}
-          buttonStyle={styles.button}
-          textStyle={styles.buttonText}
-          onPress={this.onSubmit}
-        />
+        <View style={styles.buttonWrapper}>
+          <Button
+            raised
+            title="SAVE INVITE"
+            borderRadius={10}
+            containerViewStyle={styles.containerView}
+            buttonStyle={styles.button}
+            textStyle={styles.buttonText}
+            onPress={this.onSubmit}
+          />
+        </View>
         <KeyboardSpacer />
       </View>
     );

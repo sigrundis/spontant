@@ -27,10 +27,16 @@ class Invite extends React.Component {
     this.onOption = this.onOption.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onClickJoin = this.onClickJoin.bind(this);
-    this.onFindUserSuccess = this.onFindUserSuccess.bind(this);
-    this.onFindUserError = this.onFindUserError.bind(this);
   }
 
+  componentDidUpdate(previousProps) {
+    if (previousProps.invites !== this.props.invites) {
+      const { invites, index, getUserById } = this.props;
+      const invite = invites[index];
+      const { userId } = invite;
+      getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
+    }
+  }
   componentDidMount() {
     const { invites, index, getUserById } = this.props;
     const invite = invites[index];
@@ -163,8 +169,6 @@ class Invite extends React.Component {
       userId,
       joinCount,
     } = invite;
-    console.log('date', date);
-    console.log('image', image);
     const buttonColor =
       joinCount < minAttendees ? color.themeRed : color.themeGreen;
     return (

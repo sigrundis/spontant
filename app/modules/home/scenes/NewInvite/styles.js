@@ -44,6 +44,12 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.medium,
   },
 
+  buttonWrapper: {
+    paddingTop: padding,
+    borderTopWidth: 1,
+    borderTopColor: color.grey,
+  },
+
   button: {
     backgroundColor: color.themeRed,
     height: normalize(55),
