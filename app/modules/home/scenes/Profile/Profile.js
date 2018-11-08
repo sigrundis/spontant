@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, Button, Text } from 'react-native-elements';
+import { withNavigationFocus } from 'react-navigation';
 import { actions as auth } from '../../../auth/index';
 const { signOut } = auth;
 import styles from './styles';
@@ -9,13 +10,24 @@ import { theme } from '../../index';
 const { color } = theme;
 
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+    const { user } = this.props;
+    this.state = { user };
+  }
+
   onPressSignOut = (screen) => {
-    const { navigation } = this.props;
     this.props.signOut(
       this.onSuccessSignOut.bind(this),
       this.onErrorSignOut.bind(this)
     );
   };
+
+  static getDerivedStateFromProps(props, state) {
+    const { user, isFocused } = props;
+    if (!isFocused) return null;
+    return { user };
+  }
 
   onSuccessSignOut() {
     const { navigation } = this.props;
@@ -27,7 +39,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user } = this.state;
     return (
       <View style={{ paddingVertical: 20 }}>
         <Card title={user && user.displayname}>
@@ -69,7 +81,9 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { signOut }
-)(Profile);
+export default withNavigationFocus(
+  connect(
+    mapStateToProps,
+    { signOut }
+  )(Profile)
+);

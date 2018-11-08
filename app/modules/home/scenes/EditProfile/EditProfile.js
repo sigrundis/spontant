@@ -13,9 +13,9 @@ import { connect } from 'react-redux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { isEmpty } from '../../../auth/utils/validate';
 import styles from './styles';
-import { actions as authActions } from '../../../auth/index';
+import { actions as authActions } from '../../../auth';
 const { updateUser } = authActions;
-import { theme } from '../../index';
+import { theme } from '../../';
 const { color } = theme;
 
 const error = {};
