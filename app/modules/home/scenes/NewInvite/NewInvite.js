@@ -7,6 +7,8 @@ import {
   View,
   ActivityIndicator,
   Image,
+  TextInput,
+  Text,
 } from 'react-native';
 import {
   Button,
@@ -45,6 +47,7 @@ class NewInvite extends Component {
       description,
       minAttendees,
       maxAttendees,
+      number: 10,
       error: error,
       image: null,
       uploadingImage: false,
@@ -55,6 +58,8 @@ class NewInvite extends Component {
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeMinAttendees = this.onChangeMinAttendees.bind(this);
     this.onChangeMaxAttendees = this.onChangeMaxAttendees.bind(this);
+    this.onAddNumber = this.onAddNumber.bind(this);
+    this.onSubtractNumber = this.onSubtractNumber.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -212,6 +217,22 @@ class NewInvite extends Component {
     this.setState({ maxAttendees });
   }
 
+  onChangeNumberControl(text, stateKey) {
+    console.log('text', text);
+    const numericText = text.replace(/[^0-9\.]+/g, '');
+    this.setState({ [stateKey]: Number(numericText) });
+  }
+
+  onAddNumber(stateKey) {
+    let number = this.state[stateKey];
+    this.setState({ [stateKey]: number + 1 });
+  }
+
+  onSubtractNumber(stateKey) {
+    let number = this.state[stateKey];
+    this.setState({ [stateKey]: number - 1 });
+  }
+
   getFields() {
     const { title, description, minAttendees, maxAttendees } = this.state;
     return [
@@ -361,6 +382,37 @@ class NewInvite extends Component {
     );
   }
 
+  renderNumberController(stateKey) {
+    const value = this.state[stateKey];
+    console.log('value', value);
+    return (
+      <View style={styles.numberController}>
+        <FormLabel>Number</FormLabel>
+        <View style={styles.numberControllerWrapper}>
+          <Button
+            buttonStyle={styles.numberControllerButton}
+            textStyle={styles.numberControllerButtonText}
+            title="-"
+            onPress={() => this.onSubtractNumber(stateKey)}
+          />
+          {/* <Text>{value}</Text> */}
+          <TextInput
+            style={styles.numberControllerNumber}
+            value={String(value)}
+            onChangeText={(text) => this.onChangeNumberControl(text, stateKey)}
+            keyboardType={'numeric'}
+          />
+          <Button
+            buttonStyle={styles.numberControllerButton}
+            textStyle={styles.numberControllerButtonText}
+            title="+"
+            onPress={() => this.onAddNumber(stateKey)}
+          />
+        </View>
+      </View>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -374,6 +426,7 @@ class NewInvite extends Component {
           />
           {this.renderInputs()}
           {this.renderDatePicker()}
+          {this.renderNumberController('number')}
         </ScrollView>
         <View style={styles.buttonWrapper}>
           <Button
