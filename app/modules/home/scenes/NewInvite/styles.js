@@ -74,14 +74,6 @@ const styles = StyleSheet.create({
     height: normalize(49),
   },
 
-  closeButton: {
-    // position: 'absolute',
-    // top: 5,
-    // right: 5,
-    marginLeft: 'auto',
-    padding: 10,
-  },
-
   numberController: {
     display: 'flex',
   },
@@ -95,14 +87,22 @@ const styles = StyleSheet.create({
 
   numberControllerButton: {
     backgroundColor: color.themeRed,
-    height: normalize(40),
-    width: normalize(40),
-    borderRadius: 20,
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+  },
+
+  numberControllerNumber: { textAlign: 'center', minWidth: 30 },
+
+  checkBoxContainer: {
+    backgroundColor: color.white,
+    borderColor: color.white,
   },
 
   numberControllerButtonText: {
     color: color.white,
     fontSize: fontSize.large,
+    paddingRight: 12,
     paddingBottom: 30,
   },
 

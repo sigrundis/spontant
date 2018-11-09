@@ -12,15 +12,17 @@ class JoinBar extends React.Component {
   }
 
   render() {
-    const { minAttendees, maxAttendees, joinCount } = this.props;
-    const joinPercentage = (joinCount / maxAttendees) * 100;
+    let { minAttendees, maxAttendees, joinCount } = this.props;
+    maxAttendeesForCalculations =
+      maxAttendees === 'unlimited' ? joinCount + 10 : maxAttendees;
+    const joinPercentage = (joinCount / maxAttendeesForCalculations) * 100;
     const availableSpotsPercentage = 100 - joinPercentage;
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
           <Text
             style={styles.text}
-          >{`Min: ${minAttendees} Max:${maxAttendees}`}</Text>
+          >{`Min: ${minAttendees} Max: ${maxAttendees}`}</Text>
           <View style={styles.bottom}>
             <View
               style={{
@@ -71,7 +73,19 @@ class JoinBar extends React.Component {
                   fontFamily: fontFamily.regular,
                   padding: 4,
                 }}
-              >{`${joinCount}/${maxAttendees}`}</Text>
+              >{`${joinCount} /${
+                maxAttendees !== 'unlimited' ? ` ${maxAttendees}` : ''
+              }`}</Text>
+              {maxAttendees === 'unlimited' && (
+                <Icon
+                  name={'ios-infinite'}
+                  type="ionicon"
+                  color={
+                    joinCount < minAttendees ? color.themeRed : color.themeGreen
+                  }
+                  size={18}
+                />
+              )}
             </View>
           </View>
         </View>

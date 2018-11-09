@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Button,
@@ -16,6 +17,7 @@ import {
   FormInput,
   FormValidationMessage,
   Icon,
+  CheckBox,
 } from 'react-native-elements';
 import { Permissions, ImagePicker } from 'expo';
 import { withNavigationFocus } from 'react-navigation';
@@ -45,9 +47,9 @@ class NewInvite extends Component {
       title,
       date: new Date(),
       description,
-      minAttendees,
-      maxAttendees,
-      number: 10,
+      minAttendees: minAttendees || 0,
+      maxAttendees: Number(maxAttendees) ? maxAttendees : 10,
+      unlimitedMaxAttendees: maxAttendees === 'unlimited',
       error: error,
       image: null,
       uploadingImage: false,
@@ -84,8 +86,9 @@ class NewInvite extends Component {
       title,
       date: new Date(date) || new Date(),
       description,
-      minAttendees,
-      maxAttendees,
+      minAttendees: minAttendees || 0,
+      maxAttendees: Number(maxAttendees) ? maxAttendees : 10,
+      unlimitedMaxAttendees: maxAttendees === 'unlimited',
       image,
     };
   }
@@ -98,14 +101,22 @@ class NewInvite extends Component {
   }
 
   editInvite() {
-    const { title, description, minAttendees, maxAttendees } = this.state;
+    const {
+      title,
+      description,
+      minAttendees,
+      maxAttendees,
+      unlimitedMaxAttendees,
+    } = this.state;
     let { navigation } = this.props;
     const invite = navigation.getParam('invite', {});
     invite['title'] = title || invite['title'];
     invite['date'] = date || invite['date'];
     invite['description'] = description || invite['description'];
     invite['minAttendees'] = minAttendees || invite['minAttendees'];
-    invite['maxAttendees'] = maxAttendees || invite['maxAttendees'];
+    invite['maxAttendees'] = unlimitedMaxAttendees
+      ? 'unlimited'
+      : maxAttendees || invite['maxAttendees'];
     invite['image'] = image || invite['image'];
     this.props.updateInvite(invite, this.onSuccess, this.onError);
   }
@@ -117,6 +128,7 @@ class NewInvite extends Component {
       description,
       minAttendees,
       maxAttendees,
+      unlimitedMaxAttendees,
       image,
     } = this.state;
     const { user } = this.props;
@@ -126,7 +138,7 @@ class NewInvite extends Component {
       date: date,
       description: description,
       minAttendees: minAttendees,
-      maxAttendees: maxAttendees,
+      maxAttendees: unlimitedMaxAttendees ? 'unlimited' : maxAttendees,
       image,
       time: Date.now(),
       userId: user.uid,
@@ -149,6 +161,7 @@ class NewInvite extends Component {
         description: null,
         minAttendees: null,
         maxAttendees: null,
+        unlimitedMaxAttendees: false,
         image: null,
       },
       () => navigation.navigate('Home')
@@ -254,24 +267,6 @@ class NewInvite extends Component {
         value: description,
         keyboardType: 'default',
         multiline: true,
-      },
-      {
-        key: 'minAttendees',
-        label: 'Minimum attendees',
-        placeholder: 'Minimum attendees',
-        autoFocus: false,
-        secureTextEntry: false,
-        value: minAttendees,
-        keyboardType: 'numeric',
-      },
-      {
-        key: 'maxAttendees',
-        label: 'Maximum attendees',
-        placeholder: 'Maximum attendees',
-        autoFocus: false,
-        secureTextEntry: false,
-        value: maxAttendees,
-        keyboardType: 'numeric',
       },
     ];
   }
@@ -382,34 +377,80 @@ class NewInvite extends Component {
     );
   }
 
-  renderNumberController(stateKey) {
+  renderNumberController(stateKey, label) {
+    const { unlimitedMaxAttendees } = this.state;
     const value = this.state[stateKey];
+    const isSubstractDisabled =
+      value === 0 || (stateKey === 'maxAttendees' && unlimitedMaxAttendees);
+    const isAddDisabled = stateKey === 'maxAttendees' && unlimitedMaxAttendees;
     console.log('value', value);
     return (
       <View style={styles.numberController}>
-        <FormLabel>Number</FormLabel>
+        <FormLabel>{label}</FormLabel>
         <View style={styles.numberControllerWrapper}>
-          <Button
-            buttonStyle={styles.numberControllerButton}
-            textStyle={styles.numberControllerButtonText}
-            title="-"
-            onPress={() => this.onSubtractNumber(stateKey)}
-          />
-          {/* <Text>{value}</Text> */}
-          <TextInput
-            style={styles.numberControllerNumber}
-            value={String(value)}
-            onChangeText={(text) => this.onChangeNumberControl(text, stateKey)}
-            keyboardType={'numeric'}
-          />
-          <Button
-            buttonStyle={styles.numberControllerButton}
-            textStyle={styles.numberControllerButtonText}
-            title="+"
-            onPress={() => this.onAddNumber(stateKey)}
-          />
+          <TouchableOpacity
+            onPress={() =>
+              isSubstractDisabled ? {} : this.onSubtractNumber(stateKey)
+            }
+          >
+            <Icon
+              name={'md-remove-circle'}
+              type="ionicon"
+              color={isSubstractDisabled ? color.themeLightRed : color.themeRed}
+              size={35}
+            />
+          </TouchableOpacity>
+
+          {stateKey === 'maxAttendees' && unlimitedMaxAttendees ? (
+            <View style={styles.numberControllerNumber}>
+              <Icon
+                name={'ios-infinite'}
+                type="ionicon"
+                color={color.themeNight}
+                size={20}
+              />
+            </View>
+          ) : (
+            <TextInput
+              style={styles.numberControllerNumber}
+              value={String(value)}
+              onChangeText={(text) =>
+                this.onChangeNumberControl(text, stateKey)
+              }
+              keyboardType={'numeric'}
+            />
+          )}
+
+          <TouchableOpacity
+            onPress={() => (isAddDisabled ? {} : this.onAddNumber(stateKey))}
+          >
+            <Icon
+              style={{}}
+              name={'md-add-circle'}
+              type="ionicon"
+              color={isAddDisabled ? color.themeLightRed : color.themeRed}
+              size={35}
+            />
+          </TouchableOpacity>
         </View>
       </View>
+    );
+  }
+
+  renderCheckBox(stateKey, title) {
+    const checked = this.state[stateKey];
+    return (
+      <CheckBox
+        containerStyle={styles.checkBoxContainer}
+        center
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+        checkedColor={color.themeRed}
+        uncheckedColor={color.themeRed}
+        title={title}
+        checked={checked}
+        onPress={() => this.setState({ [stateKey]: !checked })}
+      />
     );
   }
 
@@ -426,7 +467,9 @@ class NewInvite extends Component {
           />
           {this.renderInputs()}
           {this.renderDatePicker()}
-          {this.renderNumberController('number')}
+          {this.renderNumberController('minAttendees', 'Min attendees')}
+          {this.renderNumberController('maxAttendees', 'Max attendees')}
+          {this.renderCheckBox('unlimitedMaxAttendees', 'Unlimited')}
         </ScrollView>
         <View style={styles.buttonWrapper}>
           <Button
