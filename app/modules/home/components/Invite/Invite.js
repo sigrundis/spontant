@@ -87,9 +87,6 @@ class Invite extends React.Component {
     this.props.addJoin(data, (error) => alert(error.message));
   }
 
-  /**
-   * TODO: Change this when user can upload image.
-   */
   renderUserImage() {
     const { inviter, fetchingInviter } = this.state;
     if (fetchingInviter)
@@ -106,6 +103,9 @@ class Invite extends React.Component {
   }
 
   renderOptionButton() {
+    const { invites, index } = this.props;
+    const invite = invites[index];
+    const { joinCount, minAttendees } = invite;
     return (
       <View style={styles.right}>
         <TouchableOpacity onPress={this.onOption}>
@@ -113,7 +113,9 @@ class Invite extends React.Component {
             <Icon
               name={'ios-more'}
               type="ionicon"
-              color={color.themeRed}
+              color={
+                joinCount < minAttendees ? color.themeRed : color.themeGreen
+              }
               size={normalize(20)}
             />
           </View>
