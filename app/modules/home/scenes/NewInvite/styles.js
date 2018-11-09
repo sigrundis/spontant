@@ -82,6 +82,30 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
+  numberController: {
+    display: 'flex',
+  },
+
+  numberControllerWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  numberControllerButton: {
+    backgroundColor: color.themeRed,
+    height: normalize(40),
+    width: normalize(40),
+    borderRadius: 20,
+  },
+
+  numberControllerButtonText: {
+    color: color.white,
+    fontSize: fontSize.large,
+    paddingBottom: 30,
+  },
+
   color: {
     height: normalize(25),
     width: normalize(25),
