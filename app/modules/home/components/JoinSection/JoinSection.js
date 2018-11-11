@@ -21,25 +21,29 @@ class JoinSection extends React.Component {
         attendees.length - 2 === 1 ? 'is' : 'are'
       } going.`;
     } else if (attendees.length === 2) {
-      attendeesString = `${attendees[0].displayname} and  ${
+      attendeesString = `${attendees[0].displayname} and ${
         attendees[1].displayname
       } are going.`;
-    } else {
+    } else if (attendees.length === 1) {
       attendeesString = `${attendees[0].displayname} is going. `;
+    } else {
+      attendeesString = `No one have joined yet.`;
     }
     return (
       <View style={{ flexDirection: 'row' }}>
         <Text style={styles.text}>{attendeesString}</Text>
-        <Text
-          style={[styles.text, { color: inviteColor }]}
-          onPress={() =>
-            navigation.navigate('Attendees', {
-              attendees,
-            })
-          }
-        >
-          See more.
-        </Text>
+        {attendees.length > 0 && (
+          <Text
+            style={[styles.text, { color: inviteColor }]}
+            onPress={() =>
+              navigation.navigate('Attendees', {
+                attendees,
+              })
+            }
+          >
+            See more.
+          </Text>
+        )}
       </View>
     );
   }
@@ -113,16 +117,39 @@ class JoinSection extends React.Component {
     );
   }
 
+  renderActivationCounter() {
+    let { minAttendees, joinCount } = this.props;
+    const howManyNeeded = minAttendees - joinCount;
+    if (howManyNeeded < 1) return null;
+    return (
+      <View
+        style={{
+          display: 'flex',
+          backgroundColor: color.themeLightYellow,
+          borderRadius: 4,
+          width: 240,
+        }}
+      >
+        <Text
+          style={[
+            styles.text,
+            { flexShrink: 1, color: color.themeOrange, padding: 4 },
+          ]}
+        >{`${howManyNeeded} more ${
+          howManyNeeded < 2 ? 'guest' : 'guests'
+        } needed to activate event.`}</Text>
+      </View>
+    );
+  }
+
   render() {
-    let { minAttendees, maxAttendees, joinCount } = this.props;
+    let { minAttendees, joinCount } = this.props;
     const inviteColor =
       joinCount < minAttendees ? color.themeRed : color.themeGreen;
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
-          <Text
-            style={styles.text}
-          >{`Min: ${minAttendees} Max: ${maxAttendees}`}</Text>
+          {this.renderActivationCounter()}
           {this.renderAttendees(inviteColor)}
           <View style={styles.bottom}>
             {this.renderJoinBar(inviteColor)}
