@@ -65,6 +65,7 @@ class Invite extends React.Component {
     const invite = invites[index];
     const { userId, attendees } = invite;
     getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
+    this.setState({ attendeesWithInfo: [] });
     if (attendees) {
       Object.keys(attendees).map((attendee) =>
         getUserById(
