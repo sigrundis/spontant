@@ -11,7 +11,7 @@ import {
 import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import AnimatedEllipsis from 'react-native-animated-ellipsis';
-import JoinBar from '../JoinBar';
+import JoinSection from '../JoinSection';
 import styles from './styles';
 import { connect } from 'react-redux';
 import { actions, theme } from '../../index';
@@ -20,10 +20,16 @@ const { getUserById } = authActions;
 const { deleteInvite, addJoin } = actions;
 const { normalize, color } = theme;
 
+let fetchedAttendeesCounter = 0;
+
 class Invite extends React.Component {
   constructor() {
     super();
-    this.state = { fetchingInviter: true };
+    this.state = {
+      fetchingInviter: true,
+      fetchingAttendeesWithInfo: true,
+      attendeesWithInfo: [],
+    };
     this.onOption = this.onOption.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onClickJoin = this.onClickJoin.bind(this);
@@ -33,16 +39,48 @@ class Invite extends React.Component {
     if (previousProps.invites !== this.props.invites) {
       const { invites, index, getUserById } = this.props;
       const invite = invites[index];
-      const { userId } = invite;
+      const { userId, attendees } = invite;
       getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
+      Object.keys(attendees).map((attendee) =>
+        getUserById(
+          attendee,
+          this.onFindAttendeeSuccess,
+          this.onFindAttendeeError
+        )
+      );
     }
   }
   componentDidMount() {
     const { invites, index, getUserById } = this.props;
     const invite = invites[index];
-    const { userId } = invite;
+    const { userId, attendees } = invite;
     getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
+    Object.keys(attendees).map((attendee) =>
+      getUserById(
+        attendee,
+        this.onFindAttendeeSuccess,
+        this.onFindAttendeeError
+      )
+    );
   }
+
+  onFindAttendeeSuccess = (data) => {
+    fetchedAttendeesCounter++;
+    const { invites, index } = this.props;
+    const invite = invites[index];
+    const { attendees } = invite;
+    const numberOfAttendees = Object.keys(attendees).length;
+    let { attendeesWithInfo } = this.state;
+    attendeesWithInfo.push(data.user);
+    this.setState({
+      fetchingAttendeesWithInfo: numberOfAttendees === fetchedAttendeesCounter,
+      attendeesWithInfo,
+    });
+  };
+
+  onFindAttendeeError = (error) => {
+    console.error('Error finding user', error);
+  };
 
   onFindUserSuccess = (data) => {
     this.setState({ fetchingInviter: false, inviter: data.user });
@@ -98,7 +136,7 @@ class Invite extends React.Component {
         style={{ width: 50, height: 50, borderRadius: 25 }}
       />
     ) : (
-      <Icon name={'ios-contact'} type="ionicon" color={color.grey} size={50} />
+      <Icon name={'ios-contact'} type="ionicon" color={color.grey} size={60} />
     );
   }
 
@@ -157,8 +195,13 @@ class Invite extends React.Component {
   }
 
   render() {
-    const { user, invites, index } = this.props;
-    const { inviter, fetchingInviter } = this.state;
+    const { user, invites, index, navigation } = this.props;
+    const {
+      inviter,
+      fetchingInviter,
+      fetchingAttendeesWithInfo,
+      attendeesWithInfo,
+    } = this.state;
     const invite = invites[index];
     const {
       title,
@@ -222,11 +265,17 @@ class Invite extends React.Component {
             </Text>
             <Text style={[styles.description]}>{description}</Text>
           </View>
-          <JoinBar
-            joinCount={joinCount}
-            minAttendees={minAttendees}
-            maxAttendees={maxAttendees}
-          />
+          {fetchingAttendeesWithInfo ? (
+            <AnimatedEllipsis />
+          ) : (
+            <JoinSection
+              navigation={navigation}
+              joinCount={joinCount}
+              minAttendees={minAttendees}
+              maxAttendees={maxAttendees}
+              attendees={attendeesWithInfo}
+            />
+          )}
           <View style={styles.bottom}>
             {this.renderJoinButton(buttonColor)}
           </View>
