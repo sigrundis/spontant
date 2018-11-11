@@ -15,6 +15,8 @@ const color = {
   themeBlue: '#64B4E6',
   themeOcean: '#3ac9c2',
   themeYellow: '#fca45d',
+  themeLightYellow: '#ffe4b5',
+  themeOrange: '#ff6600',
   themeNight: '#354355',
   themeLightNight: '#5b7391',
   themeGreen: '#008489',

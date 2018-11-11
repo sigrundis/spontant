@@ -41,13 +41,23 @@ class Invite extends React.Component {
       const invite = invites[index];
       const { userId, attendees } = invite;
       getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
-      Object.keys(attendees).map((attendee) =>
-        getUserById(
-          attendee,
-          this.onFindAttendeeSuccess,
-          this.onFindAttendeeError
-        )
-      );
+      this.setState({ attendeesWithInfo: [] });
+      if (attendees) {
+        this.setState({
+          fetchingAttendeesWithInfo: true,
+        });
+        Object.keys(attendees).map((attendee) =>
+          getUserById(
+            attendee,
+            this.onFindAttendeeSuccess,
+            this.onFindAttendeeError
+          )
+        );
+      } else {
+        this.setState({
+          fetchingAttendeesWithInfo: false,
+        });
+      }
     }
   }
   componentDidMount() {
@@ -55,13 +65,17 @@ class Invite extends React.Component {
     const invite = invites[index];
     const { userId, attendees } = invite;
     getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
-    Object.keys(attendees).map((attendee) =>
-      getUserById(
-        attendee,
-        this.onFindAttendeeSuccess,
-        this.onFindAttendeeError
-      )
-    );
+    if (attendees) {
+      Object.keys(attendees).map((attendee) =>
+        getUserById(
+          attendee,
+          this.onFindAttendeeSuccess,
+          this.onFindAttendeeError
+        )
+      );
+    } else {
+      this.setState({ fetchingAttendeesWithInfo: false });
+    }
   }
 
   onFindAttendeeSuccess = (data) => {
@@ -172,15 +186,17 @@ class Invite extends React.Component {
         style={[
           styles.joinButton,
           {
-            backgroundColor: isSelected ? color.white : buttonColor,
-            borderColor: isSelected ? buttonColor : color.white,
+            backgroundColor: isSelected ? color.white : color.themeGreen,
+            borderColor: isSelected ? color.themeRed : color.white,
           },
         ]}
       >
         <Button
           onPress={this.onClickJoin}
           title={attendees && attendees[user.uid] ? 'Cancel join' : 'Join'}
-          color={attendees && attendees[user.uid] ? buttonColor : color.white}
+          color={
+            attendees && attendees[user.uid] ? color.themeRed : color.white
+          }
         />
       </View>
     );
