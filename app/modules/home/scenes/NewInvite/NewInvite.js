@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Image,
   TextInput,
-  Text,
   TouchableOpacity,
 } from 'react-native';
 import {
