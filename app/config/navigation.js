@@ -15,9 +15,11 @@ import Home from '../modules/home/scenes/Home';
 import NewInvite from '../modules/home/scenes/NewInvite';
 import Profile from '../modules/home/scenes/Profile';
 import EditProfile from '../modules/home/scenes/EditProfile';
+import Attendees from '../modules/home/scenes/Attendees';
 import { color } from '../styles/theme';
 
 let showEditProfileButton = false;
+let showBackToHomeButton = false;
 
 const headerStyle = {
   marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
@@ -58,7 +60,8 @@ const MainTab = createBottomTabNavigator(
         ),
         tabBarOnPress: ({ navigation }) => {
           showEditProfileButton = false;
-          navigation.navigate('Home', { title: 'Home' });
+          (showBackToHomeButton = false),
+            navigation.navigate('Home', { title: 'Home' });
         },
       },
     },
@@ -75,11 +78,12 @@ const MainTab = createBottomTabNavigator(
         ),
         tabBarOnPress: ({ navigation }) => {
           showEditProfileButton = false;
-          navigation.navigate('NewInvite', {
-            edit: false,
-            invite: {},
-            title: 'New Invite',
-          });
+          (showBackToHomeButton = true),
+            navigation.navigate('NewInvite', {
+              edit: false,
+              invite: {},
+              title: 'New Invite',
+            });
         },
       },
     },
@@ -96,7 +100,8 @@ const MainTab = createBottomTabNavigator(
         ),
         tabBarOnPress: ({ navigation }) => {
           showEditProfileButton = true;
-          navigation.navigate('Profile', { title: 'Profile' });
+          (showBackToHomeButton = false),
+            navigation.navigate('Profile', { title: 'Profile' });
         },
       },
     },
@@ -120,6 +125,27 @@ function getHeaderRight(navigation) {
   }
 }
 
+function getHeaderLeft(navigation) {
+  if (showBackToHomeButton) {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          showBackToHomeButton = false;
+          navigation.navigate('Home');
+        }}
+      >
+        <View style={{ marginLeft: 10 }}>
+          <Icon
+            name={'ios-arrow-back'}
+            type={'ionicon'}
+            color={color.themeRed}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
+
 const MainStack = createStackNavigator({
   Tab: {
     screen: MainTab,
@@ -129,6 +155,7 @@ const MainStack = createStackNavigator({
       return {
         title: params ? params.title : 'Home',
         headerRight: getHeaderRight(navigation),
+        headerLeft: getHeaderLeft(navigation),
         headerStyle,
         headerTintColor: color.themeNight,
       };
@@ -138,6 +165,14 @@ const MainStack = createStackNavigator({
     screen: EditProfile,
     navigationOptions: {
       title: 'Edit Profile',
+      headerStyle,
+      headerTintColor: color.themeNight,
+    },
+  },
+  Attendees: {
+    screen: Attendees,
+    navigationOptions: {
+      title: 'Attendees',
       headerStyle,
       headerTintColor: color.themeNight,
     },
