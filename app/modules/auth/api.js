@@ -6,7 +6,7 @@ export function register(data, callback) {
   auth
     .createUserWithEmailAndPassword(email, password)
     .then((resp) =>
-      createUser({ username, displayname, uid: resp.user.uid }, callback)
+      createUser({ username, displayname, uid: resp.user.uid, email }, callback)
     )
     .catch((error) => callback(false, null, error));
 }
@@ -22,11 +22,17 @@ export function createUser(user, callback) {
     .catch((error) => callback(false, null, { message: error }));
 }
 
-export function updateUser(user, callback) {
-  const { uid } = user;
+export function updateUser(user, oldEmail, callback) {
+  const { uid, email } = user;
 
   let updates = {};
   updates['users/' + uid] = user;
+
+  auth
+    .signInWithEmailAndPassword(oldEmail, 'correcthorsebatterystaple')
+    .then((user) => {
+      user.updateEmail(email);
+    });
 
   database
     .ref()
