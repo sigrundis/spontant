@@ -297,7 +297,7 @@ class NewInvite extends Component {
             <View key={key}>
               {edit && <FormLabel>{label}</FormLabel>}
               <FormInput
-                style={styles.FormInput}
+                style={styles.formInput}
                 autoCapitalize="none"
                 clearButtonMode="while-editing"
                 underlineColorAndroid={'#fff'}

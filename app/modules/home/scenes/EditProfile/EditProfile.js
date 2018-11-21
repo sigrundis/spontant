@@ -40,10 +40,22 @@ class EditProfile extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { isFocused, user } = props;
     if (!isFocused) return null;
-    const { displayname, userimage } = user;
+    const {
+      displayname,
+      email,
+      userimage,
+      facebook,
+      twitter,
+      instagram,
+    } = user;
     return {
       displayName: displayname,
       userImage: userimage,
+      oldEmail: email,
+      email,
+      facebook,
+      twitter,
+      instagram,
     };
   }
 
@@ -86,12 +98,24 @@ class EditProfile extends React.Component {
   };
 
   onSubmit() {
-    const { displayName, userImage } = this.state;
+    const {
+      displayName,
+      userImage,
+      email,
+      facebook,
+      twitter,
+      instagram,
+      oldEmail,
+    } = this.state;
     const { user } = this.props;
     user['displayname'] = displayName;
+    user['email'] = email || '';
+    user['facebook'] = facebook || '';
+    user['twitter'] = twitter || '';
+    user['instagram'] = instagram || '';
     user['userimage'] = userImage || '';
     this.setState({ error: error }); //clear out error messages
-    this.props.updateUser(user, this.onSuccess, this.onError);
+    this.props.updateUser(user, oldEmail, this.onSuccess, this.onError);
   }
 
   onSuccess = () => {
@@ -117,8 +141,24 @@ class EditProfile extends React.Component {
     this.setState({ displayName });
   }
 
+  onChangeEmail(email) {
+    this.setState({ email });
+  }
+
+  onChangeFacebook(facebook) {
+    this.setState({ facebook });
+  }
+
+  onChangeInstagram(instagram) {
+    this.setState({ instagram });
+  }
+
+  onChangeTwitter(twitter) {
+    this.setState({ twitter });
+  }
+
   getFields() {
-    const { displayName } = this.state;
+    const { displayName, email, facebook, instagram, twitter } = this.state;
     return [
       {
         key: 'displayName',
@@ -129,18 +169,43 @@ class EditProfile extends React.Component {
         value: displayName,
         keyboardType: 'default',
       },
+      {
+        key: 'email',
+        label: 'Email',
+        placeholder: 'Email',
+        autoFocus: false,
+        secureTextEntry: false,
+        value: facebook,
+        keyboardType: 'default',
+      },
+      {
+        key: 'facebook',
+        label: 'Facebook',
+        placeholder: 'Facebook username',
+        autoFocus: false,
+        secureTextEntry: false,
+        value: facebook,
+        keyboardType: 'default',
+      },
+      {
+        key: 'instagram',
+        label: 'Instagram',
+        placeholder: 'Instagram username',
+        autoFocus: false,
+        secureTextEntry: false,
+        value: facebook,
+        keyboardType: 'default',
+      },
+      {
+        key: 'twitter',
+        label: 'Twitter',
+        placeholder: 'Twitter username',
+        autoFocus: false,
+        secureTextEntry: false,
+        value: facebook,
+        keyboardType: 'default',
+      },
     ];
-  }
-
-  renderCloseButton(props) {
-    const { navigation } = this.props;
-    return (
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <View style={styles.closeButton}>
-          <Icon name={'md-close'} type={'ionicon'} color={color.black} />
-        </View>
-      </TouchableOpacity>
-    );
   }
 
   renderImage(uri) {
@@ -181,13 +246,16 @@ class EditProfile extends React.Component {
 
   renderInputs() {
     const { error } = this.state;
-    const { placeholderTextColor } = this.props;
     const onChangeText = {
       displayName: this.onChangeDisplayName,
+      email: this.onChangeEmail,
+      facebook: this.onChangeFacebook,
+      instagram: this.onChangeInstagram,
+      twitter: this.onChangeTwitter,
     };
 
     return (
-      <View style={styles.container}>
+      <View>
         {this.getFields().map((field) => {
           const {
             key,
@@ -200,8 +268,8 @@ class EditProfile extends React.Component {
             multiline,
           } = field;
           return (
-            <View style={styles.FormInput} key={key}>
-              <FormLabel>{label}</FormLabel>
+            <View key={key}>
+              <FormLabel style={styles.label}>{label}</FormLabel>
               <FormInput
                 autoCapitalize="none"
                 clearButtonMode="while-editing"
@@ -212,7 +280,7 @@ class EditProfile extends React.Component {
                 secureTextEntry={secureTextEntry}
                 containerStyle={styles.containerStyle}
                 inputStyle={styles.inputContainer}
-                placeholderTextColor={placeholderTextColor}
+                placeholderTextColor={color.grey}
                 keyboardType={keyboardType}
                 value={value}
                 multiline={multiline}
@@ -230,7 +298,6 @@ class EditProfile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderCloseButton()}
         {this.renderUserImage()}
         <Button
           title="Select new profile picture"
@@ -265,26 +332,6 @@ function mapStateToProps(state, props) {
     user: state.authReducer.user,
   };
 }
-
-// function uploadFile(file) {
-//   return RNFetchBlob.fetch(
-//     'POST',
-//     'https://api.cloudinary.com/v1_1/' +
-//       CLOUDINARY_NAME +
-//       '/image/upload?upload_preset=' +
-//       CLOUDINARY_PRESET,
-//     {
-//       'Content-Type': 'multipart/form-data',
-//     },
-//     [
-//       {
-//         name: 'file',
-//         filename: file.fileName,
-//         data: RNFetchBlob.wrap(file.origURL),
-//       },
-//     ]
-//   );
-// }
 
 export default withNavigationFocus(
   connect(
