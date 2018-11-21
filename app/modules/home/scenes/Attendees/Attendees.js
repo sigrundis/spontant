@@ -37,7 +37,6 @@ class Attendees extends Component {
   render() {
     const { navigation } = this.props;
     const attendees = navigation.getParam('attendees', []);
-    console.log('attendees', attendees);
     return (
       <View style={{}}>
         <ScrollView>

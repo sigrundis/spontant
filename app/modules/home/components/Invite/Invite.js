@@ -20,13 +20,12 @@ const { getUserById } = authActions;
 const { deleteInvite, addJoin } = actions;
 const { normalize, color } = theme;
 
-let fetchedAttendeesCounter = 0;
-
 class Invite extends React.Component {
   constructor() {
     super();
     this.state = {
       fetchingInviter: true,
+      fetchedAttendeesCounter: 0,
       fetchingAttendeesWithInfo: true,
       attendeesWithInfo: [],
     };
@@ -41,10 +40,10 @@ class Invite extends React.Component {
       const invite = invites[index];
       const { userId, attendees } = invite;
       getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
-      this.setState({ attendeesWithInfo: [] });
       if (attendees) {
         this.setState({
           fetchingAttendeesWithInfo: true,
+          attendeesWithInfo: [],
         });
         Object.keys(attendees).map((attendee) =>
           getUserById(
@@ -56,6 +55,7 @@ class Invite extends React.Component {
       } else {
         this.setState({
           fetchingAttendeesWithInfo: false,
+          fetchedAttendeesCounter: 0,
         });
       }
     }
@@ -65,8 +65,10 @@ class Invite extends React.Component {
     const invite = invites[index];
     const { userId, attendees } = invite;
     getUserById(userId, this.onFindUserSuccess, this.onFindUserError);
-    this.setState({ attendeesWithInfo: [] });
     if (attendees) {
+      this.setState({
+        fetchingAttendeesWithInfo: true,
+      });
       Object.keys(attendees).map((attendee) =>
         getUserById(
           attendee,
@@ -75,21 +77,28 @@ class Invite extends React.Component {
         )
       );
     } else {
-      this.setState({ fetchingAttendeesWithInfo: false });
+      this.setState({
+        fetchingAttendeesWithInfo: false,
+        fetchedAttendeesCounter: 0,
+      });
     }
   }
 
   onFindAttendeeSuccess = (data) => {
-    fetchedAttendeesCounter++;
     const { invites, index } = this.props;
     const invite = invites[index];
     const { attendees } = invite;
     const numberOfAttendees = Object.keys(attendees).length;
-    let { attendeesWithInfo } = this.state;
+    let { attendeesWithInfo, fetchedAttendeesCounter } = this.state;
     attendeesWithInfo.push(data.user);
     this.setState({
-      fetchingAttendeesWithInfo: numberOfAttendees === fetchedAttendeesCounter,
       attendeesWithInfo,
+      fetchingAttendeesWithInfo:
+        numberOfAttendees !== fetchedAttendeesCounter + 1,
+      fetchedAttendeesCounter:
+        numberOfAttendees === fetchedAttendeesCounter + 1
+          ? 0
+          : fetchedAttendeesCounter + 1,
     });
   };
 

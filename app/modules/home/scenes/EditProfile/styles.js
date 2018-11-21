@@ -7,65 +7,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
-
-  formInput: {
-    paddingTop: normalize(8 * 3),
-    paddingBottom: normalize(8 * 3),
-    paddingHorizontal: normalize(8 * 2),
-    flex: 1,
-    fontSize: normalize(17 + 3),
-    lineHeight: normalize(21 + 3),
-    color: color.themeRed,
-    letterSpacing: 0.5,
-    fontFamily: fontFamily.medium,
+  label: { backgroundColor: 'blue' },
+  containerStyle: {
+    borderColor: color.themeYellow,
   },
-
-  textInput: {
-    paddingTop: normalize(8 * 3),
-    paddingBottom: normalize(8 * 3),
-    paddingHorizontal: normalize(8 * 2),
-    flex: 1,
-    fontSize: normalize(17 + 3),
-    lineHeight: normalize(21 + 3),
-    color: color.themeRed,
-    letterSpacing: 0.5,
-    fontFamily: fontFamily.medium,
-  },
-
+  inputContainer: { color: color.themeNight },
   button: {
     backgroundColor: color.themeRed,
     height: normalize(55),
   },
-
   imageButton: {
     backgroundColor: 'transparent',
     height: normalize(55),
   },
-
   buttonText: {
     color: color.white,
     fontSize: fontSize.regular + 2,
   },
-
   imageButtonText: {
     color: color.themeGreen,
     fontSize: fontSize.regular + 2,
   },
-
   bottomContainer: {
     height: normalize(49),
   },
-
   closeButton: {
     marginLeft: 'auto',
     padding: 10,
-  },
-
-  color: {
-    height: normalize(25),
-    width: normalize(25),
-    borderRadius: normalize(25 / 2),
-    marginHorizontal: padding,
   },
 });
 
