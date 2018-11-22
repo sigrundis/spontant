@@ -31,7 +31,8 @@ class EditProfile extends React.Component {
   constructor() {
     super();
     this.state = {
-      userImage: null,
+      userImage: '',
+      displayName: '',
       uploadingImage: false,
       error: error,
       isModalVisible: false,
@@ -60,8 +61,9 @@ class EditProfile extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { isFocused, user } = props;
+    const { isFocused, displayname = '', userimage = '' } = props;
     if (!isFocused) return null;
+
     const {
       displayname,
       email,
@@ -95,7 +97,7 @@ class EditProfile extends React.Component {
       aspect: [60, 60],
       base64: true,
     });
-    if (result.canseled) {
+    if (result.cancelled) {
       this.setState({ uploadingImage: false });
     } else {
       let base64Img = `data:image/jpg;base64,${result.base64}`;
@@ -162,16 +164,16 @@ class EditProfile extends React.Component {
       password,
     } = this.state;
     const { user, updateUser } = this.props;
-    user['displayname'] = displayName;
-    user['phonenumber'] = phoneNumber || '';
-    user['email'] = email || '';
-    user['facebook'] = facebook || '';
-    user['twitter'] = twitter || '';
-    user['instagram'] = instagram || '';
-    user['userimage'] = userImage || '';
+    user.displayname = displayName;
+    user.phoneNumber = phoneNumber || '';
+    user.email = email || '';
+    user.facebook = facebook || '';
+    user.twitter = twitter || '';
+    user.instagram = instagram || '';
+    user.userimage = userImage || '';
 
     updateUser(user, oldEmail, password, this.onSuccess, this.onError);
-  }
+
 
   onSuccess = () => {
     const { navigation } = this.props;
@@ -318,7 +320,7 @@ class EditProfile extends React.Component {
   }
 
   renderUserImage() {
-    const { user } = this.props;
+    const { user = {} } = this.props;
     const { userimage } = user;
     const { uploadingImage, userImage } = this.state;
     if (uploadingImage) {
@@ -503,9 +505,8 @@ EditProfile.defaultProps = {
 };
 
 function mapStateToProps(state, props) {
-  return {
-    user: state.authReducer.user,
-  };
+  const { displayname, userimage } = state.authReducer.user;
+  return { displayname, userimage, user: state.authReducer.user };
 }
 
 export default withNavigationFocus(
