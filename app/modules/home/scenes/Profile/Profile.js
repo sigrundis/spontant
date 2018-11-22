@@ -44,12 +44,6 @@ class Profile extends Component {
     );
   };
 
-  static getDerivedStateFromProps(props, state) {
-    const { user, isFocused } = props;
-    if (!isFocused) return null;
-    return { user };
-  }
-
   onSuccessSignOut() {
     const { navigation } = this.props;
     navigation.navigate('LoggedOut');
@@ -102,7 +96,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { user } = this.state;
+    const { displayname } = this.props;
     return (
       <View style={styles.container}>
         <ScrollView style={styles.wrapper}>
@@ -148,9 +142,8 @@ class Profile extends Component {
 }
 
 function mapStateToProps(state, props) {
-  return {
-    user: state.authReducer.user,
-  };
+  const { displayname = '' } = state.authReducer.user;
+  return { displayname };
 }
 
 export default withNavigationFocus(
