@@ -21,6 +21,17 @@ const styles = StyleSheet.create({
     borderColor: color.themeOrange,
     borderRadius: 5,
   },
+  errorMessageContainer: {
+    marginTop: 4,
+    borderRadius: 4,
+    padding: 4,
+    backgroundColor: color.themeLightRed,
+    flex: 1,
+    alignSelf: 'flex-start',
+  },
+  errorMessage: {
+    color: 'red',
+  },
 });
 
 export default styles;

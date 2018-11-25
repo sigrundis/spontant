@@ -22,6 +22,7 @@ class InputField extends Component {
       keyboardType,
       value,
       multiline,
+      validationErrors,
     } = this.props;
 
     return (
@@ -40,6 +41,13 @@ class InputField extends Component {
           multiline={multiline}
           textInputStyle={styles.passwordInput}
         />
+        {validationErrors.length > 0 && (
+          <View style={styles.errorMessageContainer}>
+            {validationErrors.map((errorMessage) => (
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            ))}
+          </View>
+        )}
       </View>
     );
   }
@@ -59,6 +67,7 @@ InputField.propTypes = {
   keyboardType: PropTypes.string,
   value: PropTypes.string,
   multiline: PropTypes.bool,
+  validationErrors: PropTypes.array,
 };
 
 InputField.defaultProps = {
@@ -75,6 +84,7 @@ InputField.defaultProps = {
   keyboardType: 'default',
   value: '',
   multiline: false,
+  validationErrors: [],
 };
 
 export default InputField;

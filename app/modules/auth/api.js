@@ -45,7 +45,11 @@ export function updateUser(user, oldEmail, password, callback) {
       user
         .updateEmail(email)
         .then(() => {
-          console.log('Email updated!');
+          database
+            .ref()
+            .update(updates)
+            .then(() => callback(true, user, null))
+            .catch((error) => callback(false, null, error));
         })
         .catch((error) => {
           callback(false, null, error);
@@ -54,12 +58,6 @@ export function updateUser(user, oldEmail, password, callback) {
     .catch((error) => {
       callback(false, null, error);
     });
-
-  database
-    .ref()
-    .update(updates)
-    .then(() => callback(true, user, null))
-    .catch((error) => callback(false, null, error));
 }
 
 //Sign the user in with their email and password

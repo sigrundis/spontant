@@ -11,7 +11,7 @@ const color = {
   red: 'red',
   underlayColor: '#ddd',
   themeRed: '#f9595c',
-  themeLightRed: '#fca3a4',
+  themeLightRed: '#fcb5b6',
   themeBlue: '#00BDD9',
   themeOcean: '#3ac9c2',
   themeYellow: '#fca45d',

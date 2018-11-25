@@ -15,6 +15,7 @@ import { withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
 import { isEmpty } from '../../../auth/utils/validate';
 import styles from './styles';
+import { validateUpdatedUser } from '../../utils/validation';
 import { actions as authActions } from '../../../auth';
 const { updateUser } = authActions;
 import { theme } from '../../';
@@ -34,6 +35,14 @@ class EditProfile extends React.Component {
       uploadingImage: false,
       error: error,
       isModalVisible: false,
+      validationErrors: {
+        displayName: [],
+        email: [],
+        phoneNumber: [],
+        facebook: [],
+        twitter: [],
+        instagram: [],
+      },
     };
     this.onChangeDisplayName = this.onChangeDisplayName.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
@@ -44,6 +53,7 @@ class EditProfile extends React.Component {
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onDisplayModal = this.onDisplayModal.bind(this);
     this.onHideModal = this.onHideModal.bind(this);
+    this.onPressSave = this.onPressSave.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
@@ -112,6 +122,33 @@ class EditProfile extends React.Component {
     }
   };
 
+  onPressSave() {
+    const {
+      displayName,
+      email,
+      phoneNumber,
+      facebook,
+      twitter,
+      instagram,
+    } = this.state;
+    this.setState({ error: {} });
+    const validationErrors = validateUpdatedUser({
+      displayName,
+      email,
+      phoneNumber,
+      facebook,
+      twitter,
+      instagram,
+    });
+    if (!validationErrors.isEmpty) {
+      this.setState({
+        validationErrors,
+      });
+    } else {
+      this.onDisplayModal();
+    }
+  }
+
   onSubmit() {
     const {
       displayName,
@@ -124,7 +161,7 @@ class EditProfile extends React.Component {
       oldEmail,
       password,
     } = this.state;
-    const { user } = this.props;
+    const { user, updateUser } = this.props;
     user['displayname'] = displayName;
     user['phonenumber'] = phoneNumber || '';
     user['email'] = email || '';
@@ -132,14 +169,8 @@ class EditProfile extends React.Component {
     user['twitter'] = twitter || '';
     user['instagram'] = instagram || '';
     user['userimage'] = userImage || '';
-    this.setState({ error: error }); //clear out error messages
-    this.props.updateUser(
-      user,
-      oldEmail,
-      password,
-      this.onSuccess,
-      this.onError
-    );
+
+    updateUser(user, oldEmail, password, this.onSuccess, this.onError);
   }
 
   onSuccess = () => {
@@ -169,19 +200,19 @@ class EditProfile extends React.Component {
   }
 
   onChangePhoneNumber(phoneNumber) {
-    this.setState({ phoneNumber });
+    this.setState({ phoneNumber: phoneNumber.replace(/[^0-9]/g, '') });
   }
 
   onChangeFacebook(facebook) {
-    this.setState({ facebook });
+    this.setState({ facebook: facebook.toLowerCase() });
   }
 
   onChangeInstagram(instagram) {
-    this.setState({ instagram });
+    this.setState({ instagram: instagram.toLowerCase() });
   }
 
   onChangeTwitter(twitter) {
-    this.setState({ twitter });
+    this.setState({ twitter: twitter.toLowerCase() });
   }
 
   onChangePassword(password) {
@@ -204,6 +235,7 @@ class EditProfile extends React.Component {
       facebook,
       instagram,
       twitter,
+      validationErrors,
     } = this.state;
     return [
       {
@@ -214,6 +246,7 @@ class EditProfile extends React.Component {
         secureTextEntry: false,
         value: displayName,
         keyboardType: 'default',
+        validationErrors: validationErrors.displayName,
       },
       {
         key: 'email',
@@ -223,6 +256,7 @@ class EditProfile extends React.Component {
         secureTextEntry: false,
         value: email,
         keyboardType: 'default',
+        validationErrors: validationErrors.email,
       },
       {
         key: 'phoneNumber',
@@ -232,6 +266,7 @@ class EditProfile extends React.Component {
         secureTextEntry: false,
         value: phoneNumber,
         keyboardType: 'numeric',
+        validationErrors: validationErrors.phoneNumber,
       },
       {
         key: 'facebook',
@@ -241,6 +276,7 @@ class EditProfile extends React.Component {
         secureTextEntry: false,
         value: facebook,
         keyboardType: 'default',
+        validationErrors: validationErrors.facebook,
       },
       {
         key: 'instagram',
@@ -250,6 +286,7 @@ class EditProfile extends React.Component {
         secureTextEntry: false,
         value: instagram,
         keyboardType: 'default',
+        validationErrors: validationErrors.instagram,
       },
       {
         key: 'twitter',
@@ -259,6 +296,7 @@ class EditProfile extends React.Component {
         secureTextEntry: false,
         value: twitter,
         keyboardType: 'default',
+        validationErrors: validationErrors.twitter,
       },
     ];
   }
@@ -313,7 +351,7 @@ class EditProfile extends React.Component {
   }
 
   renderModal() {
-    const { password } = this.state;
+    const { password, error } = this.state;
     return (
       <Modal
         transparent={true}
@@ -334,6 +372,11 @@ class EditProfile extends React.Component {
           <Text style={styles.modalTitle}>
             Please enter your password to confirm changes
           </Text>
+          {error.general && (
+            <View style={styles.modalErrorContainer}>
+              <Text style={styles.modalError}>{error.general}</Text>
+            </View>
+          )}
           <InputField
             showLabel={true}
             label={'Password'}
@@ -375,7 +418,6 @@ class EditProfile extends React.Component {
   }
 
   renderInputs() {
-    const { error } = this.state;
     const onChangeText = {
       displayName: this.onChangeDisplayName,
       email: this.onChangeEmail,
@@ -397,6 +439,7 @@ class EditProfile extends React.Component {
             value,
             keyboardType,
             multiline,
+            validationErrors,
           } = field;
           return (
             <View key={key}>
@@ -416,6 +459,7 @@ class EditProfile extends React.Component {
                 keyboardType={keyboardType}
                 value={value}
                 multiline={multiline}
+                validationErrors={validationErrors}
               />
             </View>
           );
@@ -446,7 +490,7 @@ class EditProfile extends React.Component {
             containerViewStyle={styles.containerView}
             buttonStyle={styles.button}
             textStyle={styles.buttonText}
-            onPress={this.onDisplayModal}
+            onPress={this.onPressSave}
           />
         </View>
       </View>
