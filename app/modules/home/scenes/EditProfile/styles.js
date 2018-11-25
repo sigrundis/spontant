@@ -11,8 +11,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
+
     borderRadius: 4,
     borderColor: 'rgba(0, 0, 0, 0.1)',
     padding,
@@ -34,6 +33,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding,
   },
+  modalErrorContainer: {
+    alignSelf: 'flex-start',
+    marginTop: 4,
+    borderRadius: 4,
+    padding: 4,
+    backgroundColor: color.themeLightRed,
+  },
+  modalError: { color: 'red' },
   button: {
     backgroundColor: color.themeGreen,
     height: normalize(55),
