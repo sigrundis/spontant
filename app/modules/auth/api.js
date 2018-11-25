@@ -1,4 +1,9 @@
-import { auth, database, provider } from '../../config/firebase';
+import {
+  auth,
+  database,
+  provider,
+  emailAuthProvider,
+} from '../../config/firebase';
 
 //Register the user using email and password
 export function register(data, callback) {
@@ -22,16 +27,32 @@ export function createUser(user, callback) {
     .catch((error) => callback(false, null, { message: error }));
 }
 
-export function updateUser(user, oldEmail, callback) {
+function reauthenticate(currentPassword) {
+  var user = auth.currentUser;
+  var cred = emailAuthProvider.credential(user.email, currentPassword);
+  return user.reauthenticateAndRetrieveDataWithCredential(cred);
+}
+
+export function updateUser(user, oldEmail, password, callback) {
   const { uid, email } = user;
 
   let updates = {};
   updates['users/' + uid] = user;
 
-  auth
-    .signInWithEmailAndPassword(oldEmail, 'correcthorsebatterystaple')
-    .then((user) => {
-      user.updateEmail(email);
+  reauthenticate(password)
+    .then(() => {
+      var user = auth.currentUser;
+      user
+        .updateEmail(email)
+        .then(() => {
+          console.log('Email updated!');
+        })
+        .catch((error) => {
+          callback(false, null, error);
+        });
+    })
+    .catch((error) => {
+      callback(false, null, error);
     });
 
   database

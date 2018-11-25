@@ -26,9 +26,9 @@ export function createUser(user, successCB, errorCB) {
   };
 }
 
-export function updateUser(user, oldEmail, successCB, errorCB) {
+export function updateUser(user, oldEmail, password, successCB, errorCB) {
   return (dispatch) => {
-    api.updateUser(user, oldEmail, function(success, data, error) {
+    api.updateUser(user, oldEmail, password, function(success, data, error) {
       if (success) {
         dispatch({ type: t.UPDATE_USER, data: user });
         successCB();

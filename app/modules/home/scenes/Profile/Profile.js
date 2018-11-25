@@ -103,7 +103,6 @@ class Profile extends Component {
 
   render() {
     const { user } = this.state;
-    console.log('user', user);
     return (
       <View style={styles.container}>
         <ScrollView style={styles.wrapper}>
@@ -111,7 +110,7 @@ class Profile extends Component {
             {user && user.userimage
               ? this.renderImage(user.userimage)
               : this.renderNameCard()}
-            <Text style={styles.title}>{user.displayname}</Text>
+            <Text style={styles.title}>{user && user.displayname}</Text>
           </View>
           <Text style={styles.subTitle}>User Information</Text>
           <View style={styles.userInfo}>

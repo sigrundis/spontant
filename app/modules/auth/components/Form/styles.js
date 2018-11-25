@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
   },
 
   forgotText: {
-    textAlign: 'center',
     color: color.themeGreen,
     marginBottom: padding,
     fontSize: fontSize.regular,
