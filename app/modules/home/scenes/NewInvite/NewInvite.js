@@ -281,7 +281,7 @@ class NewInvite extends Component {
       maxAttendees: this.onChangeMaxAttendees,
     };
     return (
-      <View style={styles.container}>
+      <View>
         {this.getFields().map((field) => {
           const {
             key,
@@ -297,7 +297,6 @@ class NewInvite extends Component {
             <View key={key}>
               {edit && <FormLabel>{label}</FormLabel>}
               <FormInput
-                style={styles.formInput}
                 autoCapitalize="none"
                 clearButtonMode="while-editing"
                 underlineColorAndroid={'#fff'}
@@ -395,7 +394,9 @@ class NewInvite extends Component {
             <Icon
               name={'md-remove-circle'}
               type="ionicon"
-              color={isSubstractDisabled ? color.themeLightRed : color.themeRed}
+              color={
+                isSubstractDisabled ? color.themeLightOrange : color.themeOrange
+              }
               size={35}
             />
           </TouchableOpacity>
@@ -427,7 +428,7 @@ class NewInvite extends Component {
               style={{}}
               name={'md-add-circle'}
               type="ionicon"
-              color={isAddDisabled ? color.themeLightRed : color.themeRed}
+              color={isAddDisabled ? color.themeLightOrange : color.themeOrange}
               size={35}
             />
           </TouchableOpacity>
@@ -444,8 +445,8 @@ class NewInvite extends Component {
         center
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={color.themeRed}
-        uncheckedColor={color.themeRed}
+        checkedColor={color.themeOrange}
+        uncheckedColor={color.themeOrange}
         title={title}
         checked={checked}
         onPress={() => this.setState({ [stateKey]: !checked })}

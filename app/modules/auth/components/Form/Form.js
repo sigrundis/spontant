@@ -1,18 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { Text, View } from 'react-native';
-import {
-  Button,
-  FormLabel,
-  FormInput,
-  FormValidationMessage,
-} from 'react-native-elements';
-
+import { Button } from 'react-native-elements';
 import { isEmpty, validate } from '../../utils/validate';
-
 import styles from './styles';
-
 import AuthTextInput from '../AuthTextInput';
 
 class Form extends React.Component {
@@ -43,21 +34,18 @@ class Form extends React.Component {
   onSubmit() {
     const data = this.state;
     const result = validate(data);
-
     if (!result.success) this.setState({ error: result.error });
     else this.props.onSubmit(this.extractData(data));
   }
 
   extractData(data) {
     const retData = {};
-
     Object.keys(data).forEach(function(key) {
       if (key !== 'error') {
         let { value } = data[key];
         retData[key] = value;
       }
     });
-
     return retData;
   }
 
@@ -102,7 +90,6 @@ class Form extends React.Component {
               />
             );
           })}
-
           <Button
             raised
             title={buttonTitle}

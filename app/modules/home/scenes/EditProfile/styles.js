@@ -1,20 +1,48 @@
 import { StyleSheet } from 'react-native';
 import { theme } from '../../index';
+import { red, blue } from 'ansi-colors';
 const { padding, normalize, color, fontSize, fontFamily } = theme;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: color.white,
+    paddingVertical: padding,
   },
-  label: { backgroundColor: 'blue' },
-  containerStyle: {
-    borderColor: color.themeYellow,
+  modal: {
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+    padding,
+    paddingTop: 0,
   },
-  inputContainer: { color: color.themeNight },
+  closeButton: {
+    marginLeft: 'auto',
+    marginTop: 5,
+  },
+  modalTitle: {
+    fontSize: fontSize.regular,
+    color: color.themeGreen,
+    paddingTop: 0,
+    fontWeight: 'bold',
+  },
+  modalFooter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding,
+  },
   button: {
-    backgroundColor: color.themeRed,
+    backgroundColor: color.themeGreen,
     height: normalize(55),
+  },
+  canselButton: {
+    backgroundColor: color.themeBlue,
+  },
+  modalButton: {
+    backgroundColor: color.themeOrange,
   },
   imageButton: {
     backgroundColor: 'transparent',
@@ -29,11 +57,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.regular + 2,
   },
   bottomContainer: {
-    height: normalize(49),
-  },
-  closeButton: {
-    marginLeft: 'auto',
-    padding: 10,
+    padding: padding,
   },
 });
 
