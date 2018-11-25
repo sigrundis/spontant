@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: color.themeRed,
+    backgroundColor: color.themeGreen,
     height: normalize(55),
   },
 
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
 
-  numberControllerNumber: { textAlign: 'center', minWidth: 30 },
+  numberControllerNumber: { minWidth: 30 },
 
   checkBoxContainer: {
     backgroundColor: color.white,

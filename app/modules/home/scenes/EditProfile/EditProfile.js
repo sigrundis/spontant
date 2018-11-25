@@ -1,22 +1,25 @@
 import React from 'react';
-import { View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import {
-  Button,
-  FormLabel,
-  FormInput,
-  FormValidationMessage,
-  Icon,
-} from 'react-native-elements';
+  ScrollView,
+  View,
+  Image,
+  ActivityIndicator,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
+import Modal from 'react-native-modal';
+import { Button, Icon } from 'react-native-elements';
 import { Permissions, ImagePicker } from 'expo';
 import { withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { isEmpty } from '../../../auth/utils/validate';
 import styles from './styles';
 import { actions as authActions } from '../../../auth';
 const { updateUser } = authActions;
 import { theme } from '../../';
 const { color } = theme;
+import InputField from '../../components/InputField';
 
 const error = {};
 
@@ -30,8 +33,17 @@ class EditProfile extends React.Component {
       userImage: null,
       uploadingImage: false,
       error: error,
+      isModalVisible: false,
     };
     this.onChangeDisplayName = this.onChangeDisplayName.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this);
+    this.onChangeFacebook = this.onChangeFacebook.bind(this);
+    this.onChangeTwitter = this.onChangeTwitter.bind(this);
+    this.onChangeInstagram = this.onChangeInstagram.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onDisplayModal = this.onDisplayModal.bind(this);
+    this.onHideModal = this.onHideModal.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
@@ -44,6 +56,7 @@ class EditProfile extends React.Component {
       displayname,
       email,
       userimage,
+      phonenumber,
       facebook,
       twitter,
       instagram,
@@ -53,9 +66,11 @@ class EditProfile extends React.Component {
       userImage: userimage,
       oldEmail: email,
       email,
+      phoneNumber: phonenumber,
       facebook,
       twitter,
       instagram,
+      password: '',
     };
   }
 
@@ -102,20 +117,29 @@ class EditProfile extends React.Component {
       displayName,
       userImage,
       email,
+      phoneNumber,
       facebook,
       twitter,
       instagram,
       oldEmail,
+      password,
     } = this.state;
     const { user } = this.props;
     user['displayname'] = displayName;
+    user['phonenumber'] = phoneNumber || '';
     user['email'] = email || '';
     user['facebook'] = facebook || '';
     user['twitter'] = twitter || '';
     user['instagram'] = instagram || '';
     user['userimage'] = userImage || '';
     this.setState({ error: error }); //clear out error messages
-    this.props.updateUser(user, oldEmail, this.onSuccess, this.onError);
+    this.props.updateUser(
+      user,
+      oldEmail,
+      password,
+      this.onSuccess,
+      this.onError
+    );
   }
 
   onSuccess = () => {
@@ -125,7 +149,6 @@ class EditProfile extends React.Component {
 
   onError(error) {
     let errObj = this.state.error;
-
     if (error.hasOwnProperty('message')) {
       errObj['general'] = error.message;
     } else {
@@ -145,6 +168,10 @@ class EditProfile extends React.Component {
     this.setState({ email });
   }
 
+  onChangePhoneNumber(phoneNumber) {
+    this.setState({ phoneNumber });
+  }
+
   onChangeFacebook(facebook) {
     this.setState({ facebook });
   }
@@ -157,8 +184,27 @@ class EditProfile extends React.Component {
     this.setState({ twitter });
   }
 
+  onChangePassword(password) {
+    this.setState({ password });
+  }
+
+  onDisplayModal() {
+    this.setState({ isModalVisible: true });
+  }
+
+  onHideModal() {
+    this.setState({ isModalVisible: false });
+  }
+
   getFields() {
-    const { displayName, email, facebook, instagram, twitter } = this.state;
+    const {
+      displayName,
+      email,
+      phoneNumber,
+      facebook,
+      instagram,
+      twitter,
+    } = this.state;
     return [
       {
         key: 'displayName',
@@ -175,8 +221,17 @@ class EditProfile extends React.Component {
         placeholder: 'Email',
         autoFocus: false,
         secureTextEntry: false,
-        value: facebook,
+        value: email,
         keyboardType: 'default',
+      },
+      {
+        key: 'phoneNumber',
+        label: 'Phone number',
+        placeholder: 'Phone number',
+        autoFocus: false,
+        secureTextEntry: false,
+        value: phoneNumber,
+        keyboardType: 'numeric',
       },
       {
         key: 'facebook',
@@ -193,7 +248,7 @@ class EditProfile extends React.Component {
         placeholder: 'Instagram username',
         autoFocus: false,
         secureTextEntry: false,
-        value: facebook,
+        value: instagram,
         keyboardType: 'default',
       },
       {
@@ -202,7 +257,7 @@ class EditProfile extends React.Component {
         placeholder: 'Twitter username',
         autoFocus: false,
         secureTextEntry: false,
-        value: facebook,
+        value: twitter,
         keyboardType: 'default',
       },
     ];
@@ -229,7 +284,7 @@ class EditProfile extends React.Component {
     const { userimage } = user;
     const { uploadingImage, userImage } = this.state;
     if (uploadingImage) {
-      return <ActivityIndicator size="large" color={color.themeRed} />;
+      return <ActivityIndicator size="large" color={color.themeNight} />;
     }
     // Newly uploaded user image
     if (userImage) {
@@ -244,11 +299,87 @@ class EditProfile extends React.Component {
     );
   }
 
+  renderModelCloseButton() {
+    return (
+      <TouchableOpacity style={styles.closeButton} onPress={this.onHideModal}>
+        <Icon
+          name={'md-close'}
+          type="ionicon"
+          color={color.themeNight}
+          size={20}
+        />
+      </TouchableOpacity>
+    );
+  }
+
+  renderModal() {
+    const { password } = this.state;
+    return (
+      <Modal
+        transparent={true}
+        isVisible={this.state.isModalVisible}
+        onBackButtonPress={this.onHideModal}
+        onBackdropPress={this.onHideModal}
+        onSwipe={this.onHideModal}
+        swipeDirection="down"
+        animationIn={'zoomInDown'}
+        animationOut={'zoomOutUp'}
+        animationInTiming={1000}
+        animationOutTiming={1000}
+        backdropTransitionInTiming={1000}
+        backdropTransitionOutTiming={1000}
+      >
+        <View style={styles.modal}>
+          {this.renderModelCloseButton()}
+          <Text style={styles.modalTitle}>
+            Please enter your password to confirm changes
+          </Text>
+          <InputField
+            showLabel={true}
+            label={'Password'}
+            autoCapitalize="none"
+            clearButtonMode="while-editing"
+            placeholder={'password'}
+            autoFocus={true}
+            onChangeText={this.onChangePassword}
+            secureTextEntry={true}
+            placeholderTextColor={color.grey}
+            textInputStyle={{ padding: 0 }}
+            inputContainerStyle={{ width: '100%' }}
+            keyboardType={'default'}
+            value={password}
+          />
+          <View style={styles.modalFooter}>
+            <Button
+              raised
+              title="Cansel"
+              borderRadius={10}
+              containerViewStyle={styles.containerView}
+              buttonStyle={styles.canselButton}
+              textStyle={styles.buttonText}
+              onPress={this.onHideModal}
+            />
+            <Button
+              raised
+              title="Confirm changes"
+              borderRadius={10}
+              containerViewStyle={styles.containerView}
+              buttonStyle={styles.modalButton}
+              textStyle={styles.buttonText}
+              onPress={this.onSubmit}
+            />
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+
   renderInputs() {
     const { error } = this.state;
     const onChangeText = {
       displayName: this.onChangeDisplayName,
       email: this.onChangeEmail,
+      phoneNumber: this.onChangePhoneNumber,
       facebook: this.onChangeFacebook,
       instagram: this.onChangeInstagram,
       twitter: this.onChangeTwitter,
@@ -269,11 +400,12 @@ class EditProfile extends React.Component {
           } = field;
           return (
             <View key={key}>
-              <FormLabel style={styles.label}>{label}</FormLabel>
-              <FormInput
+              <InputField
+                id={key}
+                showLabel={true}
+                label={label}
                 autoCapitalize="none"
                 clearButtonMode="while-editing"
-                underlineColorAndroid={'#fff'}
                 placeholder={placeholder}
                 autoFocus={autoFocus}
                 onChangeText={onChangeText[key]}
@@ -285,9 +417,6 @@ class EditProfile extends React.Component {
                 value={value}
                 multiline={multiline}
               />
-              {!isEmpty(error) && (
-                <FormValidationMessage>{error[key]}</FormValidationMessage>
-              )}
             </View>
           );
         })}
@@ -298,26 +427,28 @@ class EditProfile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderUserImage()}
-        <Button
-          title="Select new profile picture"
-          onPress={this.pickImage}
-          buttonStyle={styles.imageButton}
-          textStyle={styles.imageButtonText}
-        />
-        {this.renderInputs()}
-        <Button
-          raised
-          title="Save changes"
-          borderRadius={10}
-          containerViewStyle={styles.containerView}
-          buttonStyle={styles.button}
-          textStyle={styles.buttonText}
-          onPress={this.onSubmit}
-        />
-
-        <View style={styles.bottomContainer} />
-        <KeyboardSpacer />
+        {this.renderModal()}
+        <ScrollView>
+          {this.renderUserImage()}
+          <Button
+            title="Select new profile picture"
+            onPress={this.pickImage}
+            buttonStyle={styles.imageButton}
+            textStyle={styles.imageButtonText}
+          />
+          {this.renderInputs()}
+        </ScrollView>
+        <View style={styles.bottomContainer}>
+          <Button
+            raised
+            title="Save changes"
+            borderRadius={10}
+            containerViewStyle={styles.containerView}
+            buttonStyle={styles.button}
+            textStyle={styles.buttonText}
+            onPress={this.onDisplayModal}
+          />
+        </View>
       </View>
     );
   }
