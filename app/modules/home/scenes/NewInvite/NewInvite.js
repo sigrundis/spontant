@@ -402,7 +402,7 @@ class NewInvite extends Component {
           </TouchableOpacity>
 
           {stateKey === 'maxAttendees' && unlimitedMaxAttendees ? (
-            <View style={styles.numberControllerNumber}>
+            <View style={styles.numberControllerIconWrapper}>
               <Icon
                 name={'ios-infinite'}
                 type="ionicon"
