@@ -55,7 +55,7 @@ const MainTab = createBottomTabNavigator(
             name={focused ? 'ios-home' : 'ios-home-outline'}
             type={'ionicon'}
             size={26}
-            color={color.themeRed}
+            color={color.themeNight}
           />
         ),
         tabBarOnPress: ({ navigation }) => {
@@ -73,7 +73,7 @@ const MainTab = createBottomTabNavigator(
             name={focused ? 'ios-add-circle' : 'ios-add-circle-outline'}
             type={'ionicon'}
             size={26}
-            color={color.themeRed}
+            color={color.themeNight}
           />
         ),
         tabBarOnPress: ({ navigation }) => {
@@ -95,7 +95,7 @@ const MainTab = createBottomTabNavigator(
             name={focused ? 'ios-person' : 'ios-person-outline'}
             type={'ionicon'}
             size={26}
-            color={color.themeRed}
+            color={color.themeNight}
           />
         ),
         tabBarOnPress: ({ navigation }) => {
@@ -118,7 +118,11 @@ function getHeaderRight(navigation) {
     return (
       <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
         <View style={{ marginRight: 10 }}>
-          <Icon name={'ios-settings'} type={'ionicon'} color={color.themeRed} />
+          <Icon
+            name={'ios-settings'}
+            type={'ionicon'}
+            color={color.themeNight}
+          />
         </View>
       </TouchableOpacity>
     );
@@ -138,7 +142,7 @@ function getHeaderLeft(navigation) {
           <Icon
             name={'ios-arrow-back'}
             type={'ionicon'}
-            color={color.themeRed}
+            color={color.themeNight}
           />
         </View>
       </TouchableOpacity>

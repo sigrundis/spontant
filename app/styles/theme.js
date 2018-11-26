@@ -11,15 +11,17 @@ const color = {
   red: 'red',
   underlayColor: '#ddd',
   themeRed: '#f9595c',
-  themeLightRed: '#fca3a4',
-  themeBlue: '#64B4E6',
+  themeLightRed: '#fcb5b6',
+  themeBlue: '#00BDD9',
   themeOcean: '#3ac9c2',
   themeYellow: '#fca45d',
   themeLightYellow: '#ffe4b5',
-  themeOrange: '#ff6600',
-  themeNight: '#354355',
+  themeLightOrange: '#fdd1b6',
+  themeOrange: '#fa8d4a',
+  themeNight: '#3f4c59',
   themeLightNight: '#5b7391',
   themeGreen: '#008489',
+  themeLightGreen: '#20C3B3',
 };
 
 const fontSize = {

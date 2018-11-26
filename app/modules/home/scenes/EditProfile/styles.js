@@ -1,71 +1,70 @@
 import { StyleSheet } from 'react-native';
 import { theme } from '../../index';
+import { red, blue } from 'ansi-colors';
 const { padding, normalize, color, fontSize, fontFamily } = theme;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: color.white,
+    paddingVertical: padding,
   },
+  modal: {
+    backgroundColor: 'white',
 
-  formInput: {
-    paddingTop: normalize(8 * 3),
-    paddingBottom: normalize(8 * 3),
-    paddingHorizontal: normalize(8 * 2),
-    flex: 1,
-    fontSize: normalize(17 + 3),
-    lineHeight: normalize(21 + 3),
-    color: color.themeRed,
-    letterSpacing: 0.5,
-    fontFamily: fontFamily.medium,
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+    padding,
+    paddingTop: 0,
   },
-
-  textInput: {
-    paddingTop: normalize(8 * 3),
-    paddingBottom: normalize(8 * 3),
-    paddingHorizontal: normalize(8 * 2),
-    flex: 1,
-    fontSize: normalize(17 + 3),
-    lineHeight: normalize(21 + 3),
-    color: color.themeRed,
-    letterSpacing: 0.5,
-    fontFamily: fontFamily.medium,
+  closeButton: {
+    marginLeft: 'auto',
+    marginTop: 5,
   },
-
+  modalTitle: {
+    fontSize: fontSize.regular,
+    color: color.themeGreen,
+    paddingTop: 0,
+    fontWeight: 'bold',
+  },
+  modalFooter: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding,
+  },
+  modalErrorContainer: {
+    alignSelf: 'flex-start',
+    marginTop: 4,
+    borderRadius: 4,
+    padding: 4,
+    backgroundColor: color.themeLightRed,
+  },
+  modalError: { color: 'red' },
   button: {
-    backgroundColor: color.themeRed,
+    backgroundColor: color.themeGreen,
     height: normalize(55),
   },
-
+  canselButton: {
+    backgroundColor: color.themeBlue,
+  },
+  modalButton: {
+    backgroundColor: color.themeOrange,
+  },
   imageButton: {
     backgroundColor: 'transparent',
     height: normalize(55),
   },
-
   buttonText: {
     color: color.white,
     fontSize: fontSize.regular + 2,
   },
-
   imageButtonText: {
     color: color.themeGreen,
     fontSize: fontSize.regular + 2,
   },
-
   bottomContainer: {
-    height: normalize(49),
-  },
-
-  closeButton: {
-    marginLeft: 'auto',
-    padding: 10,
-  },
-
-  color: {
-    height: normalize(25),
-    width: normalize(25),
-    borderRadius: normalize(25 / 2),
-    marginHorizontal: padding,
+    padding: padding,
   },
 });
 

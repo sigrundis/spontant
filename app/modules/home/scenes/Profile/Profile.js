@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import {
+  ScrollView,
+  View,
+  TouchableOpacity,
+  Image,
+  ActionSheetIOS,
+} from 'react-native';
 import { connect } from 'react-redux';
-import { Card, Button, Text } from 'react-native-elements';
+import { Icon, Text } from 'react-native-elements';
 import { withNavigationFocus } from 'react-navigation';
 import { actions as auth } from '../../../auth/index';
 const { signOut } = auth;
@@ -14,6 +20,21 @@ class Profile extends Component {
     super(props);
     const { user } = this.props;
     this.state = { user };
+    this.onSignOut = this.onSignOut.bind(this);
+    this.onPressSignOut = this.onPressSignOut.bind(this);
+  }
+
+  onSignOut() {
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Sign out', 'Cancel'],
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) this.onPressSignOut();
+      }
+    );
   }
 
   onPressSignOut = (screen) => {
@@ -38,38 +59,89 @@ class Profile extends Component {
     alert('Oops!', error.message);
   }
 
+  renderImage(uri) {
+    return (
+      <Image
+        source={{ uri }}
+        style={{ width: 100, height: 100, borderRadius: 50 }}
+      />
+    );
+  }
+
+  renderNameCard() {
+    console.log('rendernamecard');
+    const { user } = this.state;
+    return (
+      <View style={styles.namecard}>
+        <Text style={{ color: 'white', fontSize: 28 }}>
+          {user &&
+            user.displayname
+              .split(' ')
+              .map((x) => x[0])
+              .join('')}
+        </Text>
+      </View>
+    );
+  }
+
+  renderUserInfo(label, detail, iconName) {
+    return (
+      <View style={styles.infoLine}>
+        <View style={styles.labelContainer}>
+          <Icon
+            name={iconName}
+            type="ionicon"
+            color={color.themeNight}
+            size={15}
+          />
+          <Text style={styles.label}>{label}</Text>
+        </View>
+        <Text style={styles.detail}>{detail}</Text>
+      </View>
+    );
+  }
+
   render() {
     const { user } = this.state;
     return (
-      <View style={{ paddingVertical: 20 }}>
-        <Card title={user && user.displayname}>
-          <View
-            style={{
-              backgroundColor: '#bcbec1',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              alignSelf: 'center',
-              marginBottom: 20,
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: 28 }}>
-              {user &&
-                user.displayname
-                  .split(' ')
-                  .map((x) => x[0])
-                  .join('')}
-            </Text>
+      <View style={styles.container}>
+        <ScrollView style={styles.wrapper}>
+          <View style={styles.header}>
+            {user && user.userimage
+              ? this.renderImage(user.userimage)
+              : this.renderNameCard()}
+            <Text style={styles.title}>{user && user.displayname}</Text>
           </View>
-          <Button
-            buttonStyle={styles.button}
-            textStyle={styles.buttonText}
-            title="SIGN OUT"
-            onPress={this.onPressSignOut}
-          />
-        </Card>
+          <Text style={styles.subTitle}>User Information</Text>
+          <View style={styles.userInfo}>
+            {this.renderUserInfo('Email', user.email || '-', 'md-mail')}
+            {this.renderUserInfo(
+              'Phone number',
+              user.phonenumber || '-',
+              'ios-call'
+            )}
+            {this.renderUserInfo(
+              'Facebook',
+              user.facebook || '-',
+              'logo-facebook'
+            )}
+            {this.renderUserInfo(
+              'Instagram',
+              user.instagram || '-',
+              'logo-instagram'
+            )}
+            {this.renderUserInfo(
+              'Twitter',
+              user.twitter || '-',
+              'logo-twitter'
+            )}
+          </View>
+        </ScrollView>
+        <View style={styles.signOut}>
+          <TouchableOpacity onPress={this.onSignOut}>
+            <Text style={styles.signOutText}>Sign out</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
