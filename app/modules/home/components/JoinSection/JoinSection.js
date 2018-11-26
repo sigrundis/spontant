@@ -125,9 +125,9 @@ class JoinSection extends React.Component {
       <View
         style={{
           display: 'flex',
+          alignSelf: 'flex-start',
           backgroundColor: color.themeLightYellow,
           borderRadius: 4,
-          width: 240,
         }}
       >
         <Text

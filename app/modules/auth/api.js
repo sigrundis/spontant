@@ -1,4 +1,9 @@
-import { auth, database, provider } from '../../config/firebase';
+import {
+  auth,
+  database,
+  provider,
+  emailAuthProvider,
+} from '../../config/firebase';
 
 //Register the user using email and password
 export function register(data, callback) {
@@ -6,7 +11,7 @@ export function register(data, callback) {
   auth
     .createUserWithEmailAndPassword(email, password)
     .then((resp) =>
-      createUser({ username, displayname, uid: resp.user.uid }, callback)
+      createUser({ username, displayname, uid: resp.user.uid, email }, callback)
     )
     .catch((error) => callback(false, null, error));
 }
@@ -22,17 +27,37 @@ export function createUser(user, callback) {
     .catch((error) => callback(false, null, { message: error }));
 }
 
-export function updateUser(user, callback) {
-  const { uid } = user;
+function reauthenticate(currentPassword) {
+  var user = auth.currentUser;
+  var cred = emailAuthProvider.credential(user.email, currentPassword);
+  return user.reauthenticateAndRetrieveDataWithCredential(cred);
+}
+
+export function updateUser(user, oldEmail, password, callback) {
+  const { uid, email } = user;
 
   let updates = {};
   updates['users/' + uid] = user;
 
-  database
-    .ref()
-    .update(updates)
-    .then(() => callback(true, user, null))
-    .catch((error) => callback(false, null, error));
+  reauthenticate(password)
+    .then(() => {
+      var user = auth.currentUser;
+      user
+        .updateEmail(email)
+        .then(() => {
+          database
+            .ref()
+            .update(updates)
+            .then(() => callback(true, user, null))
+            .catch((error) => callback(false, null, error));
+        })
+        .catch((error) => {
+          callback(false, null, error);
+        });
+    })
+    .catch((error) => {
+      callback(false, null, error);
+    });
 }
 
 //Sign the user in with their email and password

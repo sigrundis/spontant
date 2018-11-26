@@ -76,7 +76,6 @@ export function addJoin(data, callback) {
           invite.attendees[uid] = true;
         }
       }
-
       return invite;
     },
     function(error, committed, snapshot) {
