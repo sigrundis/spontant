@@ -63,16 +63,7 @@ class EditProfile extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { isFocused, displayname = '', userimage = '' } = props;
     if (!isFocused) return null;
-
-    const {
-      displayname,
-      email,
-      userimage,
-      phonenumber,
-      facebook,
-      twitter,
-      instagram,
-    } = user;
+    const { email, phonenumber, facebook, twitter, instagram } = user;
     return {
       displayName: displayname,
       userImage: userimage,
@@ -171,9 +162,8 @@ class EditProfile extends React.Component {
     user.twitter = twitter || '';
     user.instagram = instagram || '';
     user.userimage = userImage || '';
-
     updateUser(user, oldEmail, password, this.onSuccess, this.onError);
-
+  }
 
   onSuccess = () => {
     const { navigation } = this.props;
