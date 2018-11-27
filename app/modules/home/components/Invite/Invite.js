@@ -118,6 +118,22 @@ class Invite extends React.Component {
   onOption() {
     const { invites, index, navigation } = this.props;
     const invite = invites[index];
+    const headerLeft = (
+      <TouchableOpacity
+        onPress={() => {
+          showBackToHomeButton = false;
+          navigation.navigate('Home');
+        }}
+      >
+        <View style={{ marginLeft: 10 }}>
+          <Icon
+            name={'ios-arrow-back'}
+            type={'ionicon'}
+            color={color.themeNight}
+          />
+        </View>
+      </TouchableOpacity>
+    );
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: ['Edit', 'Delete', 'Cancel'],
@@ -130,6 +146,7 @@ class Invite extends React.Component {
             title: 'Edit Invite',
             edit: true,
             invite,
+            headerLeft,
           });
         else if (buttonIndex === 1) this.onDelete();
       }

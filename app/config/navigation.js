@@ -78,12 +78,12 @@ const MainTab = createBottomTabNavigator(
         ),
         tabBarOnPress: ({ navigation }) => {
           showEditProfileButton = false;
-          (showBackToHomeButton = true),
-            navigation.navigate('NewInvite', {
-              edit: false,
-              invite: {},
-              title: 'New Invite',
-            });
+          showBackToHomeButton = true;
+          navigation.navigate('NewInvite', {
+            edit: false,
+            invite: {},
+            title: 'New Invite',
+          });
         },
       },
     },
@@ -159,7 +159,7 @@ const MainStack = createStackNavigator({
       return {
         title: params ? params.title : 'Home',
         headerRight: getHeaderRight(navigation),
-        headerLeft: getHeaderLeft(navigation),
+        headerLeft: params ? params.headerLeft : getHeaderLeft(navigation),
         headerStyle,
         headerTintColor: color.themeNight,
       };

@@ -325,7 +325,6 @@ class NewInvite extends Component {
             multiline,
             validationErrors,
           } = field;
-          console.log('validationErrrors', validationErrors);
           return (
             <View key={key}>
               <InputField
