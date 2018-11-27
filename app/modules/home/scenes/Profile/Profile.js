@@ -103,6 +103,7 @@ class Profile extends Component {
 
   render() {
     const { user } = this.state;
+    if (!user) return null;
     return (
       <View style={styles.container}>
         <ScrollView style={styles.wrapper}>
@@ -148,8 +149,9 @@ class Profile extends Component {
 }
 
 function mapStateToProps(state, props) {
+  const { authReducer } = state;
   return {
-    user: state.authReducer.user,
+    user: authReducer.user,
   };
 }
 

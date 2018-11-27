@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { theme } from '../../index';
-import { red, blue } from 'ansi-colors';
-const { padding, normalize, color, fontSize, fontFamily } = theme;
+const { padding, color, fontSize } = theme;
 
 const styles = StyleSheet.create({
   container: {
@@ -11,7 +10,6 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: 'white',
-
     borderRadius: 4,
     borderColor: 'rgba(0, 0, 0, 0.1)',
     padding,
@@ -22,10 +20,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   modalTitle: {
-    fontSize: fontSize.regular,
+    fontSize: fontSize.large,
     color: color.themeGreen,
     paddingTop: 0,
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalFooter: {
     display: 'flex',
@@ -33,38 +31,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding,
   },
-  modalErrorContainer: {
-    alignSelf: 'flex-start',
-    marginTop: 4,
-    borderRadius: 4,
-    padding: 4,
-    backgroundColor: color.themeLightRed,
-  },
-  modalError: { color: 'red' },
-  button: {
-    backgroundColor: color.themeOrange,
-    height: normalize(55),
-  },
   cancelButton: {
     backgroundColor: color.themeBlue,
   },
   modalButton: {
     backgroundColor: color.themeOrange,
-  },
-  imageButton: {
-    backgroundColor: 'transparent',
-    height: normalize(55),
-  },
-  buttonText: {
-    color: color.white,
-    fontSize: fontSize.regular + 2,
-  },
-  imageButtonText: {
-    color: color.themeOrange,
-    fontSize: fontSize.regular + 2,
-  },
-  bottomContainer: {
-    padding: padding,
   },
 });
 

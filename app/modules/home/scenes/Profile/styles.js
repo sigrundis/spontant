@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.white,
   },
   namecard: {
-    backgroundColor: color.themeRed,
+    backgroundColor: color.themeOrange,
     alignItems: 'center',
     justifyContent: 'center',
     width: 80,

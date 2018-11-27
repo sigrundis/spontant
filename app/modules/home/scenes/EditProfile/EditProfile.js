@@ -95,7 +95,7 @@ class EditProfile extends React.Component {
       aspect: [60, 60],
       base64: true,
     });
-    if (result.canseled) {
+    if (result.canceled) {
       this.setState({ uploadingImage: false });
     } else {
       let base64Img = `data:image/jpg;base64,${result.base64}`;
@@ -322,7 +322,7 @@ class EditProfile extends React.Component {
     const { userimage } = user;
     const { uploadingImage, userImage } = this.state;
     if (uploadingImage) {
-      return <ActivityIndicator size="large" color={color.themeNight} />;
+      return <ActivityIndicator size="large" color={color.themeGreen} />;
     }
     // Newly uploaded user image
     if (userImage) {
@@ -395,10 +395,10 @@ class EditProfile extends React.Component {
           <View style={styles.modalFooter}>
             <Button
               raised
-              title="Cansel"
+              title="Cancel"
               borderRadius={10}
               containerViewStyle={styles.containerView}
-              buttonStyle={styles.canselButton}
+              buttonStyle={styles.cancelButton}
               textStyle={styles.buttonText}
               onPress={this.onHideModal}
             />

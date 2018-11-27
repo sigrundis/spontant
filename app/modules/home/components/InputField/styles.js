@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   container: { paddingHorizontal: padding },
   label: {
     alignSelf: 'flex-start',
-    color: color.themeOrange,
+    color: color.themeGreen,
     backgroundColor: color.white,
     padding,
     marginLeft: 5,
@@ -17,8 +17,9 @@ const styles = StyleSheet.create({
     color: color.themeNight,
     paddingHorizontal: padding,
     paddingVertical: padding * 2,
+    paddingTop: padding * 2, // Because paddingVertical doesnt work in multiline mode
     borderWidth: 1,
-    borderColor: color.themeOrange,
+    borderColor: color.themeGreen,
     borderRadius: 5,
   },
   errorMessageContainer: {
