@@ -207,7 +207,6 @@ class EditProfile extends Component {
   }
 
   onChangeDisplayName(displayName) {
-    console.log('on change display name', displayName);
     this.setState({ displayName });
   }
 
