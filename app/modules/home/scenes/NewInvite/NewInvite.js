@@ -9,19 +9,16 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Text,
 } from 'react-native';
-import {
-  Button,
-  FormLabel,
-  FormInput,
-  FormValidationMessage,
-  Icon,
-  CheckBox,
-} from 'react-native-elements';
+import moment from 'moment';
+import { Button, FormLabel, Icon, CheckBox } from 'react-native-elements';
 import { Permissions, ImagePicker } from 'expo';
 import { withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import InputField from '../../components/InputField';
+import DatePickerModal from '../../components/DatePickerModal';
 import styles from './styles';
 import { isEmpty } from '../../../auth/utils/validate';
 import { actions as home, theme } from '../../index';
@@ -52,6 +49,7 @@ class NewInvite extends Component {
       error: error,
       image: null,
       uploadingImage: false,
+      isDatePickerModalVisible: false,
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -61,6 +59,8 @@ class NewInvite extends Component {
     this.onChangeMaxAttendees = this.onChangeMaxAttendees.bind(this);
     this.onAddNumber = this.onAddNumber.bind(this);
     this.onSubtractNumber = this.onSubtractNumber.bind(this);
+    this.openDatePickerModal = this.openDatePickerModal.bind(this);
+    this.closeDatePickerModal = this.closeDatePickerModal.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -178,7 +178,7 @@ class NewInvite extends Component {
       aspect: [80, 60],
       base64: true,
     });
-    if (result.canseled) {
+    if (result.canceled) {
       this.setState({ uploadingImage: false });
     } else {
       let base64Img = `data:image/jpg;base64,${result.base64}`;
@@ -245,6 +245,14 @@ class NewInvite extends Component {
     this.setState({ [stateKey]: number - 1 });
   }
 
+  openDatePickerModal() {
+    this.setState({ isDatePickerModalVisible: true });
+  }
+
+  closeDatePickerModal() {
+    this.setState({ isDatePickerModalVisible: false });
+  }
+
   getFields() {
     const { title, description, minAttendees, maxAttendees } = this.state;
     return [
@@ -295,25 +303,21 @@ class NewInvite extends Component {
           } = field;
           return (
             <View key={key}>
-              {edit && <FormLabel>{label}</FormLabel>}
-              <FormInput
+              <InputField
+                label={label}
+                showLabel={true}
                 autoCapitalize="none"
                 clearButtonMode="while-editing"
-                underlineColorAndroid={'#fff'}
                 placeholder={placeholder}
                 autoFocus={autoFocus}
                 onChangeText={onChangeText[key]}
                 secureTextEntry={secureTextEntry}
-                containerStyle={styles.containerStyle}
-                inputStyle={styles.inputContainer}
                 placeholderTextColor={placeholderTextColor}
                 keyboardType={keyboardType}
                 value={value}
                 multiline={multiline}
+                validationErrors={error[key] ? [error[key]] : []}
               />
-              {!isEmpty(error) && (
-                <FormValidationMessage>{error[key]}</FormValidationMessage>
-              )}
             </View>
           );
         })}
@@ -322,15 +326,23 @@ class NewInvite extends Component {
   }
 
   renderDatePicker() {
-    const { date } = this.state;
+    const { isDatePickerModalVisible, date } = this.state;
+
     return (
-      <View>
-        <FormLabel>Date and time</FormLabel>
-        {Platform.OS === 'ios' ? (
-          <DatePickerIOS date={date} onDateChange={this.onChangeDate} />
-        ) : (
-          <DatePickerAndroid date={date} onDateChange={this.onChangeDate} />
-        )}
+      <View style={styles.dateSection}>
+        <Text style={styles.label}>Date and time:</Text>
+        <View style={styles.date}>
+          <Text style={styles.date}>{date && moment(date).format('LLLL')}</Text>
+          <TouchableOpacity onPress={this.openDatePickerModal}>
+            <Text style={styles.link}>Select date</Text>
+          </TouchableOpacity>
+        </View>
+        <DatePickerModal
+          isVisible={isDatePickerModalVisible}
+          onChangeDate={this.onChangeDate}
+          onCloseModal={this.closeDatePickerModal}
+          value={date}
+        />
       </View>
     );
   }
@@ -353,7 +365,7 @@ class NewInvite extends Component {
     if (uploadingImage) {
       return (
         <View style={[styles.cover]}>
-          <ActivityIndicator size="large" color={color.themeRed} />
+          <ActivityIndicator size="large" color={color.themeGreen} />
         </View>
       );
     }
@@ -395,7 +407,7 @@ class NewInvite extends Component {
               name={'md-remove-circle'}
               type="ionicon"
               color={
-                isSubstractDisabled ? color.themeLightOrange : color.themeOrange
+                isSubstractDisabled ? color.themeLightGreen : color.themeGreen
               }
               size={35}
             />
@@ -428,7 +440,7 @@ class NewInvite extends Component {
               style={{}}
               name={'md-add-circle'}
               type="ionicon"
-              color={isAddDisabled ? color.themeLightOrange : color.themeOrange}
+              color={isAddDisabled ? color.themeLightGreen : color.themeGreen}
               size={35}
             />
           </TouchableOpacity>
@@ -445,8 +457,8 @@ class NewInvite extends Component {
         center
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={color.themeOrange}
-        uncheckedColor={color.themeOrange}
+        checkedColor={color.themeGreen}
+        uncheckedColor={color.themeGreen}
         title={title}
         checked={checked}
         onPress={() => this.setState({ [stateKey]: !checked })}

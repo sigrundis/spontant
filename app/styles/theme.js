@@ -21,7 +21,8 @@ const color = {
   themeNight: '#3f4c59',
   themeLightNight: '#5b7391',
   themeGreen: '#008489',
-  themeLightGreen: '#20C3B3',
+  themeBrightGreen: '#20C3B3',
+  themeLightGreen: '#b2dadb',
 };
 
 const fontSize = {

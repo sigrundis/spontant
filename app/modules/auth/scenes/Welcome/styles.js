@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     paddingBottom: padding * 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.themeRed,
+    backgroundColor: color.themeGreen,
   },
 
   image: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: color.themeRed,
+    backgroundColor: color.themeOrange,
     height: normalize(55),
   },
 
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 
   signInText: {
     fontSize: fontSize.regular,
-    color: color.themeGreen,
+    color: color.themeOrange,
     fontFamily: fontFamily.medium,
   },
 
