@@ -100,9 +100,9 @@ class NewInvite extends Component {
     return {
       populatedDefaultState: true,
       previousModeWasEdit: edit,
-      title,
+      title: title || '',
       date: new Date(date) || new Date(),
-      description,
+      description: description || '',
       minAttendees: minAttendees || 0,
       maxAttendees: Number(maxAttendees) ? maxAttendees : 10,
       unlimitedMaxAttendees: maxAttendees === 'unlimited',
