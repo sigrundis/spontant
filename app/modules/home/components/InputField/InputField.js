@@ -30,6 +30,7 @@ class InputField extends Component {
         {showLabel && <Text style={styles.label}>{label}</Text>}
         <TextInput
           style={[styles.textInput, textInputStyle]}
+          textAlignVertical="top"
           placeholder={placeholder}
           autoFocus={autoFocus}
           autoCapitalize={autoCapitalize}

@@ -8,6 +8,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingBottom: padding,
   },
+  link: {
+    padding,
+    fontSize: fontSize.regular,
+    color: color.themeOrange,
+  },
   cover: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -18,16 +23,18 @@ const styles = StyleSheet.create({
     borderBottomColor: color.light_grey,
     borderBottomWidth: 1,
   },
-  textInput: {
-    paddingTop: normalize(8 * 3),
-    paddingBottom: normalize(8 * 3),
-    paddingHorizontal: normalize(8 * 2),
-    flex: 1,
-    fontSize: normalize(17 + 3),
-    lineHeight: normalize(21 + 3),
-    color: color.themeRed,
-    letterSpacing: 0.5,
-    fontFamily: fontFamily.medium,
+  dateSection: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: padding,
+    paddingVertical: padding * 2,
+  },
+  date: { display: 'flex', alignItems: 'flex-end' },
+  label: {
+    fontSize: fontSize.regular,
+    color: color.themeGreen,
   },
   buttonWrapper: {
     paddingTop: padding,
@@ -35,7 +42,7 @@ const styles = StyleSheet.create({
     borderTopColor: color.grey,
   },
   button: {
-    backgroundColor: color.themeGreen,
+    backgroundColor: color.themeOrange,
     height: normalize(55),
   },
   imageButton: {
@@ -47,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.regular + 2,
   },
   imageButtonText: {
-    color: color.themeGreen,
+    color: color.themeOrange,
     fontSize: fontSize.regular + 2,
   },
   bottomContainer: {

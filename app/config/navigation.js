@@ -52,8 +52,8 @@ const MainTab = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ focused }) => (
           <Icon
-            name={focused ? 'ios-home' : 'ios-home-outline'}
-            type={'ionicon'}
+            name={focused ? 'home' : 'home-outline'}
+            type={'material-community'}
             size={26}
             color={color.themeNight}
           />
@@ -92,9 +92,9 @@ const MainTab = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ focused }) => (
           <Icon
-            name={focused ? 'ios-person' : 'ios-person-outline'}
-            type={'ionicon'}
-            size={26}
+            name={focused ? 'user' : 'user-o'}
+            type={'font-awesome'}
+            size={20}
             color={color.themeNight}
           />
         ),
