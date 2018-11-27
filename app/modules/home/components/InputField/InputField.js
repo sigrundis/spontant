@@ -24,12 +24,32 @@ class InputField extends Component {
       multiline,
       validationErrors,
     } = this.props;
-
     return (
       <View key={id} style={[styles.container, inputContainerStyle]}>
-        {showLabel && <Text style={styles.label}>{label}</Text>}
+        {showLabel && (
+          <Text
+            style={[
+              styles.label,
+              {
+                color:
+                  validationErrors.length > 0
+                    ? color.themeRed
+                    : color.themeGreen,
+              },
+            ]}
+          >
+            {label}
+          </Text>
+        )}
         <TextInput
-          style={[styles.textInput, textInputStyle]}
+          style={[
+            styles.textInput,
+            textInputStyle,
+            {
+              borderColor:
+                validationErrors.length > 0 ? color.themeRed : color.themeGreen,
+            },
+          ]}
           textAlignVertical="top"
           placeholder={placeholder}
           autoFocus={autoFocus}

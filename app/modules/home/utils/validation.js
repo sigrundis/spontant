@@ -46,3 +46,34 @@ export function validateUpdatedUser({
 
   return validationErrors;
 }
+
+export function validateInvite({ title, date, description } = {}) {
+  const validationErrors = {
+    isEmpty: true,
+    title: [],
+    date: [],
+    description: [],
+  };
+  if (
+    !validator.isByteLength(title, {
+      min: 1,
+    })
+  ) {
+    let titleValidationArray = validationErrors.title;
+    titleValidationArray.push('Title can not be empty.');
+    validationErrors.title = titleValidationArray;
+    validationErrors.isEmpty = false;
+  }
+  if (
+    !validator.isByteLength(description, {
+      min: 1,
+    })
+  ) {
+    let descriptionValidationArray = validationErrors.description;
+    descriptionValidationArray.push('Description can not be empty.');
+    validationErrors.description = descriptionValidationArray;
+    validationErrors.isEmpty = false;
+  }
+
+  return validationErrors;
+}

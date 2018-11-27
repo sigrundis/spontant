@@ -47,7 +47,7 @@ class DatePickerModal extends React.Component {
     );
   }
 
-  renderModelCloseButton() {
+  renderModalCloseButton() {
     const { onCloseModal } = this.props;
     return (
       <TouchableOpacity style={styles.closeButton} onPress={onCloseModal}>
@@ -80,7 +80,7 @@ class DatePickerModal extends React.Component {
         backdropTransitionOutTiming={1000}
       >
         <View style={styles.modal}>
-          {this.renderModelCloseButton()}
+          {this.renderModalCloseButton()}
           <Text style={styles.modalTitle}>Select date</Text>
           {this.renderDatePicker()}
           <View style={styles.modalFooter}>
