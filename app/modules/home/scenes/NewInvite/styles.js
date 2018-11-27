@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   },
   numberController: {
     display: 'flex',
+    padding,
   },
   numberControllerWrapper: {
     display: 'flex',

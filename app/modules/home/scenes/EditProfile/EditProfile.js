@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   ScrollView,
   View,
@@ -27,7 +27,7 @@ const error = {};
 const CLOUDINARY_NAME = 'dgbmwdqbl';
 const CLOUDINARY_PRESET = 'face-crop';
 
-class EditProfile extends React.Component {
+class EditProfile extends Component {
   constructor() {
     super();
     this.state = {
@@ -60,8 +60,21 @@ class EditProfile extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
+    const { populatedDefaultState } = state;
     const { isFocused, user } = props;
-    if (!isFocused) return null;
+    if (populatedDefaultState) return null;
+    if (!isFocused)
+      return {
+        populatedDefaultState: false,
+        validationErrors: {
+          displayName: [],
+          email: [],
+          phoneNumber: [],
+          facebook: [],
+          twitter: [],
+          instagram: [],
+        },
+      };
     const {
       displayname,
       email,
@@ -71,7 +84,9 @@ class EditProfile extends React.Component {
       twitter,
       instagram,
     } = user;
+
     return {
+      populatedDefaultState: true,
       displayName: displayname,
       userImage: userimage,
       oldEmail: email,
@@ -192,6 +207,7 @@ class EditProfile extends React.Component {
   }
 
   onChangeDisplayName(displayName) {
+    console.log('on change display name', displayName);
     this.setState({ displayName });
   }
 
@@ -337,7 +353,7 @@ class EditProfile extends React.Component {
     );
   }
 
-  renderModelCloseButton() {
+  renderModalCloseButton() {
     return (
       <TouchableOpacity style={styles.closeButton} onPress={this.onHideModal}>
         <Icon
@@ -368,7 +384,7 @@ class EditProfile extends React.Component {
         backdropTransitionOutTiming={1000}
       >
         <View style={styles.modal}>
-          {this.renderModelCloseButton()}
+          {this.renderModalCloseButton()}
           <Text style={styles.modalTitle}>
             Please enter your password to confirm changes
           </Text>
@@ -441,10 +457,10 @@ class EditProfile extends React.Component {
             multiline,
             validationErrors,
           } = field;
+
           return (
             <View key={key}>
               <InputField
-                id={key}
                 showLabel={true}
                 label={label}
                 autoCapitalize="none"
@@ -459,7 +475,7 @@ class EditProfile extends React.Component {
                 keyboardType={keyboardType}
                 value={value}
                 multiline={multiline}
-                validationErrors={validationErrors}
+                validationErrors={validationErrors || []}
               />
             </View>
           );

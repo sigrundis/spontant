@@ -213,11 +213,12 @@ class Invite extends React.Component {
   }
 
   renderImage(uri) {
-    return (
+    const hasImage = uri && uri !== '';
+    return hasImage ? (
       <View style={styles.imageContainer}>
         <Image source={{ uri }} style={styles.image} />
       </View>
-    );
+    ) : null;
   }
 
   render() {
@@ -272,7 +273,7 @@ class Invite extends React.Component {
             {user.uid === userId && this.renderOptionButton()}
           </View>
           <View style={[styles.left, { marginBottom: 10 }]}>
-            {image && this.renderImage(image)}
+            {this.renderImage(image)}
             <Text
               style={[
                 styles.title,

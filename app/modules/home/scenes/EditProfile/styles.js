@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: 'white',
-
     borderRadius: 4,
     borderColor: 'rgba(0, 0, 0, 0.1)',
     padding,
