@@ -69,7 +69,6 @@ class Profile extends Component {
   }
 
   renderNameCard() {
-    console.log('rendernamecard');
     const { user } = this.state;
     return (
       <View style={styles.namecard}>
