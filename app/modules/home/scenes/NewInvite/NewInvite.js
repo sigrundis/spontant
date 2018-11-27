@@ -20,7 +20,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import InputField from '../../components/InputField';
 import DatePickerModal from '../../components/DatePickerModal';
 import styles from './styles';
-import { isEmpty } from '../../../auth/utils/validate';
+import { validateInvite } from '../../utils/validation';
 import { actions as home, theme } from '../../index';
 const { addInvite, updateInvite } = home;
 const { color } = theme;
@@ -36,20 +36,27 @@ class NewInvite extends Component {
     const {
       title,
       description,
+      image,
       minAttendees,
       maxAttendees,
     } = navigation.getParam('invite', {});
     this.state = {
-      title,
+      title: title || '',
       date: new Date(),
-      description,
+      description: description || '',
       minAttendees: minAttendees || 0,
       maxAttendees: Number(maxAttendees) ? maxAttendees : 10,
       unlimitedMaxAttendees: maxAttendees === 'unlimited',
       error: error,
-      image: null,
+      image: image || '',
       uploadingImage: false,
       isDatePickerModalVisible: false,
+      validationErrors: {
+        isEmpty: true,
+        title: [],
+        date: [],
+        description: [],
+      },
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -64,13 +71,23 @@ class NewInvite extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { previousModeWasEdit } = state;
+    const { previousModeWasEdit, populatedDefaultState } = state;
     const { isFocused, navigation } = props;
-    if (!isFocused) return null;
+    if (!isFocused)
+      return {
+        populatedDefaultState: false,
+        validationErrors: {
+          isEmpty: true,
+          title: [],
+          date: [],
+          description: [],
+        },
+      };
     const edit = navigation.getParam('edit', false);
+
     // If the user was creating a new invite last time they were using the input fields
     // but didn't save, we want to keep their input, i.e. don't change the state.
-    if (!previousModeWasEdit && !edit) return null;
+    if ((!previousModeWasEdit && !edit) || populatedDefaultState) return null;
     const invite = navigation.getParam('invite', {});
     const {
       title,
@@ -81,6 +98,7 @@ class NewInvite extends Component {
       image,
     } = invite;
     return {
+      populatedDefaultState: true,
       previousModeWasEdit: edit,
       title,
       date: new Date(date) || new Date(),
@@ -94,9 +112,15 @@ class NewInvite extends Component {
 
   onSubmit() {
     let { navigation } = this.props;
+    const { title, description } = this.state;
     const edit = navigation.getParam('edit', false);
-    if (edit) this.editInvite();
-    else this.saveInvite();
+    const validationErrors = validateInvite({ title, description });
+    if (!validationErrors.isEmpty) {
+      this.setState({ validationErrors });
+    } else {
+      if (edit) this.editInvite();
+      else this.saveInvite();
+    }
   }
 
   editInvite() {
@@ -109,14 +133,14 @@ class NewInvite extends Component {
     } = this.state;
     let { navigation } = this.props;
     const invite = navigation.getParam('invite', {});
-    invite['title'] = title || invite['title'];
-    invite['date'] = date || invite['date'];
-    invite['description'] = description || invite['description'];
-    invite['minAttendees'] = minAttendees || invite['minAttendees'];
-    invite['maxAttendees'] = unlimitedMaxAttendees
+    invite.title = title || invite.title;
+    invite.date = date || invite.date;
+    invite.description = description || invite['description'];
+    invite.minAttendees = minAttendees || invite['minAttendees'];
+    invite.maxAttendees = unlimitedMaxAttendees
       ? 'unlimited'
       : maxAttendees || invite['maxAttendees'];
-    invite['image'] = image || invite['image'];
+    invite.image = image || invite['image'];
     this.props.updateInvite(invite, this.onSuccess, this.onError);
   }
 
@@ -133,7 +157,7 @@ class NewInvite extends Component {
     const { user } = this.props;
 
     const newInvite = {
-      title: title,
+      title,
       date: date,
       description: description,
       minAttendees: minAttendees,
@@ -155,13 +179,13 @@ class NewInvite extends Component {
     const { navigation } = this.props;
     this.setState(
       {
-        title: null,
+        title: '',
         date: new Date(),
-        description: null,
-        minAttendees: null,
-        maxAttendees: null,
+        description: '',
+        minAttendees: 0,
+        maxAttendees: 10,
         unlimitedMaxAttendees: false,
-        image: null,
+        image: '',
       },
       () => navigation.navigate('Home')
     );
@@ -230,7 +254,6 @@ class NewInvite extends Component {
   }
 
   onChangeNumberControl(text, stateKey) {
-    console.log('text', text);
     const numericText = text.replace(/[^0-9\.]+/g, '');
     this.setState({ [stateKey]: Number(numericText) });
   }
@@ -254,7 +277,7 @@ class NewInvite extends Component {
   }
 
   getFields() {
-    const { title, description, minAttendees, maxAttendees } = this.state;
+    const { title, description, validationErrors } = this.state;
     return [
       {
         key: 'title',
@@ -264,6 +287,7 @@ class NewInvite extends Component {
         secureTextEntry: false,
         value: title,
         keyboardType: 'default',
+        validationErrors: validationErrors.title,
       },
       {
         key: 'description',
@@ -274,14 +298,13 @@ class NewInvite extends Component {
         value: description,
         keyboardType: 'default',
         multiline: true,
+        validationErrors: validationErrors.description,
       },
     ];
   }
 
   renderInputs() {
-    const { error } = this.state;
-    const { placeholderTextColor, navigation } = this.props;
-    const edit = navigation.getParam('edit', false);
+    const { placeholderTextColor } = this.props;
     const onChangeText = {
       title: this.onChangeTitle,
       description: this.onChangeDescription,
@@ -300,12 +323,14 @@ class NewInvite extends Component {
             secureTextEntry,
             keyboardType,
             multiline,
+            validationErrors,
           } = field;
+          console.log('validationErrrors', validationErrors);
           return (
             <View key={key}>
               <InputField
-                label={label}
                 showLabel={true}
+                label={label}
                 autoCapitalize="none"
                 clearButtonMode="while-editing"
                 placeholder={placeholder}
@@ -316,7 +341,7 @@ class NewInvite extends Component {
                 keyboardType={keyboardType}
                 value={value}
                 multiline={multiline}
-                validationErrors={error[key] ? [error[key]] : []}
+                validationErrors={validationErrors || []}
               />
             </View>
           );
@@ -327,7 +352,6 @@ class NewInvite extends Component {
 
   renderDatePicker() {
     const { isDatePickerModalVisible, date } = this.state;
-
     return (
       <View style={styles.dateSection}>
         <Text style={styles.label}>Date and time:</Text>
@@ -393,10 +417,9 @@ class NewInvite extends Component {
     const isSubstractDisabled =
       value === 0 || (stateKey === 'maxAttendees' && unlimitedMaxAttendees);
     const isAddDisabled = stateKey === 'maxAttendees' && unlimitedMaxAttendees;
-    console.log('value', value);
     return (
       <View style={styles.numberController}>
-        <FormLabel>{label}</FormLabel>
+        <Text style={styles.label}>{label}</Text>
         <View style={styles.numberControllerWrapper}>
           <TouchableOpacity
             onPress={() =>
