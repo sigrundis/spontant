@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     backgroundColor: color.light_grey,
     borderRadius: 10,
   },
+
+  loadingAttendees: {
+    marginTop: 2,
+  },
 });
 
 export default styles;
