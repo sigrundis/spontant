@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
   wrapper: {
     paddingHorizontal: 22,
-    paddingTop: 10,
+    paddingTop: 0,
   },
 
   text: {
@@ -46,6 +46,38 @@ const styles = StyleSheet.create({
 
   loadingAttendees: {
     marginTop: 2,
+  },
+
+  activationMessage: {
+    display: 'flex',
+    alignSelf: 'flex-start',
+    backgroundColor: color.themeLightYellow,
+    borderRadius: 4,
+    marginTop: padding,
+  },
+
+  attendees: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: padding / 2,
+  },
+
+  imageIconContainer: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: color.white,
+    backgroundColor: color.white,
+  },
+
+  image: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    borderWidth: 2,
+    borderColor: color.white,
   },
 });
 
