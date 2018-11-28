@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     lineHeight: normalize(17),
     color: color.themeNight,
     fontFamily: fontFamily.regular,
+    paddingVertical: padding,
   },
 
   bottom: { flexDirection: 'row' },
@@ -44,9 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  loadingAttendees: {
-    marginTop: 2,
-  },
+  loadingAttendees: { paddingVertical: padding + 5 },
 
   activationMessage: {
     display: 'flex',
