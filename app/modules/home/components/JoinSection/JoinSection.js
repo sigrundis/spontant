@@ -293,7 +293,6 @@ class JoinSection extends React.Component {
           ) : (
             this.renderAttendees(inviteColor)
           )}
-          {/* <AnimatedEllipsis style={styles.loadingAttendees} /> */}
           <View style={styles.bottom}>
             {this.renderJoinBar(inviteColor)}
             {this.renderJoinStatus(inviteColor)}
