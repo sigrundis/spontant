@@ -429,7 +429,7 @@ class NewInvite extends Component {
               name={'md-remove-circle'}
               type="ionicon"
               color={
-                isSubstractDisabled ? color.themeLightGreen : color.themeGreen
+                isSubstractDisabled ? color.themeLightOrange : color.themeOrange
               }
               size={35}
             />
@@ -462,7 +462,7 @@ class NewInvite extends Component {
               style={{}}
               name={'md-add-circle'}
               type="ionicon"
-              color={isAddDisabled ? color.themeLightGreen : color.themeGreen}
+              color={isAddDisabled ? color.themeLightOrange : color.themeOrange}
               size={35}
             />
           </TouchableOpacity>
@@ -479,8 +479,8 @@ class NewInvite extends Component {
         center
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={color.themeGreen}
-        uncheckedColor={color.themeGreen}
+        checkedColor={color.themeOrange}
+        uncheckedColor={color.themeOrange}
         title={title}
         checked={checked}
         onPress={() => this.setState({ [stateKey]: !checked })}

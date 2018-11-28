@@ -1,6 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import AnimatedEllipsis from 'react-native-animated-ellipsis';
+import { actions as authActions } from '../../../auth/index';
+const { getAttendeesInInvite } = authActions;
 import styles from './styles';
 import { theme } from '../../index';
 const { color, normalize, fontFamily } = theme;
@@ -8,36 +12,82 @@ const { color, normalize, fontFamily } = theme;
 class JoinSection extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { fetchingAttendeesWithInfo: true, attendeesWithInfo: [] };
   }
 
+  componentDidUpdate(previousProps) {
+    if (previousProps.attendees !== this.props.attendees) {
+      const { inviteId, attendees } = this.props;
+      this.fetchAttendeesWitInfo(attendees, inviteId);
+    }
+  }
+  componentDidMount() {
+    const { inviteId, attendees } = this.props;
+    this.fetchAttendeesWitInfo(attendees, inviteId);
+  }
+
+  fetchAttendeesWitInfo(attendees, inviteId) {
+    const { getAttendeesInInvite } = this.props;
+    if (attendees) {
+      this.setState({
+        fetchingAttendeesWithInfo: true,
+      });
+      getAttendeesInInvite(
+        inviteId,
+        this.onFindAttendeesSuccess,
+        this.onFindAttendeesError
+      );
+    } else {
+      this.setState({
+        attendeesWithInfo: [],
+        fetchingAttendeesWithInfo: false,
+      });
+    }
+  }
+
+  onFindAttendeesSuccess = (data) => {
+    this.setState({
+      attendeesWithInfo: data,
+      fetchingAttendeesWithInfo: false,
+    });
+  };
+
+  onFindAttendeesError = (error) => {
+    this.setState({
+      attendeesWithInfo: [],
+      fetchingAttendeesWithInfo: false,
+    });
+    console.error('on find attendees error', error);
+  };
+
   renderAttendees(inviteColor) {
-    const { attendees, navigation } = this.props;
+    const { navigation } = this.props;
+    const { attendeesWithInfo } = this.state;
     let attendeesString = '';
-    if (attendees.length > 2) {
-      attendeesString = `${attendees[0].displayname}, ${
-        attendees[1].displayname
-      } and ${attendees.length - 2} more ${
-        attendees.length - 2 === 1 ? 'is' : 'are'
+    if (attendeesWithInfo.length > 2) {
+      attendeesString = `${attendeesWithInfo[0].displayname}, ${
+        attendeesWithInfo[1].displayname
+      } and ${attendeesWithInfo.length - 2} more ${
+        attendeesWithInfo.length - 2 === 1 ? 'is' : 'are'
       } going.`;
-    } else if (attendees.length === 2) {
-      attendeesString = `${attendees[0].displayname} and ${
-        attendees[1].displayname
+    } else if (attendeesWithInfo.length === 2) {
+      attendeesString = `${attendeesWithInfo[0].displayname} and ${
+        attendeesWithInfo[1].displayname
       } are going.`;
-    } else if (attendees.length === 1) {
-      attendeesString = `${attendees[0].displayname} is going. `;
+    } else if (attendeesWithInfo.length === 1) {
+      attendeesString = `${attendeesWithInfo[0].displayname} is going. `;
     } else {
       attendeesString = `No one have joined yet.`;
     }
     return (
       <View style={{ flexDirection: 'row' }}>
         <Text style={styles.text}>{attendeesString}</Text>
-        {attendees.length > 0 && (
+        {attendeesWithInfo.length > 0 && (
           <Text
             style={[styles.text, { color: inviteColor }]}
             onPress={() =>
               navigation.navigate('Attendees', {
-                attendees,
+                attendees: attendeesWithInfo,
               })
             }
           >
@@ -144,13 +194,19 @@ class JoinSection extends React.Component {
 
   render() {
     let { minAttendees, joinCount } = this.props;
+    const { fetchingAttendeesWithInfo } = this.state;
     const inviteColor =
       joinCount < minAttendees ? color.themeRed : color.themeGreen;
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
           {this.renderActivationCounter()}
-          {this.renderAttendees(inviteColor)}
+          {fetchingAttendeesWithInfo ? (
+            <AnimatedEllipsis style={styles.loadingAttendees} />
+          ) : (
+            this.renderAttendees(inviteColor)
+          )}
+          {/* <AnimatedEllipsis style={styles.loadingAttendees} /> */}
           <View style={styles.bottom}>
             {this.renderJoinBar(inviteColor)}
             {this.renderJoinStatus(inviteColor)}
@@ -161,4 +217,7 @@ class JoinSection extends React.Component {
   }
 }
 
-export default JoinSection;
+export default connect(
+  null,
+  { getAttendeesInInvite }
+)(JoinSection);
