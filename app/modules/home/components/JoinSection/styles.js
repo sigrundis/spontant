@@ -55,6 +55,8 @@ const styles = StyleSheet.create({
     marginTop: padding,
   },
 
+  activationText: { flexShrink: 1, color: color.themeOrange, padding: 4 },
+
   attendees: {
     flexDirection: 'row',
     alignItems: 'center',

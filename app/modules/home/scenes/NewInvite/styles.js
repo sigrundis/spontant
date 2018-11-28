@@ -25,13 +25,17 @@ const styles = StyleSheet.create({
   },
   dateSection: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'flex-start',
     paddingHorizontal: padding,
     paddingVertical: padding * 2,
   },
-  date: { display: 'flex', alignItems: 'flex-end' },
+  date: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: padding,
+  },
   label: {
     fontSize: fontSize.regular,
     color: color.themeGreen,
