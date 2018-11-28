@@ -104,6 +104,33 @@ export function getUserById(userId, callback) {
     .catch((error) => callback(false, null, error));
 }
 
+export const getAttendeesInInvite = (inviteId, callback) => {
+  database.ref(`/invites/${inviteId}`).on('value', (snapshots) => {
+    const values = snapshots.val() || {};
+    const attendeesList = [];
+    const attendees = values.attendees;
+    if (!attendees) {
+      callback(true, attendeesList, null);
+    } else {
+      const attendeeIds = Object.keys(attendees);
+      const promises = attendeeIds.map((uid) =>
+        database
+          .ref('users')
+          .child(uid)
+          .once('value')
+      );
+      Promise.all(promises)
+        .then((results) => {
+          results.forEach((result) => {
+            attendeesList.push(result.val());
+          });
+          callback(true, attendeesList, null);
+        })
+        .catch((error) => callback(false, null, error));
+    }
+  });
+};
+
 //Send Password Reset Email
 export function resetPassword(data, callback) {
   const { email } = data;

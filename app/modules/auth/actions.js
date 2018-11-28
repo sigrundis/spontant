@@ -2,8 +2,6 @@ import * as t from './actionTypes';
 import * as api from './api';
 import { auth } from '../../config/firebase';
 
-import { AsyncStorage } from 'react-native';
-
 export function register(data, successCB, errorCB) {
   return (dispatch) => {
     api.register(data, function(success, data, error) {
@@ -95,6 +93,16 @@ export function checkLoginStatus(callback) {
 export function getUserById(userId, successCB, errorCB) {
   return (dispatch) => {
     api.getUserById(userId, function(success, data, error) {
+      if (success) {
+        successCB(data);
+      } else if (error) errorCB(error);
+    });
+  };
+}
+
+export function getAttendeesInInvite(inviteId, successCB, errrorCB) {
+  return (dispatch) => {
+    api.getAttendeesInInvite(inviteId, function(success, data, error) {
       if (success) {
         successCB(data);
       } else if (error) errorCB(error);
