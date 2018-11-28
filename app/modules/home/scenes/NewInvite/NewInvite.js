@@ -355,7 +355,7 @@ class NewInvite extends Component {
       <View style={styles.dateSection}>
         <Text style={styles.label}>Date and time:</Text>
         <View style={styles.date}>
-          <Text style={styles.date}>{date && moment(date).format('LLLL')}</Text>
+          <Text>{date && moment(date).format('LLLL')}</Text>
           <TouchableOpacity onPress={this.openDatePickerModal}>
             <Text style={styles.link}>Select date</Text>
           </TouchableOpacity>
