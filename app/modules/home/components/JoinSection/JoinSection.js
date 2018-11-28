@@ -268,10 +268,7 @@ class JoinSection extends React.Component {
     return (
       <View style={styles.activationMessage}>
         <Text
-          style={[
-            styles.text,
-            { flexShrink: 1, color: color.themeOrange, padding: 4 },
-          ]}
+          style={[styles.text, styles.activationText]}
         >{`${howManyNeeded} more ${
           howManyNeeded < 2 ? 'guest' : 'guests'
         } needed to activate event.`}</Text>
