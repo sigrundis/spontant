@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import AnimatedEllipsis from 'react-native-animated-ellipsis';
@@ -60,7 +60,101 @@ class JoinSection extends React.Component {
     console.error('on find attendees error', error);
   };
 
+  renderAttendeeUserImage(uri) {
+    return (
+      <View style={styles.imageContainer}>
+        <Image source={{ uri }} style={styles.image} />
+      </View>
+    );
+  }
+
   renderAttendees(inviteColor) {
+    const { navigation } = this.props;
+    const { attendeesWithInfo } = this.state;
+    let arrayToMap = [];
+    if (attendeesWithInfo.length > 2) {
+      arrayToMap.push(0, 1, 2);
+    } else if (attendeesWithInfo.length > 1) {
+      arrayToMap.push(0, 1);
+    } else if (attendeesWithInfo.length > 0) {
+      arrayToMap.push(0);
+    } else {
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.text}>Be the first one to join!</Text>
+          {attendeesWithInfo.length > 0 && (
+            <Text
+              style={[styles.text, { color: inviteColor }]}
+              onPress={() =>
+                navigation.navigate('Attendees', {
+                  attendees: attendeesWithInfo,
+                })
+              }
+            >
+              See more.
+            </Text>
+          )}
+        </View>
+      );
+    }
+    const userImages = (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {arrayToMap.map((index) => {
+          const { userimage } = attendeesWithInfo[index];
+          if (!userimage) {
+            return (
+              <View
+                key={index}
+                style={[
+                  styles.imageIconContainer,
+                  { marginLeft: index > 0 ? -5 : 0 },
+                ]}
+              >
+                <Icon
+                  name={'ios-contact'}
+                  type="ionicon"
+                  color={inviteColor}
+                  size={27}
+                />
+              </View>
+            );
+          } else {
+            return (
+              <View key={index}>
+                <Image
+                  source={{ uri: userimage }}
+                  style={[styles.image, { marginLeft: index > 0 ? -5 : 0 }]}
+                />
+              </View>
+            );
+          }
+        })}
+        <Text style={styles.text}>{`${attendeesWithInfo.length} ${
+          attendeesWithInfo.length > 1 ? 'people' : 'person'
+        } have joined!`}</Text>
+      </View>
+    );
+
+    return (
+      <View style={styles.attendees}>
+        {userImages}
+        {attendeesWithInfo.length > 0 && (
+          <Text
+            style={[styles.text, { color: inviteColor }]}
+            onPress={() =>
+              navigation.navigate('Attendees', {
+                attendees: attendeesWithInfo,
+              })
+            }
+          >
+            See more.
+          </Text>
+        )}
+      </View>
+    );
+  }
+
+  renderAttendeesString(inviteColor) {
     const { navigation } = this.props;
     const { attendeesWithInfo } = this.state;
     let attendeesString = '';
@@ -77,7 +171,7 @@ class JoinSection extends React.Component {
     } else if (attendeesWithInfo.length === 1) {
       attendeesString = `${attendeesWithInfo[0].displayname} is going. `;
     } else {
-      attendeesString = `No one have joined yet.`;
+      attendeesString = 'Be the first one to join!';
     }
     return (
       <View style={{ flexDirection: 'row' }}>
@@ -172,14 +266,7 @@ class JoinSection extends React.Component {
     const howManyNeeded = minAttendees - joinCount;
     if (howManyNeeded < 1) return null;
     return (
-      <View
-        style={{
-          display: 'flex',
-          alignSelf: 'flex-start',
-          backgroundColor: color.themeLightYellow,
-          borderRadius: 4,
-        }}
-      >
+      <View style={styles.activationMessage}>
         <Text
           style={[
             styles.text,
