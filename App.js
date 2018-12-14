@@ -18,7 +18,6 @@ export default class App extends Component {
       isReady: false,
       checkedLogin: false,
       isLoggedIn: false,
-      exist: false,
     };
   }
 
@@ -35,11 +34,8 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    store.dispatch(
-      checkLoginStatus((exist, isLoggedIn) => {
-        this.setState({ checkedLogin: true, exist, isLoggedIn });
-      })
-    );
+    const { isLoggedIn } = store.getState().authReducer;
+    this.setState({ checkedLogin: true, isLoggedIn });
   }
 
   render() {

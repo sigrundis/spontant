@@ -38,7 +38,6 @@ class CompleteProfile extends React.Component {
 
   onSubmit(data) {
     this.setState({ error: error }); //clear out error messages
-
     //attach user id
     const user = this.props.navigation.getParam(user);
     data['uid'] = user.uid;
@@ -46,6 +45,7 @@ class CompleteProfile extends React.Component {
   }
 
   onSuccess() {
+    console.log('onSuccess in complete profile');
     this.props.navigation.navigate('Home');
   }
 

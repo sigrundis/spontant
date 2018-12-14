@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, TextInput } from 'react-native';
 import styles from './styles';
-import { theme } from '../../index';
+import { theme } from '../../styles/theme';
 const { color } = theme;
 
 class InputField extends Component {
@@ -61,7 +61,6 @@ class InputField extends Component {
           value={value}
           multiline={multiline}
           textInputStyle={styles.passwordInput}
-          returnKeyType={'done'}
         />
         {validationErrors.length > 0 && (
           <View style={styles.errorMessageContainer}>

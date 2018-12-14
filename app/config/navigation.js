@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View, StatusBar } from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,
@@ -27,10 +27,21 @@ const headerStyle = {
 
 const AuthStack = createStackNavigator(
   {
-    Welcome: { screen: Welcome },
+    Welcome: {
+      screen: Welcome,
+      navigationOptions: {
+        header: null,
+      },
+    },
     Register: {
       screen: Register,
       navigationOptions: {
+        headerTitleStyle: {
+          flex: 1,
+          textAlign: 'center',
+          alignSelf: 'center',
+        },
+        headerRight: <View />, //To center title on android
         title: 'Sign Up',
         headerStyle,
         headerTintColor: color.themeNight,

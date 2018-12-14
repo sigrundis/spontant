@@ -17,4 +17,5 @@ export const database = firebase.database();
 export const auth = firebase.auth();
 export const emailAuthProvider = firebase.auth.EmailAuthProvider;
 export const provider = new firebase.auth.FacebookAuthProvider();
+export const authObj = firebase.auth;
 export const storage = firebase.storage();

@@ -1,8 +1,5 @@
 import React from 'react';
-
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-
 import { actions as auth } from '../../index';
 const { register } = auth;
 
@@ -80,8 +77,10 @@ class Register extends React.Component {
     this.props.register(data, this.onSuccess, this.onError);
   }
 
-  onSuccess(user) {
-    this.props.navigation.navigate('LoggedIn');
+  onSuccess() {
+    console.log('on success in Register');
+    const { navigation } = this.props;
+    navigation.navigate('LoggedIn');
   }
 
   onError(error) {
@@ -97,6 +96,8 @@ class Register extends React.Component {
     }
     this.setState({ error: errObj });
   }
+
+  renderInputs() {}
 
   render() {
     return (
