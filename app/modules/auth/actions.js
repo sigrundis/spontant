@@ -1,13 +1,13 @@
 import * as t from './actionTypes';
 import * as api from './api';
-import { auth } from '../../config/firebase';
+import { auth, authObj, database, provider } from '../../config/firebase';
 
 export function register(data, successCB, errorCB) {
   return (dispatch) => {
     api.register(data, function(success, data, error) {
       if (success) {
         dispatch({ type: t.LOGGED_IN, data });
-        successCB(data);
+        successCB();
       } else if (error) errorCB(error);
     });
   };
@@ -17,7 +17,7 @@ export function createUser(user, successCB, errorCB) {
   return (dispatch) => {
     api.createUser(user, function(success, data, error) {
       if (success) {
-        dispatch({ type: t.LOGGED_IN, data: user });
+        dispatch({ type: t.LOGGED_IN, data });
         successCB();
       } else if (error) errorCB(error);
     });
@@ -66,30 +66,6 @@ export function signOut(successCB, errorCB) {
   };
 }
 
-export function checkLoginStatus(callback) {
-  return (dispatch) => {
-    auth.onAuthStateChanged((user) => {
-      let isLoggedIn = user !== null;
-
-      if (isLoggedIn) {
-        api.getUser(user, function(success, { exists, user }, error) {
-          if (success) {
-            if (exists) dispatch({ type: t.LOGGED_IN, data: user });
-            callback(exists, isLoggedIn);
-          } else if (error) {
-            //unable to get user
-            dispatch({ type: t.LOGGED_OUT });
-            callback(false, false);
-          }
-        });
-      } else {
-        dispatch({ type: t.LOGGED_OUT });
-        callback(false, isLoggedIn);
-      }
-    });
-  };
-}
-
 export function getUserById(userId, successCB, errorCB) {
   return (dispatch) => {
     api.getUserById(userId, function(success, data, error) {
@@ -110,12 +86,13 @@ export function getAttendeesInInvite(inviteId, successCB, errrorCB) {
   };
 }
 
+//Sign user in using Facebook
 export function signInWithFacebook(facebookToken, successCB, errorCB) {
   return (dispatch) => {
     api.signInWithFacebook(facebookToken, function(success, data, error) {
       if (success) {
-        if (data.exists) dispatch({ type: t.LOGGED_IN, data: data.user });
-        successCB(data);
+        dispatch({ type: t.LOGGED_IN, data });
+        successCB();
       } else if (error) errorCB(error);
     });
   };

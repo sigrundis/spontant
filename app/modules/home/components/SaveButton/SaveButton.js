@@ -39,6 +39,7 @@ class SaveButton extends React.Component {
   saveInvite() {
     const { data, user } = this.props;
     const { title } = data;
+    const { isFacebookUser, displayname, username, email } = user;
 
     const newInvite = {
       title: title,
@@ -46,8 +47,10 @@ class SaveButton extends React.Component {
       userId: user.uid,
       joinCount: 0,
       author: {
-        username: user.username,
-        name: user.displayname,
+        isFacebookUser: isFacebookUser || false,
+        username: isFacebookUser ? '' : username,
+        name: displayname,
+        email: email || '',
       },
     };
 
