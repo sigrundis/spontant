@@ -497,7 +497,7 @@ class EditProfile extends Component {
           />
           {this.renderInputs()}
         </ScrollView>
-        <View style={styles.bottomContainer}>
+        <View style={styles.buttonWrapper}>
           <Button
             raised
             title="Save changes"
