@@ -66,15 +66,6 @@ export function signOut(successCB, errorCB) {
   };
 }
 
-export function checkLoginStatus(callback) {
-  // return (getState) => {
-  //   console.log('getState', getState());
-  //   console.log('getState().isLoggedIdn', getState().authReducer.isLoggedIn);
-  //   const isLoggedIn = getState().authReducer.isLoggedIn;
-  //   return isLoggedIn;
-  // };
-}
-
 export function getUserById(userId, successCB, errorCB) {
   return (dispatch) => {
     api.getUserById(userId, function(success, data, error) {
