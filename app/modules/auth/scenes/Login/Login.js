@@ -1,11 +1,13 @@
 import React from 'react';
+import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { actions as auth } from '../../index';
-
+import styles from './styles';
 import Form from '../../components/Form';
+import SignInWithFacebookButton from '../../components/SignInWithFacebookButton';
 
-const { login } = auth;
+const { login, onSignInWithFacebook } = auth;
 
 const fields = [
   {
@@ -46,6 +48,19 @@ class Login extends React.Component {
     this.onError = this.onError.bind(this);
   }
 
+  //get users permission authorization (ret: facebook token)
+  async onSignInWithFacebook() {
+    const options = { permissions: ['public_profile', 'email'] };
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+      c.FACEBOOK_APP_ID,
+      options
+    );
+
+    if (type === 'success') {
+      this.props.signInWithFacebook(token, this.onSuccess, this.onError);
+    }
+  }
+
   onForgotPassword() {
     const { navigation } = this.props;
     navigation.navigate('ForgotPassword');
@@ -78,19 +93,24 @@ class Login extends React.Component {
   render() {
     const { navigation } = this.props;
     return (
-      <Form
-        fields={fields}
-        showLabel={false}
-        onSubmit={this.onSubmit}
-        buttonTitle={'LOG IN'}
-        error={this.state.error}
-        onForgotPassword={() => navigation.navigate('ForgotPassword')}
-      />
+      <View style={styles.container}>
+        <ScrollView>
+          <SignInWithFacebookButton />
+          <Form
+            fields={fields}
+            showLabel={false}
+            onSubmit={this.onSubmit}
+            buttonTitle={'LOG IN'}
+            error={this.state.error}
+            onForgotPassword={() => navigation.navigate('ForgotPassword')}
+          />
+        </ScrollView>
+      </View>
     );
   }
 }
 
 export default connect(
   null,
-  { login }
+  { login, onSignInWithFacebook }
 )(Login);

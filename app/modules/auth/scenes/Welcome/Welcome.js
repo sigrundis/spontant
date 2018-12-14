@@ -1,46 +1,50 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Image } from 'react-native';
-import { Facebook } from 'expo';
-import { Button, SocialIcon, Divider } from 'react-native-elements';
-import { Actions } from 'react-native-router-flux';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
+import { Facebook, Svg } from 'expo';
+import { Button, Divider, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-
+import SvgLogo from '../../../../components/SvgLogo';
+import SignInWithFacebookButton from '../../components/SignInWithFacebookButton';
 import { actions as auth, constants as c } from '../../index';
 const { signInWithFacebook } = auth;
+const { Circle, G, Path } = Svg;
 
 import styles from './styles';
-
-const image = require('../../../../static/img/icon.png');
+const { width, height } = Dimensions.get('window');
+const image1 = require('../../../../static/img/fjara.jpg');
+const image2 = require('../../../../static/img/basket.jpg');
+const image3 = require('../../../../static/img/pizza.jpg');
+const image4 = require('../../../../static/img/skidi.jpg');
+const image5 = require('../../../../static/img/ganga.jpg');
 
 class Welcome extends React.Component {
   constructor() {
     super();
     this.state = {};
-    this.onSuccess = this.onSuccess.bind(this);
-    this.onError = this.onError.bind(this);
-    this.onSignInWithFacebook = this.onSignInWithFacebook.bind(this);
   }
 
-  //get users permission authorization (ret: facebook token)
-  async onSignInWithFacebook() {
-    const options = { permissions: ['public_profile', 'email'] };
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-      c.FACEBOOK_APP_ID,
-      options
-    );
-
-    if (type === 'success') {
-      this.props.signInWithFacebook(token, this.onSuccess, this.onError);
-    }
-  }
-
-  onSuccess({ exists, user }) {
-    if (exists) Actions.Main();
-    else Actions.CompleteProfile({ user });
-  }
-
-  onError(error) {
-    alert(error.message);
+  componentDidMount() {
+    const numOfBackground = 5;
+    let scrollValue = 0,
+      scrolled = 0;
+    setInterval(function() {
+      scrolled++;
+      if (scrolled < numOfBackground) {
+        scrollValue = scrollValue + width; // width = screen width
+      } else {
+        scrollValue = 0;
+        scrolled = 0;
+      }
+      _scrollView.scrollTo({ x: scrollValue });
+    }, 3000);
   }
 
   onPressSignIn() {
@@ -48,28 +52,40 @@ class Welcome extends React.Component {
     navigation.navigate('Login');
   }
 
+  renderTopContainer() {
+    return (
+      <View style={styles.topContainer}>
+        <ScrollView
+          ref={(scrollView) => {
+            _scrollView = scrollView;
+          }}
+          horizontal={true}
+          pagingEnabled={true}
+        >
+          <Image source={image1} style={{ height: '100%', width }} />
+          <Image source={image2} style={{ height: '100%', width }} />
+          <Image source={image3} style={{ height: '100%', width }} />
+          <Image source={image4} style={{ height: '100%', width }} />
+          <Image source={image5} style={{ height: '100%', width }} />
+        </ScrollView>
+        <View style={styles.overlay} />
+        <View style={styles.headerContent}>
+          <SvgLogo height={150} width={150} />
+          <Text style={styles.title}>Spontant</Text>
+        </View>
+      </View>
+    );
+  }
+
   render() {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.topContainer}>
-          <Image style={styles.image} source={image} />
-          <Text style={styles.title}>Spontant</Text>
-        </View>
+        {this.renderTopContainer()}
 
         <View style={styles.bottomContainer}>
           <View style={[styles.buttonContainer]}>
-            <SocialIcon
-              raised
-              button
-              type="facebook"
-              title="SIGN UP WITH FACEBOOK"
-              iconSize={19}
-              style={[styles.containerView, styles.socialButton]}
-              fontStyle={styles.buttonText}
-              onPress={this.onSignInWithFacebook}
-            />
-
+            <SignInWithFacebookButton navigation={navigation} />
             <View style={styles.orContainer}>
               <Divider style={styles.divider} />
               <Text style={styles.orText}>Or</Text>
@@ -87,7 +103,6 @@ class Welcome extends React.Component {
           </View>
           <View style={styles.bottom}>
             <Text style={styles.bottomText}>Already have an account?</Text>
-
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text style={styles.signInText}>Sign in</Text>
             </TouchableOpacity>

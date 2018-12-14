@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
     backgroundColor: color.themeLightRed,
   },
   modalError: { color: 'red' },
+  buttonWrapper: {
+    paddingTop: padding,
+    borderTopWidth: 1,
+    borderTopColor: color.grey,
+  },
   button: {
     backgroundColor: color.themeOrange,
     height: normalize(55),
