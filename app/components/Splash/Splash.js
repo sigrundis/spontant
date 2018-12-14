@@ -10,7 +10,7 @@ export default class extends React.Component {
         <View style={styles.wrapper}>
           <Image
             style={styles.image}
-            source={{ uri: '../../assets/icon.png' }}
+            source={{ uri: '../../assets/spontant_logo.svg' }}
           />
           <Text style={styles.title}>Invites</Text>
         </View>

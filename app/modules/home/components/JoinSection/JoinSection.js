@@ -82,18 +82,6 @@ class JoinSection extends React.Component {
       return (
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.text}>Be the first one to join!</Text>
-          {attendeesWithInfo.length > 0 && (
-            <Text
-              style={[styles.text, { color: inviteColor }]}
-              onPress={() =>
-                navigation.navigate('Attendees', {
-                  attendees: attendeesWithInfo,
-                })
-              }
-            >
-              See more.
-            </Text>
-          )}
         </View>
       );
     }
@@ -147,45 +135,7 @@ class JoinSection extends React.Component {
               })
             }
           >
-            See more.
-          </Text>
-        )}
-      </View>
-    );
-  }
-
-  renderAttendeesString(inviteColor) {
-    const { navigation } = this.props;
-    const { attendeesWithInfo } = this.state;
-    let attendeesString = '';
-    if (attendeesWithInfo.length > 2) {
-      attendeesString = `${attendeesWithInfo[0].displayname}, ${
-        attendeesWithInfo[1].displayname
-      } and ${attendeesWithInfo.length - 2} more ${
-        attendeesWithInfo.length - 2 === 1 ? 'is' : 'are'
-      } going.`;
-    } else if (attendeesWithInfo.length === 2) {
-      attendeesString = `${attendeesWithInfo[0].displayname} and ${
-        attendeesWithInfo[1].displayname
-      } are going.`;
-    } else if (attendeesWithInfo.length === 1) {
-      attendeesString = `${attendeesWithInfo[0].displayname} is going. `;
-    } else {
-      attendeesString = 'Be the first one to join!';
-    }
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        <Text style={styles.text}>{attendeesString}</Text>
-        {attendeesWithInfo.length > 0 && (
-          <Text
-            style={[styles.text, { color: inviteColor }]}
-            onPress={() =>
-              navigation.navigate('Attendees', {
-                attendees: attendeesWithInfo,
-              })
-            }
-          >
-            See more.
+            See attendees
           </Text>
         )}
       </View>

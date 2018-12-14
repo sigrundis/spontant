@@ -12,11 +12,27 @@ const styles = StyleSheet.create({
 
   topContainer: {
     flex: 1,
-    paddingHorizontal: 15,
-    paddingBottom: padding * 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.themeGreen,
+    height: '100%',
+  },
+
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: color.black,
+    opacity: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  headerContent: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   image: {
@@ -28,10 +44,10 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: fontSize.large + 2,
+    fontSize: fontSize.large + 6,
     lineHeight: fontSize.large + 4,
     fontFamily: fontFamily.bold,
-    color: color.white,
+    color: color.themeOrange,
     letterSpacing: 1,
   },
 

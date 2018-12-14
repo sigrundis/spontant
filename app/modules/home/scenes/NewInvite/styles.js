@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     color: color.themeGreen,
   },
   buttonWrapper: {
-    paddingTop: padding,
+    padding,
     borderTopWidth: 1,
     borderTopColor: color.grey,
   },
@@ -91,12 +91,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize.large,
     paddingRight: 12,
     paddingBottom: 30,
-  },
-  color: {
-    height: normalize(25),
-    width: normalize(25),
-    borderRadius: normalize(25 / 2),
-    marginHorizontal: padding,
   },
 });
 

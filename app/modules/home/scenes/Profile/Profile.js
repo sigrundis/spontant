@@ -89,7 +89,7 @@ class Profile extends Component {
         <View style={styles.labelContainer}>
           <Icon
             name={iconName}
-            type="ionicon"
+            type="material-community"
             color={color.themeNight}
             size={15}
           />
@@ -102,7 +102,13 @@ class Profile extends Component {
 
   render() {
     const { user } = this.state;
-    if (!user) return null;
+    console.log('user in profile', user);
+    if (!user || !user.displayname)
+      return (
+        <TouchableOpacity onPress={this.onSignOut}>
+          <Text style={styles.signOutText}>Sign out</Text>
+        </TouchableOpacity>
+      );
     return (
       <View style={styles.container}>
         <ScrollView style={styles.wrapper}>
@@ -114,27 +120,23 @@ class Profile extends Component {
           </View>
           <Text style={styles.subTitle}>User Information</Text>
           <View style={styles.userInfo}>
-            {this.renderUserInfo('Email', user.email || '-', 'md-mail')}
+            {this.renderUserInfo('Email', user.email || '-', 'email')}
             {this.renderUserInfo(
               'Phone number',
               user.phonenumber || '-',
-              'ios-call'
+              'cellphone-iphone'
             )}
             {this.renderUserInfo(
               'Facebook',
               user.facebook || '-',
-              'logo-facebook'
+              'facebook-box'
             )}
             {this.renderUserInfo(
               'Instagram',
               user.instagram || '-',
-              'logo-instagram'
+              'instagram'
             )}
-            {this.renderUserInfo(
-              'Twitter',
-              user.twitter || '-',
-              'logo-twitter'
-            )}
+            {this.renderUserInfo('Twitter', user.twitter || '-', 'twitter')}
           </View>
         </ScrollView>
         <View style={styles.signOut}>

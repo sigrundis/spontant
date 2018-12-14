@@ -25,7 +25,8 @@ class Home extends React.Component {
   }
 
   render() {
-    if (this.props.isLoading) {
+    const { isLoading, invites } = this.props;
+    if (isLoading) {
       return (
         <View style={styles.activityIndicator}>
           <ActivityIndicator animating={true} />
@@ -36,7 +37,7 @@ class Home extends React.Component {
         <View style={styles.container}>
           <FlatList
             ref="listRef"
-            data={this.props.invites}
+            data={invites}
             renderItem={this.renderItem}
             initialNumToRender={5}
             keyExtractor={(item, index) => index.toString()}
