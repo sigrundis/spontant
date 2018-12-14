@@ -40,9 +40,11 @@ class NewInvite extends Component {
       minAttendees,
       maxAttendees,
     } = navigation.getParam('invite', {});
+    var defaultDate = new Date();
+    defaultDate.setHours(defaultDate.getHours() + 23);
     this.state = {
       title: title || '',
-      date: new Date(),
+      date: defaultDate,
       description: description || '',
       minAttendees: minAttendees || 0,
       maxAttendees: Number(maxAttendees) ? maxAttendees : 10,
@@ -97,11 +99,13 @@ class NewInvite extends Component {
       maxAttendees,
       image,
     } = invite;
+    var defaultDate = new Date();
+    defaultDate.setHours(defaultDate.getHours() + 23);
     return {
       populatedDefaultState: true,
       previousModeWasEdit: edit,
       title: title || '',
-      date: new Date(date) || new Date(),
+      date: date ? new Date(date) : defaultDate,
       description: description || '',
       minAttendees: minAttendees || 0,
       maxAttendees: Number(maxAttendees) ? maxAttendees : 10,
@@ -155,6 +159,7 @@ class NewInvite extends Component {
       image,
     } = this.state;
     const { user } = this.props;
+    const { isFacebookUser, displayname, username, email } = user;
 
     const newInvite = {
       title,
@@ -163,12 +168,13 @@ class NewInvite extends Component {
       minAttendees: minAttendees,
       maxAttendees: unlimitedMaxAttendees ? 'unlimited' : maxAttendees,
       image,
-      time: Date.now(),
       userId: user.uid,
       joinCount: 1,
       author: {
-        username: user.username,
-        name: user.displayname,
+        isFacebookUser: isFacebookUser || false,
+        username: isFacebookUser ? '' : username,
+        name: displayname,
+        email: email || '',
       },
       attendees: { [user.uid]: true },
     };
@@ -177,10 +183,12 @@ class NewInvite extends Component {
 
   onSuccess = () => {
     const { navigation } = this.props;
+    var defaultDate = new Date();
+    defaultDate.setHours(defaultDate.getHours() + 23);
     this.setState(
       {
         title: '',
-        date: new Date(),
+        date: defaultDate,
         description: '',
         minAttendees: 0,
         maxAttendees: 10,
@@ -516,7 +524,6 @@ class NewInvite extends Component {
             onPress={this.onSubmit}
           />
         </View>
-        <KeyboardSpacer />
       </View>
     );
   }
