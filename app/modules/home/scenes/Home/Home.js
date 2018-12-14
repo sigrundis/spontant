@@ -26,8 +26,6 @@ class Home extends React.Component {
 
   render() {
     const { isLoading, invites } = this.props;
-    console.log('render Home');
-    console.log('is loading', isLoading);
     if (isLoading) {
       return (
         <View style={styles.activityIndicator}>

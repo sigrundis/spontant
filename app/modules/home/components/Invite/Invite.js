@@ -181,7 +181,6 @@ class Invite extends React.Component {
   render() {
     const { user, invites, index, navigation } = this.props;
     const { inviter, fetchingInviter } = this.state;
-    console.log('user', user);
     const invite = invites[index];
     const {
       title,

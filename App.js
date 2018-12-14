@@ -34,15 +34,12 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    console.log('store', store.getState());
     const { isLoggedIn } = store.getState().authReducer;
     this.setState({ checkedLogin: true, isLoggedIn });
   }
 
   render() {
     const { isReady, checkedLogin, isLoggedIn } = this.state;
-    console.log('isRready', isReady);
-    console.log('checkedLogin', checkedLogin);
     if (!isReady) {
       return (
         <AppLoading

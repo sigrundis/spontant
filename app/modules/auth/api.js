@@ -25,7 +25,6 @@ export function register(data, callback) {
 
 //Create the user object in realtime database
 export function createUser(userId, data, callback) {
-  console.log('user in create user User', data);
   database
     .ref('users')
     .child(userId)
@@ -87,7 +86,6 @@ export function getUser(user, callback) {
       //if the user exist in the DB, replace the user variable with the returned snapshot
       if (exists) user = snapshot.val();
       const data = { exists, user };
-      console.log('data from get User', data);
       callback(true, data, null);
     })
     .catch((error) => callback(false, null, error));
@@ -163,7 +161,6 @@ export function signInWithFacebook(fbToken, callback) {
   auth
     .signInAndRetrieveDataWithCredential(credential)
     .then((result) => {
-      console.log('auth.signin with facebook');
       const { user } = result;
       this.checkFbUserExist(user, callback);
     })
@@ -188,7 +185,6 @@ export function checkFbUserExist(user, callback) {
     .once('value')
     .then(function(snapshot) {
       var exists = snapshot.val() === null ? false : true;
-      console.log('Check if facebook user exists, if not create it!');
       if (exists) callback(true, processUserFromFacebookData(user), null);
       else {
         createUser(uid, processUserFromFacebookData(user), callback);
