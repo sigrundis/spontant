@@ -19,6 +19,8 @@ class SignInWithFacebookButton extends React.Component {
 
   //get users permission authorization (ret: facebook token)
   async onSignInWithFacebook() {
+    const { onPress } = this.props;
+    onPress();
     const options = { permissions: ['public_profile', 'email'] };
     const { type, token } = await Facebook.logInWithReadPermissionsAsync(
       c.FACEBOOK_APP_ID,
