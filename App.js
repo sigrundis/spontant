@@ -4,7 +4,6 @@ import { Font, AppLoading } from 'expo';
 import { createRootNavigator } from './app/config/navigation';
 import NavigationService from './NavigationService';
 import store from './app/redux/store';
-import { checkLoginStatus } from './app/modules/auth/actions';
 import Splash from './app/components/Splash/Splash';
 
 function cacheFonts(fonts) {
