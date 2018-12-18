@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: color.black,
+    backgroundColor: color.light_black,
     opacity: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: fontSize.large + 6,
-    lineHeight: fontSize.large + 4,
     fontFamily: fontFamily.bold,
     color: color.themeOrange,
     letterSpacing: 1,
