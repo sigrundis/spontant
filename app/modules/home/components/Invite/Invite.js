@@ -111,6 +111,7 @@ class Invite extends React.Component {
     if (fetchingInviter)
       return <ActivityIndicator size="small" color={color.grey} />;
     const { userimage } = inviter;
+    console.log('userimage', userimage);
     return userimage ? (
       <Image
         source={{ uri: userimage }}
@@ -197,7 +198,6 @@ class Invite extends React.Component {
     } = invite;
     const buttonColor =
       joinCount < minAttendees ? color.themeRed : color.themeGreen;
-    if (!user) return null;
     return (
       <View style={[styles.container]}>
         <View style={styles.wrapper}>

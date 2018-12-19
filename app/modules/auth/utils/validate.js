@@ -11,7 +11,7 @@ export function validateEmail(email) {
 }
 
 export function validatePassword(password) {
-  if (password.length > 6) return true;
+  if (password.length > 5) return true;
 
   return false;
 }
@@ -23,14 +23,17 @@ export function confirmPassword(c_password, password) {
 }
 
 export function validate(form) {
+  console.log('form', form);
   let error = {};
   let success = true;
 
   var keys = Object.keys(form);
+
+  console.log('keys', keys);
   var length = keys.length;
 
   keys.slice(0, length).map((field) => {
-    if (field !== 'error') {
+    if (field !== 'error' && field !== 'validationError') {
       var { type, value } = form[field];
       if (isEmpty(value)) {
         error[field] = 'Your ' + field + ' is required';

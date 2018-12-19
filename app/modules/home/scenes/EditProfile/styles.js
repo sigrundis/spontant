@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.1)',
     padding,
     paddingTop: 0,
+    marginBottom: 40,
   },
   closeButton: {
     marginLeft: 'auto',
@@ -25,6 +26,7 @@ const styles = StyleSheet.create({
     color: color.themeGreen,
     paddingTop: 0,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalFooter: {
     display: 'flex',
@@ -54,6 +56,11 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     backgroundColor: color.themeOrange,
+  },
+  imageLoadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 100,
   },
   imageButton: {
     backgroundColor: 'transparent',

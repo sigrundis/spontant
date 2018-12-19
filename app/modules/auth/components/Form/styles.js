@@ -12,8 +12,7 @@ const styles = StyleSheet.create({
 
   errorText: {
     color: color.red,
-    width: windowWidth - 45,
-    marginTop: 20,
+    marginLeft: padding,
   },
 
   containerView: {

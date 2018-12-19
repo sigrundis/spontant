@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, View } from 'react-native';
+import { Text, View, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
 import { isEmpty, validate } from '../../utils/validate';
 import styles from './styles';
@@ -13,7 +13,6 @@ class Form extends React.Component {
     super(props);
 
     const { fields, error } = props;
-
     this.state = this.createState(fields, error);
 
     //bind functions
@@ -21,6 +20,13 @@ class Form extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const { error } = props;
+    if (!isEmpty(error.general)) {
+      state.error.general = error.general;
+    }
+    return state;
+  }
   createState(fields, error) {
     //create the state
     const state = {};
@@ -28,16 +34,17 @@ class Form extends React.Component {
       let { key, type, value } = field;
       state[key] = { type, value };
     });
-
-    state['error'] = error;
+    state.error = error;
     return state;
   }
 
   onSubmit() {
     const data = this.state;
     const result = validate(data);
-    if (!result.success) this.setState({ error: result.error });
-    else this.props.onSubmit(this.extractData(data));
+    this.setState({ error: result.error });
+    if (result.success) {
+      this.props.onSubmit(this.extractData(data));
+    }
   }
 
   extractData(data) {
@@ -58,13 +65,17 @@ class Form extends React.Component {
   }
 
   render() {
-    const { fields, onChangeText, buttonTitle, onForgotPassword } = this.props;
+    const { isLoading, fields, buttonTitle, onForgotPassword } = this.props;
+    const { error } = this.state;
     return (
       <View style={styles.container}>
-        {!isEmpty(this.state.error['general']) && (
-          <Text style={styles.errorText}>
-            {this.state.error['general'].toString()}
-          </Text>
+        {isLoading && (
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator animating={true} />
+          </View>
+        )}
+        {!isEmpty(error.general) && (
+          <Text style={styles.errorText}>{`${error.general}`}</Text>
         )}
 
         {fields.map((field) => {
@@ -74,10 +85,8 @@ class Form extends React.Component {
             placeholder,
             autoFocus,
             secureTextEntry,
-            value,
             keyboardType,
             multiline,
-            validationErrors,
           } = field;
 
           return (
@@ -97,7 +106,7 @@ class Form extends React.Component {
                 keyboardType={keyboardType}
                 value={this.state[key].value}
                 multiline={multiline}
-                validationErrors={validationErrors || []}
+                validationErrors={!isEmpty(error[key]) ? [error[key]] : []}
               />
             </View>
           );

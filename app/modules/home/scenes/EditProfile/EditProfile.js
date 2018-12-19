@@ -7,6 +7,7 @@ import {
   Text,
   TouchableHighlight,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { Button, Icon } from 'react-native-elements';
@@ -337,7 +338,11 @@ class EditProfile extends Component {
     const { userimage } = user;
     const { uploadingImage, userImage } = this.state;
     if (uploadingImage) {
-      return <ActivityIndicator size="large" color={color.themeGreen} />;
+      return (
+        <View style={styles.imageLoadingContainer}>
+          <ActivityIndicator size="large" color={color.themeOrange} />
+        </View>
+      );
     }
     // Newly uploaded user image
     if (userImage) {
@@ -382,52 +387,54 @@ class EditProfile extends Component {
         backdropTransitionInTiming={1000}
         backdropTransitionOutTiming={1000}
       >
-        <View style={styles.modal}>
-          {this.renderModalCloseButton()}
-          <Text style={styles.modalTitle}>
-            Please enter your password to confirm changes
-          </Text>
-          {error.general && (
-            <View style={styles.modalErrorContainer}>
-              <Text style={styles.modalError}>{error.general}</Text>
+        <KeyboardAvoidingView behavior="position" enabled>
+          <View style={styles.modal}>
+            {this.renderModalCloseButton()}
+            <Text style={styles.modalTitle}>
+              Please enter your password to confirm changes
+            </Text>
+            {error.general && (
+              <View style={styles.modalErrorContainer}>
+                <Text style={styles.modalError}>{error.general}</Text>
+              </View>
+            )}
+            <InputField
+              showLabel={true}
+              label={'Password'}
+              autoCapitalize="none"
+              clearButtonMode="while-editing"
+              placeholder={'password'}
+              autoFocus={true}
+              onChangeText={this.onChangePassword}
+              secureTextEntry={true}
+              placeholderTextColor={color.grey}
+              textInputStyle={{ padding: 0 }}
+              inputContainerStyle={{ width: '100%' }}
+              keyboardType={'default'}
+              value={password}
+            />
+            <View style={styles.modalFooter}>
+              <Button
+                raised
+                title="Cancel"
+                borderRadius={10}
+                containerViewStyle={styles.containerView}
+                buttonStyle={styles.cancelButton}
+                textStyle={styles.buttonText}
+                onPress={this.onHideModal}
+              />
+              <Button
+                raised
+                title="Confirm changes"
+                borderRadius={10}
+                containerViewStyle={styles.containerView}
+                buttonStyle={styles.modalButton}
+                textStyle={styles.buttonText}
+                onPress={this.onSubmit}
+              />
             </View>
-          )}
-          <InputField
-            showLabel={true}
-            label={'Password'}
-            autoCapitalize="none"
-            clearButtonMode="while-editing"
-            placeholder={'password'}
-            autoFocus={true}
-            onChangeText={this.onChangePassword}
-            secureTextEntry={true}
-            placeholderTextColor={color.grey}
-            textInputStyle={{ padding: 0 }}
-            inputContainerStyle={{ width: '100%' }}
-            keyboardType={'default'}
-            value={password}
-          />
-          <View style={styles.modalFooter}>
-            <Button
-              raised
-              title="Cancel"
-              borderRadius={10}
-              containerViewStyle={styles.containerView}
-              buttonStyle={styles.cancelButton}
-              textStyle={styles.buttonText}
-              onPress={this.onHideModal}
-            />
-            <Button
-              raised
-              title="Confirm changes"
-              borderRadius={10}
-              containerViewStyle={styles.containerView}
-              buttonStyle={styles.modalButton}
-              textStyle={styles.buttonText}
-              onPress={this.onSubmit}
-            />
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }
@@ -485,7 +492,7 @@ class EditProfile extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
         {this.renderModal()}
         <ScrollView>
           {this.renderUserImage()}
@@ -508,7 +515,7 @@ class EditProfile extends Component {
             onPress={this.onPressSave}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

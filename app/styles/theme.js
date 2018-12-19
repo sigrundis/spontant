@@ -31,6 +31,12 @@ const fontSize = {
   large: normalize(21),
 };
 
+const yummo = {
+  bold: 'YummoBold',
+  light: 'YummoLight',
+  regular: 'YummoRegular',
+};
+
 const fontFamily = {
   extrabold: 'RobotoExtraBold',
   bold: 'RobotoBold',
@@ -59,6 +65,7 @@ export {
   color,
   fontSize,
   fontFamily,
+  yummo,
   padding,
   navbarHeight,
   windowWidth,
