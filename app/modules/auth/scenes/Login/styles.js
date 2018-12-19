@@ -12,6 +12,8 @@ const styles = StyleSheet.create({
   },
 
   signInWithFacebookSection: {
+    marginTop: padding,
+    marginBottom: 2 * padding,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

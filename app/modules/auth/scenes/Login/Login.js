@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
-
+import { NavigationEvents, withNavigationFocus } from 'react-navigation';
 import { actions as auth } from '../../index';
 import styles from './styles';
 import Form from '../../components/Form';
@@ -44,10 +44,27 @@ class Login extends React.Component {
       email: '',
       password: '',
       error: error,
+      isLoading: false,
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const { isFocused } = props;
+    const { isOpened } = state;
+    const updatedState = {};
+    // Clear error message when the login scene is opened
+    if (!isOpened && isFocused) {
+      updatedState.error = {
+        general: '',
+        email: '',
+        password: '',
+      };
+    }
+    updatedState.isOpened = isFocused;
+    return updatedState;
   }
 
   //get users permission authorization (ret: facebook token)
@@ -69,7 +86,8 @@ class Login extends React.Component {
   }
 
   onSubmit(data) {
-    this.setState({ error: error }); //clear out error messages
+    this.setState({ isLoading: true });
+    this.setState({ error }); //clear out error messages
     this.props.login(data, this.onSuccess, this.onError);
   }
 
@@ -80,8 +98,7 @@ class Login extends React.Component {
     navigation.navigate('LoggedIn');
     but App.js handles which navigator is activated by checking if the user is logged in or not.
     */
-    // if (exists) this.props.navigation.navigate('LoggedIn');
-    console.log('user in onsuccess loggin', user);
+    // this.setState({ isLoading: false });
     if (!exists) this.props.navigation.navigate('CompleteProfile', { user });
   };
 
@@ -89,24 +106,19 @@ class Login extends React.Component {
     let errObj = this.state.error;
 
     if (error.hasOwnProperty('message')) {
-      errObj['general'] = error.message;
+      errObj.general = error.message;
     } else {
       let keys = Object.keys(error);
       keys.map((key, index) => {
         errObj[key] = error[key];
       });
     }
-    this.setState({ error: errObj });
+    this.setState({ isLoading: false, error: errObj });
   }
 
   render() {
     const { navigation } = this.props;
-    const { error } = this.state;
-    console.log('error', error);
-    const onChangeText = {
-      email: this.onChangeEmail,
-      password: this.onChangePassword,
-    };
+    const { isLoading, error } = this.state;
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -119,6 +131,7 @@ class Login extends React.Component {
           </View>
           <View style={styles.regularSignInSection}>
             <Form
+              isLoading={isLoading}
               fields={fields}
               onSubmit={this.onSubmit}
               buttonTitle={'LOG IN'}
@@ -132,7 +145,9 @@ class Login extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { login, onSignInWithFacebook }
-)(Login);
+export default withNavigationFocus(
+  connect(
+    null,
+    { login, onSignInWithFacebook }
+  )(Login)
+);
