@@ -56,10 +56,10 @@ class Form extends React.Component {
   }
 
   renderInputs() {
-    const { placeholderTextColor } = this.props;
+    const { placeholderTextColor, fields } = this.props;
     return (
       <View>
-        {this.getFields().map((field) => {
+        {fields.map((field) => {
           const {
             key,
             label,
@@ -160,6 +160,7 @@ Form.propTypes = {
 
 Form.defaultProps = {
   onForgotPassword: null,
+  placeholderTextColor: 'grey',
 };
 
 export default Form;

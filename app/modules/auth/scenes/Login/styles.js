@@ -8,6 +8,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.white,
+    paddingVertical: padding * 2,
+  },
+
+  signInWithFacebookSection: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   socialButton: {
@@ -20,6 +27,29 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: fontSize.regular + 2,
     fontFamily: fontFamily.medium,
+  },
+
+  orContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    width: windowWidth,
+  },
+
+  divider: {
+    backgroundColor: '#D0D5DA',
+    position: 'absolute',
+    top: 19,
+    left: 20,
+    right: 20,
+  },
+
+  orText: {
+    backgroundColor: color.white,
+    fontSize: fontSize.regular,
+    fontFamily: fontFamily.medium,
+    color: '#414141',
+    paddingHorizontal: padding,
   },
 });
 

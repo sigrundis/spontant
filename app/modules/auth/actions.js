@@ -14,8 +14,9 @@ export function register(data, successCB, errorCB) {
 }
 
 export function createUser(user, successCB, errorCB) {
+  console.log('create user data in actions', user);
   return (dispatch) => {
-    api.createUser(user, function(success, data, error) {
+    api.createUser(user.uid, user, function(success, data, error) {
       if (success) {
         dispatch({ type: t.LOGGED_IN, data });
         successCB();
@@ -94,6 +95,30 @@ export function signInWithFacebook(facebookToken, successCB, errorCB) {
         dispatch({ type: t.LOGGED_IN, data });
         successCB();
       } else if (error) errorCB(error);
+    });
+  };
+}
+
+export function checkLoginStatus(callback) {
+  return (dispatch) => {
+    auth.onAuthStateChanged((user) => {
+      let isLoggedIn = user !== null;
+
+      if (isLoggedIn) {
+        api.getUser(user, function(success, { exists, user }, error) {
+          if (success) {
+            if (exists) dispatch({ type: t.LOGGED_IN, data: user });
+            callback(exists, isLoggedIn);
+          } else if (error) {
+            //unable to get user
+            dispatch({ type: t.LOGGED_OUT });
+            callback(false, false);
+          }
+        });
+      } else {
+        dispatch({ type: t.LOGGED_OUT });
+        callback(false, isLoggedIn);
+      }
     });
   };
 }

@@ -8,6 +8,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import { Facebook, Svg } from 'expo';
 import { Button, Divider, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -29,32 +30,44 @@ const image5 = require('../../../../static/img/utilega.jpg');
 class Welcome extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { numOfBackground: 5, scrollValue: 0, scrolled: 0 };
   }
 
   componentDidMount() {
     const { isFocused } = this.props;
-    if (isFocused) {
-      const numOfBackground = 5;
-      let scrollValue = 0,
-        scrolled = 0;
-      const slideShowInterval = setInterval(() => {
-        scrolled++;
-        if (scrolled < numOfBackground) {
-          scrollValue = scrollValue + width; // width = screen width
-        } else {
-          scrollValue = 0;
-          scrolled = 0;
-        }
-        this._scrollView.scrollTo({ x: scrollValue });
-      }, 3000);
-      this.setState({ slideShowInterval });
+    const { slideShowInterval } = this.state;
+    if (isFocused && !slideShowInterval) {
+      this.setSlideShowInterval();
     }
+  }
+
+  slideShowIntervalFunction = () => {
+    let { scrolled, scrollValue, numOfBackground } = this.state;
+    scrolled++;
+    if (scrolled < numOfBackground) {
+      scrollValue = scrollValue + width;
+    } else {
+      scrollValue = 0;
+      scrolled = 0;
+    }
+    this._scrollView.scrollTo({ x: scrollValue });
+    this.setState({ scrolled, scrollValue });
+  };
+
+  setSlideShowInterval() {
+    const slideShowInterval = setInterval(this.slideShowIntervalFunction, 3000);
+    this.setState({ slideShowInterval });
+  }
+
+  clearSlideShowInterval() {
+    const { slideShowInterval } = this.state;
+    clearInterval(slideShowInterval);
+    this.setState({ slideShowInterval: null });
   }
 
   onPressSignIn() {
     const { navigation } = this.props;
-    clearInterval(this.state.slideShowInterval);
+    this.clearSlideShowInterval();
     navigation.navigate('Login');
   }
 
@@ -85,14 +98,22 @@ class Welcome extends React.Component {
 
   render() {
     const { navigation } = this.props;
+    const { slideShowInterval } = this.state;
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onDidFocus={() => {
+            if (!slideShowInterval) {
+              this.setSlideShowInterval();
+            }
+          }}
+        />
         {this.renderTopContainer()}
         <View style={styles.bottomContainer}>
           <View style={[styles.buttonContainer]}>
             <SignInWithFacebookButton
               onPress={() => {
-                clearInterval(this.state.slideShowInterval);
+                this.clearSlideShowInterval();
               }}
               navigation={navigation}
             />
@@ -108,7 +129,7 @@ class Welcome extends React.Component {
               buttonStyle={[styles.button]}
               textStyle={styles.buttonText}
               onPress={() => {
-                clearInterval(this.state.slideShowInterval);
+                this.clearSlideShowInterval();
                 navigation.navigate('Register');
               }}
             />
@@ -117,7 +138,7 @@ class Welcome extends React.Component {
             <Text style={styles.bottomText}>Already have an account?</Text>
             <TouchableOpacity
               onPress={() => {
-                clearInterval(this.state.slideShowInterval);
+                this.clearSlideShowInterval();
                 navigation.navigate('Login');
               }}
             >

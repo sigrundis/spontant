@@ -51,8 +51,12 @@ class Profile extends Component {
   }
 
   onSuccessSignOut() {
+    /*
+    It sounds logical to navigate to the 'loggedOut' switch navigator here by doing
     const { navigation } = this.props;
     navigation.navigate('LoggedOut');
+    but App.js handles which navigator  is activated by checking if the user is logged in or not.
+    */
   }
 
   onErrorSignOut(error) {
@@ -102,7 +106,6 @@ class Profile extends Component {
 
   render() {
     const { user } = this.state;
-    console.log('user in profile', user);
     if (!user || !user.displayname)
       return (
         <TouchableOpacity onPress={this.onSignOut}>
