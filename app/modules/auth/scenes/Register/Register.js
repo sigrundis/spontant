@@ -66,10 +66,14 @@ class Register extends React.Component {
     this.state = {
       error: error,
     };
-
     this.onSubmit = this.onSubmit.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangeUserName = this.onChangeUserName.bind(this);
+    this.onChangeDisplayName = this.onChangeDisplayName.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeUpdatedPassword = this.onChangeUpdatedPassword.bind(this);
   }
 
   onSubmit(data) {
@@ -78,9 +82,12 @@ class Register extends React.Component {
   }
 
   onSuccess() {
-    console.log('on success in Register');
+    /*
+    It sounds logical to navigate to the 'loggedIn' switch navigator here by doing
     const { navigation } = this.props;
     navigation.navigate('LoggedIn');
+    but App.js handles which navigator is activated by checking if the user is logged in or not.
+    */
   }
 
   onError(error) {
@@ -97,13 +104,38 @@ class Register extends React.Component {
     this.setState({ error: errObj });
   }
 
-  renderInputs() {}
+  onChangeEmail(email) {
+    this.setState({ email });
+  }
+
+  onChangeUserName(userName) {
+    this.setState({ username });
+  }
+
+  onChangeDisplayName(displayName) {
+    this.setState({ displayName });
+  }
+
+  onChangePassword(password) {
+    this.setState({ password });
+  }
+
+  onChangeUpdatedPassword(updatedPassword) {
+    this.setState({ updatedPassword });
+  }
 
   render() {
+    const onChangeText = {
+      email: this.onChangeEmail,
+      userName: this.onChangeUserName,
+      displayName: this.onChangeDisplayName,
+      password: this.onChangePassword,
+      updatedPassword: this.onChangeUpdatedPassword,
+    };
     return (
       <Form
         fields={fields}
-        showLabel={false}
+        onChangeText={onChangeText}
         onSubmit={this.onSubmit}
         buttonTitle={'SIGN UP'}
         error={this.state.error}

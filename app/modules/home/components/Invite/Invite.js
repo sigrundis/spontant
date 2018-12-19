@@ -197,6 +197,7 @@ class Invite extends React.Component {
     } = invite;
     const buttonColor =
       joinCount < minAttendees ? color.themeRed : color.themeGreen;
+    if (!user) return null;
     return (
       <View style={[styles.container]}>
         <View style={styles.wrapper}>

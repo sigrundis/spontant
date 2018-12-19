@@ -47,9 +47,48 @@ const AuthStack = createStackNavigator(
         headerTintColor: color.themeNight,
       },
     },
-    CompleteProfile: { screen: CompleteProfile },
-    Login: { screen: Login },
-    ForgotPassword: { screen: ForgotPassword },
+    CompleteProfile: {
+      screen: CompleteProfile,
+      navigationOptions: {
+        headerTitleStyle: {
+          flex: 1,
+          textAlign: 'center',
+          alignSelf: 'center',
+        },
+        headerRight: <View />, //To center title on android
+        title: 'Complete profile',
+        headerStyle,
+        headerTintColor: color.themeNight,
+      },
+    },
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        headerTitleStyle: {
+          flex: 1,
+          textAlign: 'center',
+          alignSelf: 'center',
+        },
+        headerRight: <View />, //To center title on android
+        title: 'Sign In',
+        headerStyle,
+        headerTintColor: color.themeNight,
+      },
+    },
+    ForgotPassword: {
+      screen: ForgotPassword,
+      navigationOptions: {
+        headerTitleStyle: {
+          flex: 1,
+          textAlign: 'center',
+          alignSelf: 'center',
+        },
+        headerRight: <View />, //To center title on android
+        title: 'Forgotten Password',
+        headerStyle,
+        headerTintColor: color.themeNight,
+      },
+    },
   },
   {
     initialRouteName: 'Welcome',

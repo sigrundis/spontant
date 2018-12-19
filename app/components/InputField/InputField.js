@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, TextInput } from 'react-native';
 import styles from './styles';
-import { theme } from '../../styles/theme';
-const { color } = theme;
+import { color } from '../../styles/theme';
 
 class InputField extends Component {
   render() {

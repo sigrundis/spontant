@@ -4,7 +4,9 @@ import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { isEmpty, validate } from '../../utils/validate';
 import styles from './styles';
-import AuthTextInput from '../AuthTextInput';
+import InputField from '../../../../components/InputField';
+import { theme } from '../../';
+const { color } = theme;
 
 class Form extends React.Component {
   constructor(props) {
@@ -24,7 +26,7 @@ class Form extends React.Component {
     const state = {};
     fields.forEach((field) => {
       let { key, type, value } = field;
-      state[key] = { type: type, value: value };
+      state[key] = { type, value };
     });
 
     state['error'] = error;
@@ -56,55 +58,64 @@ class Form extends React.Component {
   }
 
   render() {
-    const { fields, showLabel, buttonTitle, onForgotPassword } = this.props;
+    const { fields, onChangeText, buttonTitle, onForgotPassword } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.wrapper}>
-          {!isEmpty(this.state.error['general']) && (
-            <Text style={styles.errorText}>
-              {this.state.error['general'].toString()}
-            </Text>
-          )}
+        {!isEmpty(this.state.error['general']) && (
+          <Text style={styles.errorText}>
+            {this.state.error['general'].toString()}
+          </Text>
+        )}
 
-          {fields.map((data, idx) => {
-            let {
-              key,
-              label,
-              placeholder,
-              autoFocus,
-              secureTextEntry,
-              keyboardType,
-            } = data;
-            return (
-              <AuthTextInput
-                key={key}
+        {fields.map((field) => {
+          const {
+            key,
+            label,
+            placeholder,
+            autoFocus,
+            secureTextEntry,
+            value,
+            keyboardType,
+            multiline,
+            validationErrors,
+          } = field;
+
+          return (
+            <View key={key}>
+              <InputField
+                showLabel={true}
                 label={label}
-                showLabel={showLabel}
+                autoCapitalize="none"
+                clearButtonMode="while-editing"
                 placeholder={placeholder}
                 autoFocus={autoFocus}
                 onChangeText={(text) => this.onChange(key, text)}
                 secureTextEntry={secureTextEntry}
+                containerStyle={styles.containerStyle}
+                inputStyle={styles.inputContainer}
+                placeholderTextColor={color.grey}
                 keyboardType={keyboardType}
-                value={this.state[key]['value']}
-                error={this.state.error[key]}
+                value={this.state[key].value}
+                multiline={multiline}
+                validationErrors={validationErrors || []}
               />
-            );
-          })}
-          <Button
-            raised
-            title={buttonTitle}
-            borderRadius={0}
-            containerViewStyle={styles.containerView}
-            buttonStyle={styles.button}
-            textStyle={styles.buttonText}
-            onPress={this.onSubmit}
-          />
-          {this.props.onForgotPassword !== null && (
-            <Text style={styles.forgotText} onPress={onForgotPassword}>
-              Forgot password?
-            </Text>
-          )}
-        </View>
+            </View>
+          );
+        })}
+        <Button
+          raised
+          title={buttonTitle}
+          borderRadius={0}
+          containerViewStyle={styles.containerView}
+          buttonStyle={styles.button}
+          textStyle={styles.buttonText}
+          onPress={this.onSubmit}
+        />
+        {this.props.onForgotPassword !== null && (
+          <Text style={styles.forgotText} onPress={onForgotPassword}>
+            Forgot password?
+          </Text>
+        )}
       </View>
     );
   }
@@ -120,6 +131,7 @@ Form.propTypes = {
 
 Form.defaultProps = {
   onForgotPassword: null,
+  placeholderTextColor: 'grey',
 };
 
 export default Form;
