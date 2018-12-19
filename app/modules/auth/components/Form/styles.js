@@ -7,11 +7,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.white,
-  },
-
-  wrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding,
   },
 
   errorText: {
@@ -22,7 +18,8 @@ const styles = StyleSheet.create({
 
   containerView: {
     marginVertical: padding * 3,
-    width: windowWidth - 40,
+    width: windowWidth - padding * 4,
+    marginLeft: padding,
   },
 
   socialButton: {
@@ -46,6 +43,7 @@ const styles = StyleSheet.create({
   forgotText: {
     color: color.themeOrange,
     marginBottom: padding,
+    marginLeft: padding,
     fontSize: fontSize.regular,
     fontFamily: fontFamily.medium,
   },

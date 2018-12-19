@@ -5,6 +5,7 @@ import { createRootNavigator } from './app/config/navigation';
 import NavigationService from './NavigationService';
 import store from './app/redux/store';
 import Splash from './app/components/Splash/Splash';
+import { checkLoginStatus } from './app/modules/auth/actions';
 
 function cacheFonts(fonts) {
   return fonts.map((font) => Font.loadAsync(font));
@@ -17,6 +18,7 @@ export default class App extends Component {
       isReady: false,
       checkedLogin: false,
       isLoggedIn: false,
+      exist: false,
     };
   }
 
@@ -33,11 +35,19 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const { isLoggedIn } = store.getState().authReducer;
-    this.setState({ checkedLogin: true, isLoggedIn });
+    store.dispatch(
+      checkLoginStatus((exist, isLoggedIn) => {
+        this.setState({
+          checkedLogin: true,
+          exist,
+          isLoggedIn: isLoggedIn && exist,
+        });
+      })
+    );
   }
 
   render() {
+    console.log('render App');
     const { isReady, checkedLogin, isLoggedIn } = this.state;
     if (!isReady) {
       return (

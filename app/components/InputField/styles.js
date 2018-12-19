@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../../index';
-const { padding, color } = theme;
+import { padding, color } from '../../styles/theme';
 
 const styles = StyleSheet.create({
   container: { paddingHorizontal: padding },
+
   label: {
     alignSelf: 'flex-start',
     color: color.themeGreen,

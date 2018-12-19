@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Facebook } from 'expo';
 import { SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -32,9 +33,12 @@ class SignInWithFacebookButton extends React.Component {
   }
 
   onSuccess() {
-    console.log('on success in signin with facebook');
+    /*
+    It sounds logical to navigate to the 'loggedIn' switch navigator here by doing
     const { navigation } = this.props;
     navigation.navigate('LoggedIn');
+    but App.js handles which navigator is activated by checking if the user is logged in or not.
+    */
   }
 
   onError(error) {
@@ -42,12 +46,13 @@ class SignInWithFacebookButton extends React.Component {
   }
 
   render() {
+    const { buttonTitle } = this.props;
     return (
       <SocialIcon
         raised
         button
         type="facebook"
-        title="SIGN UP WITH FACEBOOK"
+        title={buttonTitle}
         iconSize={19}
         style={[styles.containerView, styles.socialButton]}
         fontStyle={styles.buttonText}
@@ -56,6 +61,11 @@ class SignInWithFacebookButton extends React.Component {
     );
   }
 }
+
+SignInWithFacebookButton.defaultProps = {
+  buttonTitle: 'SIGN UP WITH FACEBOOK',
+  onPress: () => {},
+};
 
 export default connect(
   null,

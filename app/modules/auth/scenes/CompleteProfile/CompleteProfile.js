@@ -17,6 +17,15 @@ const fields = [
     value: '',
     type: 'text',
   },
+  {
+    key: 'displayname',
+    label: 'Display name',
+    placeholder: 'Display name',
+    autoFocus: false,
+    secureTextEntry: false,
+    value: '',
+    type: 'text',
+  },
 ];
 
 const error = {
@@ -30,22 +39,24 @@ class CompleteProfile extends React.Component {
     this.state = {
       error: error,
     };
-
     this.onSubmit = this.onSubmit.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
   }
 
   onSubmit(data) {
-    this.setState({ error: error }); //clear out error messages
+    const { navigation } = this.props;
+    this.setState({ error }); //clear out error messages
+    console.log('on submit data', data);
     //attach user id
-    const user = this.props.navigation.getParam(user);
-    data['uid'] = user.uid;
+    const user = navigation.getParam('user', {});
+    console.log('user in complete profile', user);
+    data.uid = user.uid;
+    data.email = user.email;
     this.props.createUser(data, this.onSuccess, this.onError);
   }
 
   onSuccess() {
-    console.log('onSuccess in complete profile');
     this.props.navigation.navigate('Home');
   }
 
@@ -68,7 +79,6 @@ class CompleteProfile extends React.Component {
     return (
       <Form
         fields={fields}
-        showLabel={false}
         onSubmit={this.onSubmit}
         buttonTitle={'CONTINUE'}
         error={this.state.error}
