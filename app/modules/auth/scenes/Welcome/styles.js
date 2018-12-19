@@ -1,6 +1,14 @@
 import { StyleSheet } from 'react-native';
 import { theme } from '../../index';
-const { padding, color, fontSize, fontFamily, windowWidth, normalize } = theme;
+const {
+  padding,
+  color,
+  fontSize,
+  fontFamily,
+  yummo,
+  windowWidth,
+  normalize,
+} = theme;
 
 const resizeMode = 'contain';
 
@@ -45,7 +53,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: fontSize.large + 6,
-    fontFamily: fontFamily.bold,
+    fontFamily: yummo.bold,
     color: color.themeOrange,
     letterSpacing: 1,
   },

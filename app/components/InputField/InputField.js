@@ -63,8 +63,10 @@ class InputField extends Component {
         />
         {validationErrors.length > 0 && (
           <View style={styles.errorMessageContainer}>
-            {validationErrors.map((errorMessage) => (
-              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            {validationErrors.map((errorMessage, index) => (
+              <Text key={index} style={styles.errorMessage}>
+                {errorMessage}
+              </Text>
             ))}
           </View>
         )}

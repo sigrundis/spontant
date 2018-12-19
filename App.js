@@ -29,6 +29,9 @@ export default class App extends Component {
       { RobotoMedium: require('./app/assets/fonts/Roboto-Medium.ttf') },
       { RobotoRegular: require('./app/assets/fonts/Roboto-Regular.ttf') },
       { RobotoLight: require('./app/assets/fonts/Roboto-Light.ttf') },
+      { YummoBold: require('./app/assets/fonts/Yummo_Bold.otf') },
+      { YummoLight: require('./app/assets/fonts/Yummo_Light.otf') },
+      { YummoRegular: require('./app/assets/fonts/Yummo_Regular.otf') },
     ]);
 
     await Promise.all([...fontAssets]);

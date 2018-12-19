@@ -130,6 +130,8 @@ class NewInvite extends Component {
   editInvite() {
     const {
       title,
+      date,
+      image,
       description,
       minAttendees,
       maxAttendees,
@@ -396,7 +398,7 @@ class NewInvite extends Component {
     if (uploadingImage) {
       return (
         <View style={[styles.cover]}>
-          <ActivityIndicator size="large" color={color.themeGreen} />
+          <ActivityIndicator size="large" color={color.themeOrange} />
         </View>
       );
     }
