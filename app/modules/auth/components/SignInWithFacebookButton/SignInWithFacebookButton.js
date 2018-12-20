@@ -73,7 +73,7 @@ class SignInWithFacebookButton extends React.Component {
         iconSize={19}
         style={[styles.containerView, styles.socialButton]}
         fontStyle={styles.buttonText}
-        onPress={this.onSignInWithFacebook}
+        onPress={this.onSignUpWithFacebook}
       />
     );
   }
