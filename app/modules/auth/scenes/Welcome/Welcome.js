@@ -3,24 +3,25 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
-  ImageBackground,
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
-import { Facebook, Svg } from 'expo';
+import { NavigationEvents, withNavigationFocus } from 'react-navigation';
 import { Button, Divider, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { withNavigationFocus } from 'react-navigation';
 import SvgLogo from '../../../../components/SvgLogo';
+import ProgressiveImage from '../../../../components/ProgressiveImage';
 import SignInWithFacebookButton from '../../components/SignInWithFacebookButton';
-import { actions as auth, constants as c } from '../../index';
+import { actions as auth } from '../../index';
 const { signInWithFacebook } = auth;
-const { Circle, G, Path } = Svg;
 
 import styles from './styles';
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
+const image1Small = require('../../../../static/img/barnaganga_small.jpg');
+const image2Small = require('../../../../static/img/basket_small.jpg');
+const image3Small = require('../../../../static/img/pizza_small.jpg');
+const image4Small = require('../../../../static/img/skidi_small.jpg');
+const image5Small = require('../../../../static/img/utilega_small.jpg');
 const image1 = require('../../../../static/img/barnaganga.jpg');
 const image2 = require('../../../../static/img/basket.jpg');
 const image3 = require('../../../../static/img/pizza.jpg');
@@ -81,11 +82,31 @@ class Welcome extends React.Component {
           horizontal={true}
           pagingEnabled={true}
         >
-          <Image source={image1} style={{ height: '100%', width }} />
-          <Image source={image2} style={{ height: '100%', width }} />
-          <Image source={image3} style={{ height: '100%', width }} />
-          <Image source={image4} style={{ height: '100%', width }} />
-          <Image source={image5} style={{ height: '100%', width }} />
+          <ProgressiveImage
+            thumbnailSource={image1Small}
+            source={image1}
+            style={{ height: '100%', width }}
+          />
+          <ProgressiveImage
+            thumbnailSource={image2Small}
+            source={image2}
+            style={{ height: '100%', width }}
+          />
+          <ProgressiveImage
+            thumbnailSource={image3Small}
+            source={image3}
+            style={{ height: '100%', width }}
+          />
+          <ProgressiveImage
+            thumbnailSource={image4Small}
+            source={image4}
+            style={{ height: '100%', width }}
+          />
+          <ProgressiveImage
+            thumbnailSource={image5Small}
+            source={image5}
+            style={{ height: '100%', width }}
+          />
         </ScrollView>
         <View style={styles.overlay} />
         <View style={styles.headerContent}>

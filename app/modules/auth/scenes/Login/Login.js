@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, KeyboardAvoidingView } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { NavigationEvents, withNavigationFocus } from 'react-navigation';
@@ -123,7 +123,10 @@ class Login extends React.Component {
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.signInWithFacebookSection}>
-            <SignInWithFacebookButton buttonTitle="SIGN IN WITH FACEBOOK" />
+            <SignInWithFacebookButton
+              navigation={navigation}
+              buttonTitle="SIGN IN WITH FACEBOOK"
+            />
           </View>
           <View style={styles.orContainer}>
             <Divider style={styles.divider} />

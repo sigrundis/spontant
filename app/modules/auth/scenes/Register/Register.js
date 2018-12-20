@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { View, ScrollView } from 'react-native';
 import { actions as auth } from '../../index';
 const { register } = auth;
-
+import styles from './styles';
 import Form from '../../components/Form';
 
 const fields = [
@@ -133,13 +134,17 @@ class Register extends React.Component {
       updatedPassword: this.onChangeUpdatedPassword,
     };
     return (
-      <Form
-        fields={fields}
-        onChangeText={onChangeText}
-        onSubmit={this.onSubmit}
-        buttonTitle={'SIGN UP'}
-        error={this.state.error}
-      />
+      <View style={styles.container}>
+        <ScrollView>
+          <Form
+            fields={fields}
+            onChangeText={onChangeText}
+            onSubmit={this.onSubmit}
+            buttonTitle={'SIGN UP'}
+            error={this.state.error}
+          />
+        </ScrollView>
+      </View>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import SvgLogo from '../SvgLogo';
 import { View, Text, ActivityIndicator, Image } from 'react-native';
 
 import styles from './styles';
@@ -8,11 +9,8 @@ export default class extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.wrapper}>
-          <Image
-            style={styles.image}
-            source={{ uri: '../../assets/spontant_logo.svg' }}
-          />
-          <Text style={styles.title}>Invites</Text>
+          <SvgLogo height={150} width={150} />
+          <Text style={styles.title}>Spontant</Text>
         </View>
         <View style={styles.activityIndicatorContainer}>
           <ActivityIndicator animating={true} />
