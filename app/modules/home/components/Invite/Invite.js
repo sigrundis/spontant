@@ -12,6 +12,7 @@ import { Icon } from 'react-native-elements';
 import moment from 'moment';
 import AnimatedEllipsis from 'react-native-animated-ellipsis';
 import JoinSection from '../JoinSection';
+import ProgressiveImage from '../../../../components/ProgressiveImage';
 import styles from './styles';
 import { connect } from 'react-redux';
 import { actions, theme } from '../../index';
@@ -111,9 +112,10 @@ class Invite extends React.Component {
     if (fetchingInviter)
       return <ActivityIndicator size="small" color={color.grey} />;
     const { userimage } = inviter;
-    console.log('userimage', userimage);
     return userimage ? (
-      <Image
+      <ProgressiveImage
+        isCircle
+        thumbnailSource={{ uri: userimage.replace('upload/', 'upload/w_50/') }}
         source={{ uri: userimage }}
         style={{ width: 50, height: 50, borderRadius: 25 }}
       />

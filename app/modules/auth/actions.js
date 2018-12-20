@@ -1,6 +1,6 @@
 import * as t from './actionTypes';
 import * as api from './api';
-import { auth, authObj, database, provider } from '../../config/firebase';
+import { auth } from '../../config/firebase';
 
 export function register(data, successCB, errorCB) {
   return (dispatch) => {
@@ -14,7 +14,6 @@ export function register(data, successCB, errorCB) {
 }
 
 export function createUser(user, successCB, errorCB) {
-  console.log('create user data in actions', user);
   return (dispatch) => {
     api.createUser(user.uid, user, function(success, data, error) {
       if (success) {
@@ -87,10 +86,23 @@ export function getAttendeesInInvite(inviteId, successCB, errrorCB) {
   };
 }
 
+export function signUpWithFacebook(facebookToken, successCB, errorCB) {
+  return (dispatch) => {
+    api.signUpWithFacebook(facebookToken, function(success, data, error) {
+      if (success) {
+        dispatch({ type: t.LOGGED_IN, data });
+        successCB();
+      } else if (error) errorCB(error);
+    });
+  };
+}
+
 //Sign user in using Facebook
 export function signInWithFacebook(facebookToken, successCB, errorCB) {
   return (dispatch) => {
     api.signInWithFacebook(facebookToken, function(success, data, error) {
+      console.log('success', success);
+      console.log('error', error);
       if (success) {
         dispatch({ type: t.LOGGED_IN, data });
         successCB();
@@ -100,16 +112,18 @@ export function signInWithFacebook(facebookToken, successCB, errorCB) {
 }
 
 export function checkLoginStatus(callback) {
+  console.log('check login status');
   return (dispatch) => {
     auth.onAuthStateChanged((user) => {
+      console.log('on auth state changed', user);
       let isLoggedIn = user !== null;
-
       if (isLoggedIn) {
         api.getUser(user, function(success, { exists, user }, error) {
           if (success) {
             if (exists) dispatch({ type: t.LOGGED_IN, data: user });
             callback(exists, isLoggedIn);
           } else if (error) {
+            console.log('error in check login status', error);
             //unable to get user
             dispatch({ type: t.LOGGED_OUT });
             callback(false, false);

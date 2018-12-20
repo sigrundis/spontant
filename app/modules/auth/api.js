@@ -1,7 +1,6 @@
 import {
   auth,
   database,
-  provider,
   emailAuthProvider,
   authObj,
 } from '../../config/firebase';
@@ -41,7 +40,6 @@ function reauthenticate(currentPassword) {
 
 export function updateUser(user, oldEmail, password, callback) {
   const { uid, email } = user;
-
   let updates = {};
   updates['users/' + uid] = user;
 
@@ -82,6 +80,7 @@ export function getUser(user, callback) {
     .child(user.uid)
     .once('value')
     .then(function(snapshot) {
+      console.log('snapshot.val() from get user', snapshot.val());
       const exists = snapshot.val() !== null;
       //if the user exist in the DB, replace the user variable with the returned snapshot
       if (exists) user = snapshot.val();
@@ -155,6 +154,19 @@ export function signOut(callback) {
     });
 }
 
+//Sign user up using Facebook
+export function signUpWithFacebook(fbToken, callback) {
+  const credential = authObj.FacebookAuthProvider.credential(fbToken);
+  auth
+    .signInAndRetrieveDataWithCredential(credential)
+    .then((result) => {
+      const { user } = result;
+      const { uid } = user;
+      return createUser(uid, processUserFromFacebookData(user), callback);
+    })
+    .catch((error) => callback(false, null, { message: error }));
+}
+
 //Sign user in using Facebook
 export function signInWithFacebook(fbToken, callback) {
   const credential = authObj.FacebookAuthProvider.credential(fbToken);
@@ -162,7 +174,7 @@ export function signInWithFacebook(fbToken, callback) {
     .signInAndRetrieveDataWithCredential(credential)
     .then((result) => {
       const { user } = result;
-      this.checkFbUserExist(user, callback);
+      return this.checkFbUserExist(user, callback);
     })
     .catch((error) => callback(false, null, { message: error }));
 }
@@ -185,9 +197,11 @@ export function checkFbUserExist(user, callback) {
     .once('value')
     .then(function(snapshot) {
       var exists = snapshot.val() === null ? false : true;
-      if (exists) callback(true, processUserFromFacebookData(user), null);
-      else {
-        createUser(uid, processUserFromFacebookData(user), callback);
+      console.log('check fb user exists', exists);
+      if (exists) {
+        return callback(true, processUserFromFacebookData(user), null);
+      } else {
+        return createUser(uid, processUserFromFacebookData(user), callback);
       }
     })
     .catch((error) => callback(false, null, { message: error }));
