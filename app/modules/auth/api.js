@@ -24,6 +24,7 @@ export function register(data, callback) {
 
 //Create the user object in realtime database
 export function createUser(userId, data, callback) {
+  console.log('tries to create user');
   database
     .ref('users')
     .child(userId)
@@ -154,6 +155,19 @@ export function signOut(callback) {
     });
 }
 
+/*
+NOTE! SignInWithFacebook to be changed.
+For now we always use signUpWithFacebook but it would be more ideal to 
+check first if the user already exists and if not create it. 
+But when auth.signInAndRetrieveDataWithCredential is called it triggers
+auth.onAuthStateChanged which is called in actions.js and triggers
+rerendering of the app before signInWithFacebook is able to finish to
+both check if the user exists and create the user with async function.
+TODO: Find a way so that signInAndRretrieveDataWithCredential can wait
+for async func (to check if the user exists) inside the then and return the
+output from another async func (createUser).
+*/
+
 //Sign user up using Facebook
 export function signUpWithFacebook(fbToken, callback) {
   const credential = authObj.FacebookAuthProvider.credential(fbToken);
@@ -174,7 +188,20 @@ export function signInWithFacebook(fbToken, callback) {
     .signInAndRetrieveDataWithCredential(credential)
     .then((result) => {
       const { user } = result;
-      return this.checkFbUserExist(user, callback);
+      const { uid } = user;
+      return database
+        .ref('/users/' + uid)
+        .once('value')
+        .then((snapshot) => {
+          var exists = snapshot.val() !== null;
+          console.log('check fb user exists', exists);
+          if (exists) {
+            return callback(true, processUserFromFacebookData(user), null);
+          } else {
+            return createUser(uid, processUserFromFacebookData(user), callback);
+          }
+        })
+        .catch((error) => callback(false, null, { message: error }));
     })
     .catch((error) => callback(false, null, { message: error }));
 }
@@ -195,8 +222,8 @@ export function checkFbUserExist(user, callback) {
   database
     .ref('/users/' + uid)
     .once('value')
-    .then(function(snapshot) {
-      var exists = snapshot.val() === null ? false : true;
+    .then((snapshot) => {
+      var exists = snapshot.val() !== null;
       console.log('check fb user exists', exists);
       if (exists) {
         return callback(true, processUserFromFacebookData(user), null);
