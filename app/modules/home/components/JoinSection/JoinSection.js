@@ -3,6 +3,7 @@ import { Text, View, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import AnimatedEllipsis from 'react-native-animated-ellipsis';
+import ProgressiveImage from '../../../../components/ProgressiveImage';
 import { actions as authActions } from '../../../auth/index';
 const { getAttendeesInInvite } = authActions;
 import styles from './styles';
@@ -60,14 +61,6 @@ class JoinSection extends React.Component {
     console.error('on find attendees error', error);
   };
 
-  renderAttendeeUserImage(uri) {
-    return (
-      <View style={styles.imageContainer}>
-        <Image source={{ uri }} style={styles.image} />
-      </View>
-    );
-  }
-
   renderAttendees(inviteColor) {
     const { navigation } = this.props;
     const { attendeesWithInfo } = this.state;
@@ -109,15 +102,21 @@ class JoinSection extends React.Component {
           } else {
             return (
               <View key={index}>
-                <Image
+                <ProgressiveImage
+                  isCircle
                   source={{ uri: userimage }}
+                  thumbnailSource={{
+                    uri: userimage.replace('upload/', 'upload/w_50/'),
+                  }}
                   style={[styles.image, { marginLeft: index > 0 ? -5 : 0 }]}
                 />
               </View>
             );
           }
         })}
-        <Text style={styles.text}>{`${attendeesWithInfo.length} ${
+        <Text style={[styles.text, { marginLeft: 2 }]}>{`${
+          attendeesWithInfo.length
+        } ${
           attendeesWithInfo.length > 1 ? 'people' : 'person'
         } have joined!`}</Text>
       </View>

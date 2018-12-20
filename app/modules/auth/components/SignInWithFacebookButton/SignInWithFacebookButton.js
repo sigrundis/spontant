@@ -5,7 +5,7 @@ import { SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import { actions as auth, constants as c } from '../../index';
-const { signInWithFacebook } = auth;
+const { signInWithFacebook, signUpWithFacebook } = auth;
 
 import styles from './styles';
 
@@ -15,6 +15,7 @@ class SignInWithFacebookButton extends React.Component {
     this.state = {};
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
+    this.onSignUpWithFacebook = this.onSignUpWithFacebook.bind(this);
     this.onSignInWithFacebook = this.onSignInWithFacebook.bind(this);
   }
 
@@ -32,6 +33,20 @@ class SignInWithFacebookButton extends React.Component {
     }
   }
 
+  //get users permission authorization (ret: facebook token)
+  async onSignUpWithFacebook() {
+    const { onPress } = this.props;
+    onPress();
+    const options = { permissions: ['public_profile', 'email'] };
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+      c.FACEBOOK_APP_ID,
+      options
+    );
+    if (type === 'success') {
+      this.props.signUpWithFacebook(token, this.onSuccess, this.onError);
+    }
+  }
+
   onSuccess() {
     /*
     It sounds logical to navigate to the 'loggedIn' switch navigator here by doing
@@ -39,6 +54,8 @@ class SignInWithFacebookButton extends React.Component {
     navigation.navigate('LoggedIn');
     but App.js handles which navigator is activated by checking if the user is logged in or not.
     */
+    // const { navigation } = this.props;
+    // navigation.navigate('LoggedIn');
   }
 
   onError(error) {
@@ -69,5 +86,5 @@ SignInWithFacebookButton.defaultProps = {
 
 export default connect(
   null,
-  { signInWithFacebook }
+  { signInWithFacebook, signUpWithFacebook }
 )(SignInWithFacebookButton);

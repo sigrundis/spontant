@@ -40,10 +40,11 @@ export default class App extends Component {
   componentDidMount() {
     store.dispatch(
       checkLoginStatus((exist, isLoggedIn) => {
+        console.log('exists from checked login', exist);
         this.setState({
           checkedLogin: true,
           exist,
-          isLoggedIn: isLoggedIn && exist,
+          isLoggedIn,
         });
       })
     );
@@ -51,7 +52,8 @@ export default class App extends Component {
 
   render() {
     console.log('render App');
-    const { isReady, checkedLogin, isLoggedIn } = this.state;
+    const { isReady, checkedLogin, isLoggedIn, exist } = this.state;
+    console.log('isLoggedIn', isLoggedIn);
     if (!isReady) {
       return (
         <AppLoading
@@ -63,7 +65,7 @@ export default class App extends Component {
     }
     if (!checkedLogin) return <Splash />;
 
-    const Layout = createRootNavigator(isLoggedIn);
+    const Layout = createRootNavigator(isLoggedIn && exist);
     return (
       <Provider store={store}>
         <Layout
