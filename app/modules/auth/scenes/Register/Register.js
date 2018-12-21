@@ -78,8 +78,9 @@ class Register extends React.Component {
   }
 
   onSubmit(data) {
-    this.setState({ error: error }); //clear out error messages
-    this.props.register(data, this.onSuccess, this.onError);
+    const { register } = this.props;
+    this.setState({ error }); //clear out error messages
+    register(data, this.onSuccess, this.onError);
   }
 
   onSuccess() {

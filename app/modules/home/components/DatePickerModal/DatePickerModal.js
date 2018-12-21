@@ -8,7 +8,7 @@ import {
   DatePickerAndroid,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { Button, Icon, FormLabel } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 import styles from './styles';
 import { theme } from '../../';
 const { color } = theme;

@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import {
   ScrollView,
-  Platform,
-  DatePickerIOS,
-  DatePickerAndroid,
   View,
   ActivityIndicator,
   Image,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
   Text,
 } from 'react-native';
 import moment from 'moment';
-import { Button, FormLabel, Icon, CheckBox } from 'react-native-elements';
+import { Button, Icon, CheckBox } from 'react-native-elements';
 import { Permissions, ImagePicker } from 'expo';
 import { withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -147,6 +145,7 @@ class NewInvite extends Component {
       ? 'unlimited'
       : maxAttendees || invite['maxAttendees'];
     invite.image = image || invite['image'];
+    invite.edited = true;
     this.props.updateInvite(invite, this.onSuccess, this.onError);
   }
 
@@ -179,7 +178,9 @@ class NewInvite extends Component {
         email: email || '',
       },
       attendees: { [user.uid]: true },
+      timePublished: new Date(),
     };
+
     this.props.addInvite(newInvite, this.onSuccess, this.onError);
   }
 
@@ -264,8 +265,14 @@ class NewInvite extends Component {
   }
 
   onChangeNumberControl(text, stateKey) {
-    const numericText = text.replace(/[^0-9\.]+/g, '');
-    this.setState({ [stateKey]: Number(numericText) });
+    const { navigation } = this.props;
+    const invite = navigation.getParam('invite', {});
+    const { joinCount } = invite;
+    let number = Number(text.replace(/[^0-9\.]+/g, ''));
+    if (joinCount >= number && stateKey === 'maxAttendees') {
+      number = joinCount;
+    }
+    this.setState({ [stateKey]: number });
   }
 
   onAddNumber(stateKey) {
@@ -421,10 +428,15 @@ class NewInvite extends Component {
   }
 
   renderNumberController(stateKey, label) {
+    const { navigation } = this.props;
+    const invite = navigation.getParam('invite', {});
+    const { joinCount } = invite;
     const { unlimitedMaxAttendees } = this.state;
     const value = this.state[stateKey];
     const isSubstractDisabled =
-      value === 0 || (stateKey === 'maxAttendees' && unlimitedMaxAttendees);
+      value === 0 ||
+      (stateKey === 'maxAttendees' && unlimitedMaxAttendees) ||
+      (stateKey === 'maxAttendees' && joinCount >= value);
     const isAddDisabled = stateKey === 'maxAttendees' && unlimitedMaxAttendees;
     return (
       <View style={styles.numberController}>
@@ -500,7 +512,7 @@ class NewInvite extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView enabled behavior="padding" style={styles.container}>
         <ScrollView>
           {this.renderInviteImage()}
           <Button
@@ -526,7 +538,7 @@ class NewInvite extends Component {
             onPress={this.onSubmit}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

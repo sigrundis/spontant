@@ -5,7 +5,6 @@ import {
   Image,
   ActivityIndicator,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -14,7 +13,6 @@ import { Button, Icon } from 'react-native-elements';
 import { Permissions, ImagePicker } from 'expo';
 import { withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
-import { isEmpty } from '../../../auth/utils/validate';
 import styles from './styles';
 import { validateUpdatedUser } from '../../utils/validation';
 import { actions as authActions } from '../../../auth';
@@ -139,6 +137,7 @@ class EditProfile extends Component {
   };
 
   onPressSave() {
+    const { user } = this.props;
     const {
       displayName,
       email,
@@ -160,6 +159,8 @@ class EditProfile extends Component {
       this.setState({
         validationErrors,
       });
+    } else if (user.isFacebookUser) {
+      this.onSubmit();
     } else {
       this.onDisplayModal();
     }
@@ -185,7 +186,6 @@ class EditProfile extends Component {
     user['twitter'] = twitter || '';
     user['instagram'] = instagram || '';
     user['userimage'] = userImage || '';
-
     updateUser(user, oldEmail, password, this.onSuccess, this.onError);
   }
 
@@ -195,6 +195,7 @@ class EditProfile extends Component {
   };
 
   onError(error) {
+    console.log('error', error);
     let errObj = this.state.error;
     if (error.hasOwnProperty('message')) {
       errObj['general'] = error.message;
