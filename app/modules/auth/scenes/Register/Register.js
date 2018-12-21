@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView } from 'react-native';
+import { View, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { actions as auth } from '../../index';
 const { register } = auth;
 import styles from './styles';
@@ -135,7 +135,7 @@ class Register extends React.Component {
       updatedPassword: this.onChangeUpdatedPassword,
     };
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView enabled behavior="padding" style={styles.container}>
         <ScrollView>
           <Form
             fields={fields}
@@ -145,7 +145,7 @@ class Register extends React.Component {
             error={this.state.error}
           />
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

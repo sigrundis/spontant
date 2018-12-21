@@ -101,8 +101,6 @@ export function signUpWithFacebook(facebookToken, successCB, errorCB) {
 export function signInWithFacebook(facebookToken, successCB, errorCB) {
   return (dispatch) => {
     api.signInWithFacebook(facebookToken, function(success, data, error) {
-      console.log('success', success);
-      console.log('error', error);
       if (success) {
         dispatch({ type: t.LOGGED_IN, data });
         successCB();
@@ -112,10 +110,8 @@ export function signInWithFacebook(facebookToken, successCB, errorCB) {
 }
 
 export function checkLoginStatus(callback) {
-  console.log('check login status');
   return (dispatch) => {
     auth.onAuthStateChanged((user) => {
-      console.log('on auth state changed', user);
       let isLoggedIn = user !== null;
       if (isLoggedIn) {
         api.getUser(user, function(success, { exists, user }, error) {
@@ -123,7 +119,6 @@ export function checkLoginStatus(callback) {
             if (exists) dispatch({ type: t.LOGGED_IN, data: user });
             callback(exists, isLoggedIn);
           } else if (error) {
-            console.log('error in check login status', error);
             //unable to get user
             dispatch({ type: t.LOGGED_OUT });
             callback(false, false);

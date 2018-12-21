@@ -40,7 +40,6 @@ export default class App extends Component {
   componentDidMount() {
     store.dispatch(
       checkLoginStatus((exist, isLoggedIn) => {
-        console.log('exists from checked login', exist);
         this.setState({
           checkedLogin: true,
           exist,
@@ -51,9 +50,7 @@ export default class App extends Component {
   }
 
   render() {
-    console.log('render App');
     const { isReady, checkedLogin, isLoggedIn, exist } = this.state;
-    console.log('isLoggedIn', isLoggedIn);
     if (!isReady) {
       return (
         <AppLoading
