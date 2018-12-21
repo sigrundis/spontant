@@ -43,26 +43,33 @@ export function updateUser(user, oldEmail, password, callback) {
   const { uid, email } = user;
   let updates = {};
   updates['users/' + uid] = user;
-
-  reauthenticate(password)
-    .then(() => {
-      var user = auth.currentUser;
-      user
-        .updateEmail(email)
-        .then(() => {
-          database
-            .ref()
-            .update(updates)
-            .then(() => callback(true, user, null))
-            .catch((error) => callback(false, null, error));
-        })
-        .catch((error) => {
-          callback(false, null, error);
-        });
-    })
-    .catch((error) => {
-      callback(false, null, error);
-    });
+  if (user.isFacebookUser) {
+    database
+      .ref()
+      .update(updates)
+      .then(() => callback(true, user, null))
+      .catch((error) => callback(false, null, error));
+  } else {
+    reauthenticate(password)
+      .then(() => {
+        var user = auth.currentUser;
+        user
+          .updateEmail(email)
+          .then(() => {
+            database
+              .ref()
+              .update(updates)
+              .then(() => callback(true, user, null))
+              .catch((error) => callback(false, null, error));
+          })
+          .catch((error) => {
+            callback(false, null, error);
+          });
+      })
+      .catch((error) => {
+        callback(false, null, error);
+      });
+  }
 }
 
 //Sign the user in with their email and password
@@ -189,16 +196,16 @@ export function signInWithFacebook(fbToken, callback) {
     .then((result) => {
       const { user } = result;
       const { uid } = user;
-      return database
+      database
         .ref('/users/' + uid)
         .once('value')
         .then((snapshot) => {
           var exists = snapshot.val() !== null;
           console.log('check fb user exists', exists);
           if (exists) {
-            return callback(true, processUserFromFacebookData(user), null);
+            callback(true, snapshot.val(), null);
           } else {
-            return createUser(uid, processUserFromFacebookData(user), callback);
+            createUser(uid, processUserFromFacebookData(user), callback);
           }
         })
         .catch((error) => callback(false, null, { message: error }));
@@ -208,6 +215,7 @@ export function signInWithFacebook(fbToken, callback) {
 
 function processUserFromFacebookData(user) {
   const { uid, displayName, email, photoURL } = user;
+
   return {
     isFacebookUser: true,
     email,
