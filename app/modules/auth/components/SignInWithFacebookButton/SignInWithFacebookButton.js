@@ -15,15 +15,29 @@ class SignInWithFacebookButton extends React.Component {
     this.state = {};
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
+    this.onPress = this.onPress.bind(this);
     this.onSignUpWithFacebook = this.onSignUpWithFacebook.bind(this);
     this.onSignInWithFacebook = this.onSignInWithFacebook.bind(this);
   }
 
+  onPress() {
+    const { signUp } = this.props;
+    if (signUp) {
+      this.onSignUpWithFacebook();
+    } else {
+      this.onSignInWithFacebook();
+    }
+  }
+
   //get users permission authorization (ret: facebook token)
   async onSignInWithFacebook() {
+    console.log('on press signin');
     const { onPress } = this.props;
     onPress();
-    const options = { permissions: ['public_profile', 'email'] };
+    const options = {
+      permissions: ['public_profile', 'email'],
+      behavior: 'web',
+    };
     const { type, token } = await Facebook.logInWithReadPermissionsAsync(
       c.FACEBOOK_APP_ID,
       options
@@ -37,7 +51,10 @@ class SignInWithFacebookButton extends React.Component {
   async onSignUpWithFacebook() {
     const { onPress } = this.props;
     onPress();
-    const options = { permissions: ['public_profile', 'email'] };
+    const options = {
+      permissions: ['public_profile', 'email'],
+      behavior: 'web',
+    };
     const { type, token } = await Facebook.logInWithReadPermissionsAsync(
       c.FACEBOOK_APP_ID,
       options
@@ -73,11 +90,15 @@ class SignInWithFacebookButton extends React.Component {
         iconSize={19}
         style={[styles.containerView, styles.socialButton]}
         fontStyle={styles.buttonText}
-        onPress={this.onSignUpWithFacebook}
+        onPress={this.onPress}
       />
     );
   }
 }
+
+SignInWithFacebookButton.propTypes = {
+  signUp: PropTypes.bool,
+};
 
 SignInWithFacebookButton.defaultProps = {
   buttonTitle: 'SIGN UP WITH FACEBOOK',

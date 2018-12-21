@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { NavigationEvents, withNavigationFocus } from 'react-navigation';
-import { Button, Divider, Icon } from 'react-native-elements';
+import { Button, Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
 import SvgLogo from '../../../../components/SvgLogo';
 import ProgressiveImage from '../../../../components/ProgressiveImage';
@@ -133,6 +133,7 @@ class Welcome extends React.Component {
         <View style={styles.bottomContainer}>
           <View style={[styles.buttonContainer]}>
             <SignInWithFacebookButton
+              signUp
               onPress={() => {
                 this.clearSlideShowInterval();
               }}

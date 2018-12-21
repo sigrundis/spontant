@@ -106,6 +106,7 @@ class Profile extends Component {
 
   render() {
     const { user } = this.state;
+    console.log('user', user);
     if (!user || !user.displayname)
       return (
         <TouchableOpacity onPress={this.onSignOut}>
@@ -142,11 +143,11 @@ class Profile extends Component {
             {this.renderUserInfo('Twitter', user.twitter || '-', 'twitter')}
           </View>
         </ScrollView>
-        <View style={styles.signOut}>
-          <TouchableOpacity onPress={this.onSignOut}>
+        <TouchableOpacity onPress={this.onSignOut}>
+          <View style={styles.signOut}>
             <Text style={styles.signOutText}>Sign out</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }

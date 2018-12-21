@@ -192,6 +192,7 @@ class Invite extends React.Component {
       minAttendees,
       maxAttendees,
       time,
+      timePublished,
       image,
       userId,
       joinCount,
@@ -200,6 +201,8 @@ class Invite extends React.Component {
     } = invite;
     const buttonColor =
       joinCount < minAttendees ? color.themeRed : color.themeGreen;
+    // Temp because some events have time and some timePublished.
+    const timeCreated = time || timePublished;
     return (
       <View style={[styles.container]}>
         <View style={styles.wrapper}>
@@ -224,7 +227,7 @@ class Invite extends React.Component {
                 </Text>
               )}
               <Text style={[styles.publishedAt]}>{`Created an invite ${moment(
-                time
+                timeCreated
               ).fromNow()}`}</Text>
             </View>
             {user.uid === userId && this.renderOptionButton()}
