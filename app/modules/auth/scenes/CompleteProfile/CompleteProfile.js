@@ -47,10 +47,8 @@ class CompleteProfile extends React.Component {
   onSubmit(data) {
     const { navigation } = this.props;
     this.setState({ error }); //clear out error messages
-    console.log('on submit data', data);
     //attach user id
     const user = navigation.getParam('user', {});
-    console.log('user in complete profile', user);
     data.uid = user.uid;
     data.email = user.email;
     this.props.createUser(data, this.onSuccess, this.onError);

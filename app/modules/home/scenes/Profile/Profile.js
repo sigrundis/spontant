@@ -106,7 +106,6 @@ class Profile extends Component {
 
   render() {
     const { user } = this.state;
-    console.log('user', user);
     if (!user || !user.displayname)
       return (
         <TouchableOpacity onPress={this.onSignOut}>

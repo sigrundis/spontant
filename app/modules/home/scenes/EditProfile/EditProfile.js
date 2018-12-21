@@ -195,7 +195,6 @@ class EditProfile extends Component {
   };
 
   onError(error) {
-    console.log('error', error);
     let errObj = this.state.error;
     if (error.hasOwnProperty('message')) {
       errObj['general'] = error.message;

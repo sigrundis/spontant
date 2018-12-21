@@ -23,13 +23,11 @@ export function confirmPassword(c_password, password) {
 }
 
 export function validate(form) {
-  console.log('form', form);
   let error = {};
   let success = true;
 
   var keys = Object.keys(form);
 
-  console.log('keys', keys);
   var length = keys.length;
 
   keys.slice(0, length).map((field) => {
