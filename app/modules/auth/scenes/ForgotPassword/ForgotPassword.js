@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
 import { actions as auth } from '../../index';
@@ -45,7 +44,7 @@ class ForgotPassword extends React.Component {
 
   onSuccess() {
     alert('Password Reminder Sent');
-    Actions.pop();
+    this.props.navigation.navigate('Login');
   }
 
   onError(error) {
