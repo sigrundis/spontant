@@ -14,7 +14,6 @@ import { Button, Icon, CheckBox } from 'react-native-elements';
 import { Permissions, ImagePicker } from 'expo';
 import { withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import InputField from '../../components/InputField';
 import DatePickerModal from '../../components/DatePickerModal';
 import styles from './styles';

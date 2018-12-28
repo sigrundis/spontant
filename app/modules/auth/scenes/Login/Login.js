@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, ScrollView, Text, KeyboardAvoidingView } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { NavigationEvents, withNavigationFocus } from 'react-navigation';
+import { withNavigationFocus } from 'react-navigation';
 import { actions as auth } from '../../index';
 import styles from './styles';
 import Form from '../../components/Form';
