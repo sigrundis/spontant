@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "expo": "^31.0.0",
+    "expo": "^46.0.16",
     "firebase": "^5.5.1",
     "moment": "^2.22.2",
     "react": "16.5.0",
